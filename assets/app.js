@@ -53,12 +53,28 @@ async function boot() {
     state.links = Array.isArray(lj) ? lj : (lj.items || []);
   } catch { state.links = []; }
 
+  await loadCatalogParts();
+
   buildNav();
   buildSearchIndex();
-  indexCatalog();
   route();
   tickNow();
   setInterval(tickNow, 30000);
+}
+
+/* ---------- каталог: те же данные, свои разделы ---------- */
+async function loadCatalogParts() {
+  if (typeof window.buildDataParts !== 'function') return;
+  let d;
+  try { d = await (await fetch('katalog/data.json', { cache: 'no-cache' })).json(); }
+  catch { return; }
+  try {
+    window.buildDataParts(d).forEach(p => {
+      state.parts.push(p);
+      state.byslug[p.slug] = p;
+    });
+    state.parts.sort((a, b) => a.order - b.order);
+  } catch (e) { console.error('Каталог не собрался:', e); }
 }
 
 /* ---------- навигация ---------- */
@@ -103,6 +119,7 @@ function buildNav() {
       <span class="sub">${p.subtitle}</span>`;
     li.appendChild(a);
 
+    if (p.noSub) { nav.appendChild(li); return; }
     const ol = el('ol');
     headingsOf(p).forEach(h => {
       const s = el('li');
@@ -195,38 +212,6 @@ function buildSearchIndex() {
       const txt = node.textContent.trim();
       if (txt.length > 12) INDEX.push({ part: p, h2, id: slugify(h2), text: txt });
     });
-  });
-}
-
-/* каталог моделей: добавляем его содержимое в общий поиск */
-const noTags = s => String(s || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-
-async function indexCatalog() {
-  let d;
-  try { d = await (await fetch('katalog/data.json', { cache: 'no-cache' })).json(); }
-  catch { return; }
-
-  const add = (where, url, text) => {
-    text = noTags(text);
-    if (text.length > 8) INDEX.push({ part: { title: 'Каталог', slug: null }, h2: where, url, text });
-  };
-
-  (d.models || []).forEach(m => {
-    const price = m.price ? ` · ${m.price} ₽` : '';
-    add('Модели', 'katalog/#search',
-      `${m.art} ${m.full || ''} · ${m.colors || ''} · ${m.material || ''}${price} · ${m.dims || ''} ${m.weight || ''} · ${m.features || ''}`);
-  });
-  (d.acc || []).forEach(a => {
-    const price = a.price ? ` · ${a.price} ₽` : '';
-    add('Аксессуары', 'katalog/#search',
-      `${a.art} · ${a.colors || ''} · ${a.material || ''}${price} · ${a.features || ''}`);
-  });
-  (d.mats || []).forEach(r => {
-    add('Материалы и уход', 'katalog/#mat',
-      `${r[0]} · ${r[1] || ''} Минусы: ${r[2] || ''} Уход: ${r[3] || ''} Средства: ${r[4] || ''}`);
-  });
-  (d.faq || []).forEach(r => {
-    add('Частые вопросы', 'katalog/#faq', `${r[1]} — ${r[2]}`);
   });
 }
 

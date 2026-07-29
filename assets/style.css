@@ -210,6 +210,40 @@ a{color:inherit}
 .doc tbody tr:hover{background:var(--sand)}
 .doc td:first-child{font-weight:500}
 
+/* ---------- каталог внутри разделов ---------- */
+.doc .lead{color:var(--muted);font-size:14.5px;margin-bottom:18px}
+
+.doc .chips{
+  display:flex;flex-wrap:wrap;gap:6px;margin:0 0 30px;
+  padding-bottom:18px;border-bottom:1px solid var(--rule);
+}
+.doc .chip{
+  font-family:"JetBrains Mono",monospace;font-size:12px;text-decoration:none;
+  color:var(--muted);border:1px solid var(--rule);border-radius:6px;padding:4px 8px;
+  background:var(--card);
+}
+.doc .chip:hover{color:var(--wine);border-color:var(--wine)}
+
+.doc .meta{
+  margin:-6px 0 12px;font-size:13.5px;color:var(--muted);
+}
+.doc .flag{
+  margin:0 0 14px;padding:8px 12px;font-size:14px;
+  background:var(--wine-soft);color:var(--wine);border-radius:8px;
+}
+
+.doc .shots{
+  display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin:0 0 16px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+}
+.doc .shot{flex:0 0 auto;line-height:0}
+.doc .shot img{
+  height:186px;width:auto;border-radius:8px;background:var(--sand);
+  border:1px solid var(--rule);
+}
+.doc .vid{width:100%;max-width:420px;border-radius:10px;background:var(--sand)}
+.doc .was{color:var(--faint);text-decoration:line-through;font-size:.9em}
+
 /* чек-листы */
 .doc input[type=checkbox]{
   appearance:none;width:16px;height:16px;border:1.5px solid var(--faint);border-radius:4px;

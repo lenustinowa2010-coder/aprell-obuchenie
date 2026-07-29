@@ -12,11 +12,11 @@
   {
     "file": "03-delivery.md",
     "title": "Доставка и тарифы",
-    "order": 3
+    "order": 6
   },
   {
     "file": "04-returns.md",
     "title": "Возврат, отказ и брак",
-    "order": 4
+    "order": 7
   }
 ]
