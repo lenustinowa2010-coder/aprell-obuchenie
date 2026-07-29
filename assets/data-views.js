@@ -70,6 +70,8 @@
       if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
 
       if (isNote(m.status)) pieces.push(`<p class="flag">${esc(m.status)}</p>`);
+      if (!(m.site || []).length)
+        pieces.push('<p class="flag">На сайте вариантов нет — наличие и цену уточнить перед предложением</p>');
 
       pieces.push(shots(allShots, m.art));
       pieces.push(specs(m));
