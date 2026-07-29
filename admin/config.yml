@@ -1,7 +1,7 @@
 # Вход в админку — через GitHub. Netlify выступает только посредником OAuth.
 backend:
   name: github
-  repo: lenustinowa2010-coder//aprell-obuchenie   # заменить на свой репозиторий
+  repo: lenustinowa2010-coder/aprell-obuchenie   # заменить на свой репозиторий
   branch: main
 
 locale: ru
