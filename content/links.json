@@ -2,8 +2,13 @@
   "items": [
     {
       "title": "Каталог моделей",
-      "subtitle": "41 модель, цены, фото, видео, материалы, частые вопросы",
-      "url": "katalog/"
+      "subtitle": "Артикулы, цены, фото, видео",
+      "url": "katalog/",
+      "sections": [
+        { "title": "Поиск по артикулу", "url": "katalog/#search" },
+        { "title": "Материалы и уход", "url": "katalog/#mat" },
+        { "title": "Частые вопросы", "url": "katalog/#faq" }
+      ]
     }
   ]
 }

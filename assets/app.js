@@ -55,6 +55,7 @@ async function boot() {
 
   buildNav();
   buildSearchIndex();
+  indexCatalog();
   route();
   tickNow();
   setInterval(tickNow, 30000);
@@ -70,6 +71,29 @@ function headingsOf(part) {
 function buildNav() {
   const nav = $('#nav');
   nav.innerHTML = '';
+
+  (state.links || []).forEach(l => {
+    if (!l || !l.url) return;
+    const li = el('li');
+    const a = el('a', 'part link-out');
+    a.href = l.url;
+    a.innerHTML = `<span class="num">→</span>
+      <span class="ttl">${l.title || l.url}</span>
+      <span class="sub">${l.subtitle || ''}</span>`;
+    li.appendChild(a);
+    if (Array.isArray(l.sections) && l.sections.length) {
+      const ol = el('ol');
+      l.sections.forEach(sec => {
+        if (!sec || !sec.url) return;
+        const s2 = el('li'), a2 = el('a');
+        a2.href = sec.url; a2.textContent = sec.title || sec.url;
+        s2.appendChild(a2); ol.appendChild(s2);
+      });
+      li.appendChild(ol);
+    }
+    nav.appendChild(li);
+  });
+
   state.parts.forEach((p, i) => {
     const li = el('li');
     const a = el('a', 'part');
@@ -91,17 +115,6 @@ function buildNav() {
     nav.appendChild(li);
   });
 
-  (state.links || []).forEach(l => {
-    if (!l || !l.url) return;
-    const li = el('li');
-    const a = el('a', 'part link-out');
-    a.href = l.url;
-    a.innerHTML = `<span class="num">→</span>
-      <span class="ttl">${l.title || l.url}</span>
-      <span class="sub">${l.subtitle || ''}</span>`;
-    li.appendChild(a);
-    nav.appendChild(li);
-  });
 }
 
 /* ---------- отрисовка раздела ---------- */
@@ -185,6 +198,38 @@ function buildSearchIndex() {
   });
 }
 
+/* каталог моделей: добавляем его содержимое в общий поиск */
+const noTags = s => String(s || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+
+async function indexCatalog() {
+  let d;
+  try { d = await (await fetch('katalog/data.json', { cache: 'no-cache' })).json(); }
+  catch { return; }
+
+  const add = (where, url, text) => {
+    text = noTags(text);
+    if (text.length > 8) INDEX.push({ part: { title: 'Каталог', slug: null }, h2: where, url, text });
+  };
+
+  (d.models || []).forEach(m => {
+    const price = m.price ? ` · ${m.price} ₽` : '';
+    add('Модели', 'katalog/#search',
+      `${m.art} ${m.full || ''} · ${m.colors || ''} · ${m.material || ''}${price} · ${m.dims || ''} ${m.weight || ''} · ${m.features || ''}`);
+  });
+  (d.acc || []).forEach(a => {
+    const price = a.price ? ` · ${a.price} ₽` : '';
+    add('Аксессуары', 'katalog/#search',
+      `${a.art} · ${a.colors || ''} · ${a.material || ''}${price} · ${a.features || ''}`);
+  });
+  (d.mats || []).forEach(r => {
+    add('Материалы и уход', 'katalog/#mat',
+      `${r[0]} · ${r[1] || ''} Минусы: ${r[2] || ''} Уход: ${r[3] || ''} Средства: ${r[4] || ''}`);
+  });
+  (d.faq || []).forEach(r => {
+    add('Частые вопросы', 'katalog/#faq', `${r[1]} — ${r[2]}`);
+  });
+}
+
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function search(q) {
@@ -210,7 +255,7 @@ function search(q) {
 
   hits.forEach(h => {
     const a = el('a', 'hit');
-    a.href = '#/' + h.part.slug + '/' + h.id;
+    a.href = h.url ? h.url : '#/' + h.part.slug + '/' + h.id;
     let t = h.text;
     if (t.length > 240) {
       const at = t.search(new RegExp(esc(query), 'i'));
