@@ -154,25 +154,25 @@
     const out = [];
     if (Array.isArray(d.models) && d.models.length)
       out.push({
-        slug: 'models', title: 'Модели', order: 5, noSub: true,
+        slug: 'models', title: 'Модели', order: 6, noSub: true,
         subtitle: plural(d.models.length, ['модель', 'модели', 'моделей']) + ': цены, фото, готовый текст',
         html: buildModels(d.models)
       });
     if (Array.isArray(d.acc) && d.acc.length)
       out.push({
-        slug: 'accessories', title: 'Аксессуары', order: 6, noSub: true,
+        slug: 'accessories', title: 'Аксессуары', order: 7, noSub: true,
         subtitle: plural(d.acc.length, ['позиция', 'позиции', 'позиций']) + ': подвесы, перчатки, шапки',
         html: buildAcc(d.acc)
       });
     if (Array.isArray(d.mats) && d.mats.length)
       out.push({
-        slug: 'materials', title: 'Материалы и уход', order: 7,
+        slug: 'materials', title: 'Материалы и уход', order: 8,
         subtitle: 'Что говорить про кожу и замшу',
         html: buildMats(d.mats)
       });
     if (Array.isArray(d.faq) && d.faq.length)
       out.push({
-        slug: 'faq', title: 'Частые вопросы', order: 8,
+        slug: 'faq', title: 'Частые вопросы', order: 9,
         subtitle: plural(d.faq.length, ['готовый ответ', 'готовых ответа', 'готовых ответов']),
         html: buildFaq(d.faq)
       });

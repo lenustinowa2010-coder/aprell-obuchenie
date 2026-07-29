@@ -5,18 +5,23 @@
     "order": 1
   },
   {
+    "file": "02-script.md",
+    "title": "Скрипт продаж",
+    "order": 2
+  },
+  {
     "file": "02-dialog.md",
     "title": "Карта диалога",
-    "order": 2
+    "order": 3
   },
   {
     "file": "03-delivery.md",
     "title": "Доставка и тарифы",
-    "order": 6
+    "order": 4
   },
   {
     "file": "04-returns.md",
     "title": "Возврат, отказ и брак",
-    "order": 7
+    "order": 5
   }
 ]
