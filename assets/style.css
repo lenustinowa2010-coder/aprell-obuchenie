@@ -104,24 +104,43 @@ a{color:inherit}
 .nav ol a:hover{color:var(--ink);border-left-color:var(--wine)}
 .nav ol a[aria-current="true"]{color:var(--wine);border-left-color:var(--wine);font-weight:600}
 
-/* ---------- «Сейчас» ---------- */
+/* ---------- «Сейчас» — закреплено в правом верхнем углу ---------- */
 .now{
-  margin-top:auto;padding-top:18px;border-top:1px solid var(--rule);
+  position:fixed;top:16px;right:18px;z-index:30;width:236px;
+  padding:13px 15px 14px;
+  background:var(--card);border:1px solid var(--rule);border-radius:14px;
+  box-shadow:0 6px 22px -12px rgba(22,21,26,.22);
 }
-.now h2{
-  margin:0;font-size:11px;font-weight:600;letter-spacing:.13em;
+.now-cap{
+  margin:0;font-size:10.5px;font-weight:600;letter-spacing:.15em;
   text-transform:uppercase;color:var(--faint);
 }
 .now-time{
-  margin:8px 0 0;font-family:"JetBrains Mono",monospace;font-size:26px;line-height:1;
-  font-weight:500;letter-spacing:-.01em;
+  margin:5px 0 0;font-family:"JetBrains Mono",monospace;font-size:25px;line-height:1;
+  font-weight:500;letter-spacing:-.02em;font-variant-numeric:tabular-nums;
 }
-.now-shift{margin:5px 0 0;font-size:13px;color:var(--muted)}
-.now-rule{
-  margin-top:12px;padding:10px 12px;background:var(--wine-soft);border-radius:var(--r);
+.now-shift{margin:5px 0 0;font-size:12.5px;color:var(--muted)}
+.now-shift-s{display:none}
+.now-rule{margin-top:11px;padding:9px 11px;background:var(--wine-soft);border-radius:9px}
+.now-label{display:block;font-size:11px;color:var(--muted)}
+.now-rule strong{display:block;margin-top:2px;font-size:13.5px;color:var(--wine);line-height:1.3}
+.now-rule em{display:none}
+
+/* узкое окно — сворачиваем в одну строку */
+@media (max-width:1330px) and (min-width:901px){
+  .now{
+    width:auto;display:flex;align-items:center;gap:11px;
+    padding:8px 14px;border-radius:11px;
+  }
+  .now-cap,.now-shift,.now-label,.now-rule strong{display:none}
+  .now-time{font-size:16px;margin:0}
+  .now-shift-s{display:block;margin:0;font-size:12.5px;color:var(--muted)}
+  .now-rule{margin:0;padding:4px 10px;border-radius:7px}
+  .now-rule em{
+    display:block;font-style:normal;font-size:12.5px;font-weight:600;color:var(--wine);
+    white-space:nowrap;
+  }
 }
-.now-label{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.01em}
-.now-rule strong{display:block;margin-top:2px;font-size:14px;color:var(--wine);line-height:1.35}
 
 /* ---------- контент ---------- */
 .main{flex:1 1 auto;min-width:0;padding:0 var(--gap) 120px}
@@ -220,8 +239,23 @@ a{color:inherit}
     background:var(--paper);padding-top:22px;
   }
   .side.open{transform:none;box-shadow:0 0 60px rgba(0,0,0,.16)}
-  .main{padding:0 18px 90px}
-  .doc,.results{padding-top:26px}
+  .main{padding:44px 18px 90px}
+  .doc,.results{padding-top:20px}
+
+  .now{
+    position:fixed;top:55px;left:0;right:0;width:auto;margin:0;
+    display:flex;align-items:center;gap:10px;
+    padding:8px 18px;border-radius:0;border-left:0;border-right:0;border-top:0;
+    box-shadow:none;background:var(--paper);
+  }
+  .now-cap,.now-shift,.now-label,.now-rule strong{display:none}
+  .now-time{font-size:15px;margin:0}
+  .now-shift-s{display:block;margin:0;font-size:12.5px;color:var(--muted)}
+  .now-rule{margin-left:auto;padding:3px 9px;border-radius:6px}
+  .now-rule em{
+    display:block;font-style:normal;font-size:12px;font-weight:600;color:var(--wine);
+    white-space:nowrap;
+  }
   .doc h2{margin-top:38px}
   .doc blockquote{padding-right:18px;padding-top:42px}
   .copy{top:8px;left:12px;right:auto}
@@ -232,7 +266,7 @@ a{color:inherit}
 }
 
 @media print{
-  .side,.topbar,.copy,.results{display:none}
+  .side,.topbar,.copy,.results,.now{display:none}
   .main{padding:0}
   .doc{max-width:none}
 }

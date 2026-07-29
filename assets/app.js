@@ -219,16 +219,19 @@ function tickNow() {
 
   $('#nowTime').textContent = `${hh}:${mm}`;
 
-  let shift;
-  if (h >= 8 && h < 14) shift = 'Утренняя смена · до 17:00';
-  else if (h >= 14 && h < 17) shift = 'Обе смены — время передачи';
-  else if (h >= 17 && h < 23) shift = 'Вечерняя смена · до 23:00';
-  else shift = 'Вне смен — отвечает бот';
+  let shift, shortShift;
+  if (h >= 8 && h < 14) { shift = 'Утренняя смена · до 17:00'; shortShift = 'утренняя'; }
+  else if (h >= 14 && h < 17) { shift = 'Обе смены — время передачи'; shortShift = 'передача смены'; }
+  else if (h >= 17 && h < 23) { shift = 'Вечерняя смена · до 23:00'; shortShift = 'вечерняя'; }
+  else { shift = 'Вне смен — отвечает бот'; shortShift = 'вне смен'; }
   $('#nowShift').textContent = shift + ' · Мск';
+  $('#nowShiftShort').textContent = shortShift;
 
-  $('#nowSlot').textContent = h < 15
+  const early = h < 15;
+  $('#nowSlot').textContent = early
     ? 'сегодня в 21:00 — вечерней смене'
     : 'завтра в 08:00 — утренней смене';
+  $('#nowSlotShort').textContent = early ? 'догон сегодня 21:00' : 'догон завтра 08:00';
 }
 
 /* ---------- маршрутизация ---------- */
