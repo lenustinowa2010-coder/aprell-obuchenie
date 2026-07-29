@@ -78,9 +78,13 @@
 
       if (m.features) pieces.push(`<p>${esc(clean(m.features))}</p>`);
 
-      if (m.answer) {
-        pieces.push('<h3>Готовый текст для клиентки</h3>');
-        pieces.push(`<blockquote>${esc(m.answer).replace(/\n/g, '<br>')}</blockquote>`);
+      const talk = m.pres || m.answer;
+      if (talk) {
+        pieces.push(`<h3>Презентация модели</h3>`);
+        if (!m.pres) pieces.push('<p class="meta">Презентации нет — текст из старого шаблона, сверить перед отправкой</p>');
+        pieces.push(`<blockquote>${esc(talk).replace(/\n/g, '<br>')}</blockquote>`);
+      } else {
+        pieces.push('<p class="flag">Готовой презентации нет — составить перед тем, как предлагать модель</p>');
       }
       if (m.video) {
         pieces.push(`<p><a href="${esc(m.video)}" target="_blank" rel="noopener">Видеообзор</a></p>`);

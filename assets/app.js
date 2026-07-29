@@ -81,7 +81,7 @@ async function loadCatalogParts() {
 function headingsOf(part) {
   const d = document.createElement('div');
   d.innerHTML = part.html;
-  return [...d.querySelectorAll('h2')].map(h => ({ id: slugify(h.textContent), text: h.textContent }));
+  return [...d.querySelectorAll('h2')].map(h => ({ id: h.id || slugify(h.textContent), text: h.textContent }));
 }
 
 function buildNav() {
@@ -152,7 +152,7 @@ function render(slug, anchor) {
   const wrap = el('div');
   wrap.innerHTML = p.html;
 
-  wrap.querySelectorAll('h2,h3').forEach(h => h.id = slugify(h.textContent));
+  wrap.querySelectorAll('h2,h3').forEach(h => { if (!h.id) h.id = slugify(h.textContent); });
   wrap.querySelectorAll('input[type=checkbox]').forEach(i => i.disabled = false);
   wrap.querySelectorAll('table').forEach(t => {
     const box = el('div', 'tw');
@@ -199,18 +199,18 @@ function buildSearchIndex() {
   state.parts.forEach(p => {
     const d = document.createElement('div');
     d.innerHTML = p.html;
-    let h2 = '';
+    let h2 = '', h2id = '';
     [...d.children].forEach(node => {
-      if (node.tagName === 'H2') { h2 = node.textContent; return; }
+      if (node.tagName === 'H2') { h2 = node.textContent; h2id = node.id || slugify(h2); return; }
       if (node.tagName === 'TABLE') {
         node.querySelectorAll('tbody tr').forEach(tr => {
           const cells = [...tr.children].map(td => td.textContent.trim());
-          INDEX.push({ part: p, h2, id: slugify(h2), text: cells.join(' · ') });
+          INDEX.push({ part: p, h2, id: h2id, text: cells.join(' · ') });
         });
         return;
       }
       const txt = node.textContent.trim();
-      if (txt.length > 12) INDEX.push({ part: p, h2, id: slugify(h2), text: txt });
+      if (txt.length > 12) INDEX.push({ part: p, h2, id: h2id, text: txt });
     });
   });
 }
