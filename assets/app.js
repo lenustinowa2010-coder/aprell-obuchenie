@@ -3,7 +3,7 @@
 const $ = (s, r = document) => r.querySelector(s);
 const el = (t, c) => { const n = document.createElement(t); if (c) n.className = c; return n; };
 
-const state = { parts: [], byslug: {}, current: null };
+const state = { parts: [], byslug: {}, links: [], current: null };
 
 /* ---------- фронтматтер ---------- */
 function splitFront(raw) {
@@ -48,6 +48,11 @@ async function boot() {
   state.parts = loaded;
   loaded.forEach(p => state.byslug[p.slug] = p);
 
+  try {
+    const lj = await (await fetch('content/links.json', { cache: 'no-cache' })).json();
+    state.links = Array.isArray(lj) ? lj : (lj.items || []);
+  } catch { state.links = []; }
+
   buildNav();
   buildSearchIndex();
   route();
@@ -83,6 +88,18 @@ function buildNav() {
       s.appendChild(sa); ol.appendChild(s);
     });
     li.appendChild(ol);
+    nav.appendChild(li);
+  });
+
+  (state.links || []).forEach(l => {
+    if (!l || !l.url) return;
+    const li = el('li');
+    const a = el('a', 'part link-out');
+    a.href = l.url;
+    a.innerHTML = `<span class="num">→</span>
+      <span class="ttl">${l.title || l.url}</span>
+      <span class="sub">${l.subtitle || ''}</span>`;
+    li.appendChild(a);
     nav.appendChild(li);
   });
 }

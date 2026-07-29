@@ -96,6 +96,10 @@ a{color:inherit}
 }
 .nav .ttl{font-weight:600;font-size:14.5px;line-height:1.35}
 .nav .sub{grid-column:2;font-size:12.5px;color:var(--faint);line-height:1.35}
+.nav a.link-out{margin-top:10px;border:1px dashed var(--rule)}
+.nav a.link-out:hover{border-color:var(--wine);background:var(--wine-soft)}
+.nav a.link-out .num{font-family:inherit;font-size:14px;font-weight:400}
+
 .nav ol{list-style:none;margin:2px 0 10px;padding:0 0 0 36px}
 .nav ol a{
   display:block;padding:4px 0;font-size:13.5px;color:var(--muted);text-decoration:none;

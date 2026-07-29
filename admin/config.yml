@@ -27,3 +27,20 @@ collections:
       - { name: order,    label: Порядок, widget: number, value_type: int, min: 1, default: 9,
           hint: "1 — первый раздел в меню" }
       - { name: body,     label: Текст, widget: markdown }
+
+  - name: links
+    label: Меню
+    files:
+      - name: menu
+        label: Ссылки на другие разделы
+        file: content/links.json
+        fields:
+          - name: items
+            label: Ссылки
+            widget: list
+            label_singular: Ссылка
+            fields:
+              - { name: title,    label: Название, widget: string }
+              - { name: subtitle, label: Подпись, widget: string, required: false }
+              - { name: url,      label: Адрес, widget: string,
+                  hint: "Внутри сайта — katalog/ ; внешний — полный адрес с https://" }

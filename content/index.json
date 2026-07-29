@@ -18,10 +18,5 @@
     "file": "04-returns.md",
     "title": "Возврат, отказ и брак",
     "order": 4
-  },
-  {
-    "file": "05-models.md",
-    "title": "Шпаргалка по моделям",
-    "order": 5
   }
 ]
