@@ -1,0 +1,29 @@
+# Вход в админку — через GitHub. Netlify выступает только посредником OAuth.
+backend:
+  name: github
+  repo: ВАШ-ЛОГИН/aprell-obuchenie   # заменить на свой репозиторий
+  branch: main
+
+locale: ru
+publish_mode: simple
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+collections:
+  - name: parts
+    label: Разделы обучения
+    label_singular: Раздел
+    folder: content
+    create: true
+    slug: "{{order}}-{{slug}}"
+    extension: md
+    format: yaml-frontmatter
+    summary: "{{order}}. {{title}}"
+    sortable_fields: [order, title]
+    fields:
+      - { name: title,    label: Название раздела, widget: string }
+      - { name: subtitle, label: Подзаголовок, widget: string, required: false,
+          hint: "Короткая строка под названием в меню" }
+      - { name: order,    label: Порядок, widget: number, value_type: int, min: 1, default: 9,
+          hint: "1 — первый раздел в меню" }
+      - { name: body,     label: Текст, widget: markdown }

@@ -1,0 +1,27 @@
+[
+  {
+    "file": "01-amocrm.md",
+    "title": "Работа в amoCRM",
+    "order": 1
+  },
+  {
+    "file": "02-dialog.md",
+    "title": "Карта диалога",
+    "order": 2
+  },
+  {
+    "file": "03-delivery.md",
+    "title": "Доставка и тарифы",
+    "order": 3
+  },
+  {
+    "file": "04-returns.md",
+    "title": "Возврат, отказ и брак",
+    "order": 4
+  },
+  {
+    "file": "05-models.md",
+    "title": "Шпаргалка по моделям",
+    "order": 5
+  }
+]
