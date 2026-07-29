@@ -1,0 +1,10 @@
+[build]
+  command = "node scripts/build-index.js"
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "no-referrer"
