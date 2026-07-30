@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+data.backup.json
+index.backup.html
+media_report.txt
