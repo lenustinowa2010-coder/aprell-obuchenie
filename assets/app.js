@@ -22,6 +22,10 @@ const slugify = s => s.toLowerCase().trim()
 
 /* ---------- загрузка ---------- */
 async function boot() {
+  if (typeof marked === "undefined") {
+    $("#loading").textContent = "Не удалось загрузить движок отображения. Проверьте интернет и обновите страницу.";
+    return;
+  }
   marked.setOptions({ gfm: true, breaks: false });
 
   let index;
