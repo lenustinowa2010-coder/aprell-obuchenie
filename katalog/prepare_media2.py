@@ -22,6 +22,11 @@ APRELL — заливка своих фото и видео в базу мене
 Порядок кадров — по алфавиту имён файлов. Чтобы задать свой порядок,
 добавь цифру в начало имени: «1 главное.jpg», «2 сбоку.jpg».
 
+АКСЕССУАРЫ (раздел "acc" в data.json — подвесы, перчатки, шапки и т.п.):
+у них нет вариантов по цветам. Просто положи папку с артикулом аксессуара
+(например 0337/) и кинь фото прямо в неё — можно без подпапок по цветам.
+Все фото соберутся одним списком в поле "i" аксессуара и появятся на сайте.
+
 Что делает:
   1. Конвертирует HEIC → JPEG (браузеры HEIC не показывают).
   2. Сжимает фото до 1400 px по длинной стороне, качество 82.
@@ -269,6 +274,9 @@ def main():
             by_art.setdefault(art_key(v.get("a", "")), []).append(v)
     models_by_art = {art_key(m.get("full") or m.get("art")): m
                      for m in data.get("models", [])}
+    acc_by_art = {}
+    for a in data.get("acc", []):
+        acc_by_art.setdefault(art_key(a.get("art", "")), a)
 
     total_ph = total_vd = 0
     flat_folders, unknown_colors, no_variant, failed = [], [], [], []
@@ -288,8 +296,47 @@ def main():
 
         variants = by_art.get(key, [])
         model = models_by_art.get(key)
+        acc = acc_by_art.get(key)
 
         print(f"— {folder.name} (артикул {art})")
+
+        # --- Аксессуар: фото одним списком, без разбивки по цветам ---
+        if acc is not None and not variants and not model:
+            imgs = sorted([p for p in folder.rglob("*")
+                           if p.is_file() and p.suffix.lower() in IMG_EXT
+                           and not p.name.startswith(".")], key=sort_key)
+            vids = sorted([p for p in folder.rglob("*")
+                           if p.is_file() and p.suffix.lower() in VID_EXT
+                           and not p.name.startswith(".")], key=sort_key)
+            if limit:
+                imgs = imgs[:limit]
+            if not imgs and not vids:
+                print("    · пусто")
+                continue
+            paths, n = [], 0
+            for f in imgs:
+                n += 1
+                rel = f"media/{art}/acc-{n}.jpg"
+                if dry:
+                    paths.append(rel)
+                    continue
+                if process_image(f, OUT / art / f"acc-{n}.jpg", max_side):
+                    paths.append(rel)
+                else:
+                    failed.append(f"{folder.name}/{f.name}")
+                    n -= 1
+            if paths:
+                acc["i"] = (list(acc.get("i") or []) + paths) if keep_site else paths
+                total_ph += len(paths)
+            if vids:
+                rel = f"media/{art}/acc.mp4"
+                if not dry:
+                    process_video(vids[0], OUT / art / "acc.mp4")
+                acc["vid"] = rel
+                total_vd += 1
+            print(f"    + аксессуар: {len(paths)} фото"
+                  f"{', видео' if vids else ''}")
+            continue
 
         if not subdirs:
             if loose:

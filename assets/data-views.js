@@ -123,6 +123,11 @@
         .concat(a.i || [], a.shots || [], a.photos || [],
           ...(a.site || []).map(v => v.i || []));
       if (accShots.length) pieces.push(shots(accShots, a.art));
+      const accVid = a.vid || a.vidLocal;
+      if (accVid) {
+        const vurl = esc(asset(accVid));
+        pieces.push(`<p><video src="${vurl}" controls preload="none" class="vid"></video><br><a class="dl dl-vid" href="${vurl}" download="${esc(fileName(accVid))}">↓ Скачать видео</a></p>`);
+      }
       if (a.offline) pieces.push('<p class="flag">Только в офлайн-магазинах — в директе не предлагаем</p>');
       if (a.colors) pieces.push(`<p><strong>Цвета:</strong> ${esc(clean(a.colors))}</p>`);
       if (a.features) pieces.push(`<p>${esc(clean(a.features))}</p>`);
