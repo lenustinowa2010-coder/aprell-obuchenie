@@ -119,6 +119,10 @@
       const pieces = [`<h2 id="a-${esc(String(a.art).toLowerCase().replace(/[^\wа-яё\d]+/gi, '-'))}">${esc(a.art)}</h2>`];
       const head = [a.material && clean(a.material), a.price && money(a.price)].filter(Boolean).join(' · ');
       if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
+      const accShots = []
+        .concat(a.i || [], a.shots || [], a.photos || [],
+          ...(a.site || []).map(v => v.i || []));
+      if (accShots.length) pieces.push(shots(accShots, a.art));
       if (a.offline) pieces.push('<p class="flag">Только в офлайн-магазинах — в директе не предлагаем</p>');
       if (a.colors) pieces.push(`<p><strong>Цвета:</strong> ${esc(clean(a.colors))}</p>`);
       if (a.features) pieces.push(`<p>${esc(clean(a.features))}</p>`);
