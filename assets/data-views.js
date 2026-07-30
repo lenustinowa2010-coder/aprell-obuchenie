@@ -14,6 +14,9 @@
   /* локальные пути в data.json заданы относительно папки katalog/ */
   const asset = u => /^https?:/i.test(u) ? u : 'katalog/' + String(u).replace(/^\.?\//, '');
 
+  /* имя файла для скачивания */
+  const fileName = u => String(u).split(/[\\/]/).pop().split('?')[0] || 'photo.jpg';
+
   /* «переписать», «не нравится» — это редакторские пометки, не для менеджера */
   const isNote = s => s && s.trim().length > 25;
 
@@ -21,10 +24,16 @@
 
   function shots(list, alt) {
     if (!Array.isArray(list) || !list.length) return '';
-    const imgs = list.slice(0, 6).map(u =>
-      `<a class="shot" href="${esc(asset(u))}" target="_blank" rel="noopener">
-         <img src="${esc(asset(u))}" alt="${esc(alt)}" loading="lazy">
-       </a>`).join('');
+    const imgs = list.slice(0, 6).map(u => {
+      const url = esc(asset(u));
+      const name = esc(fileName(u));
+      return `<div class="shot">
+         <a class="shot-view" href="${url}" target="_blank" rel="noopener">
+           <img src="${url}" alt="${esc(alt)}" loading="lazy">
+         </a>
+         <a class="dl" href="${url}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
+       </div>`;
+    }).join('');
     return `<div class="shots">${imgs}</div>`;
   }
 
@@ -90,7 +99,8 @@
         pieces.push(`<p><a href="${esc(m.video)}" target="_blank" rel="noopener">Видеообзор</a></p>`);
       }
       if (m.vidLocal) {
-        pieces.push(`<p><video src="${esc(asset(m.vidLocal))}" controls preload="none" class="vid"></video></p>`);
+        const vurl = esc(asset(m.vidLocal));
+        pieces.push(`<p><video src="${vurl}" controls preload="none" class="vid"></video><br><a class="dl dl-vid" href="${vurl}" download="${esc(fileName(m.vidLocal))}">↓ Скачать видео</a></p>`);
       }
       pieces.push(variants(m.site));
       return pieces.filter(Boolean).join('\n');
