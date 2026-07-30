@@ -325,3 +325,12 @@ a{color:inherit}
   .main{padding:0}
   .doc{max-width:none}
 }
+
+.doc .zipall{
+  display:inline-block;margin-top:4px;padding:7px 14px;
+  border:1px solid var(--ink);border-radius:8px;
+  font:600 13px/1 var(--mono);color:var(--paper);background:var(--ink);
+  cursor:pointer;transition:opacity .15s
+}
+.doc .zipall:hover{opacity:.85}
+.doc .zipall:disabled{opacity:.6;cursor:default}

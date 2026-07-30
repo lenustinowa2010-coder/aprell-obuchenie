@@ -8,3 +8,11 @@
     X-Robots-Tag = "noindex, nofollow"
     X-Frame-Options = "SAMEORIGIN"
     Referrer-Policy = "no-referrer"
+
+# Прокси для фото/видео с сайта aprellshop.ru — чтобы браузер мог
+# собрать их в ZIP-архив (обходит ограничение CORS чужого домена).
+[[redirects]]
+  from = "/dl-proxy/*"
+  to = "https://aprellshop.ru/:splat"
+  status = 200
+  force = true

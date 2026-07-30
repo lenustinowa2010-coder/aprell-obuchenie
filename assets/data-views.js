@@ -22,6 +22,13 @@
 
   const clean = s => String(s || '').replace(/\s*---\s*/g, ' — ').replace(/\s+/g, ' ').trim();
 
+  function zipBtn(list, name) {
+    const files = (list || []).filter(Boolean).map(u => asset(u));
+    if (files.length < 2) return '';
+    const data = esc(JSON.stringify({ name: String(name), files }));
+    return `<p><button type="button" class="zipall" data-zip="${data}">↓ Скачать всё архивом (${files.length})</button></p>`;
+  }
+
   function shots(list, alt) {
     if (!Array.isArray(list) || !list.length) return '';
     const imgs = list.slice(0, 6).map(u => {
@@ -83,6 +90,7 @@
         pieces.push('<p class="flag">На сайте вариантов нет — наличие и цену уточнить перед предложением</p>');
 
       pieces.push(shots(allShots, m.art));
+      pieces.push(zipBtn([].concat(allShots, m.vidLocal ? [m.vidLocal] : []), m.art));
       pieces.push(specs(m));
 
       if (m.features) pieces.push(`<p>${esc(clean(m.features))}</p>`);
@@ -123,6 +131,7 @@
         .concat(a.i || [], a.shots || [], a.photos || [],
           ...(a.site || []).map(v => v.i || []));
       if (accShots.length) pieces.push(shots(accShots, a.art));
+      pieces.push(zipBtn([].concat(accShots, (a.vid||a.vidLocal) ? [a.vid||a.vidLocal] : []), a.art));
       const accVid = a.vid || a.vidLocal;
       if (accVid) {
         const vurl = esc(asset(accVid));

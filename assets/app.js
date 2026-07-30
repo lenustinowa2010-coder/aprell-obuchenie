@@ -177,6 +177,10 @@ function render(slug, anchor) {
     q.appendChild(b);
   });
 
+  wrap.querySelectorAll('button.zipall').forEach(btn => {
+    btn.addEventListener('click', () => zipDownload(btn));
+  });
+
   [...wrap.childNodes].forEach(n => doc.appendChild(n));
 
   $('#results').hidden = true;
@@ -317,3 +321,48 @@ document.addEventListener('keydown', e => {
 });
 
 boot();
+
+
+/* ---- Скачать все файлы артикула одним ZIP-архивом ---- */
+// aprellshop.ru не отдаёт CORS, поэтому его файлы тянем через прокси Netlify.
+function proxied(url) {
+  const m = String(url).match(/^https?:\/\/aprellshop\.ru\/(.*)$/i);
+  return m ? '/dl-proxy/' + m[1] : url;
+}
+
+async function zipDownload(btn) {
+  let cfg;
+  try { cfg = JSON.parse(btn.dataset.zip); } catch { return; }
+  if (typeof JSZip === 'undefined') { alert('Не удалось загрузить архиватор. Обновите страницу.'); return; }
+  const label = btn.textContent;
+  btn.disabled = true;
+  const zip = new JSZip();
+  let done = 0, ok = 0;
+  const seen = {};
+  for (const url of cfg.files) {
+    done++;
+    btn.textContent = 'Скачиваю ' + done + '/' + cfg.files.length + '…';
+    try {
+      const res = await fetch(proxied(url));
+      if (!res.ok) continue;
+      const blob = await res.blob();
+      let name = (url.split('/').pop() || 'file').split('?')[0];
+      if (seen[name]) name = (++seen[name]) + '-' + name; else seen[name] = 1;
+      zip.file(name, blob);
+      ok++;
+    } catch (e) { /* пропускаем недоступный файл */ }
+  }
+  if (!ok) {
+    btn.textContent = 'Не удалось — попробуйте позже';
+    setTimeout(() => { btn.textContent = label; btn.disabled = false; }, 2500);
+    return;
+  }
+  btn.textContent = 'Собираю архив…';
+  const out = await zip.generateAsync({ type: 'blob' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(out);
+  a.download = String(cfg.name).replace(/[^\w\dа-яё .()-]+/gi, '_') + '.zip';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  btn.textContent = label; btn.disabled = false;
+}
