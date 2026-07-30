@@ -216,6 +216,7 @@ function buildSearchIndex() {
 }
 
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escHtml = s => String(s == null ? '' : s).replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
 
 function search(q) {
   const box = $('#results');
@@ -246,7 +247,7 @@ function search(q) {
       const at = t.search(new RegExp(esc(query), 'i'));
       t = (at > 90 ? '…' : '') + t.slice(Math.max(0, at - 90), Math.max(0, at - 90) + 240) + '…';
     }
-    a.innerHTML = `<div class="hit-where">${h.part.title}${h.h2 ? ' · ' + h.h2 : ''}</div>
+    a.innerHTML = `<div class="hit-where">${escHtml(h.part.title)}${h.h2 ? ' · ' + escHtml(h.h2) : ''}</div>
       <p class="hit-text">${t.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]))
         .replace(new RegExp(esc(query), 'gi'), m => `<mark>${m}</mark>`)}</p>`;
     box.appendChild(a);
