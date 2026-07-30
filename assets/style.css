@@ -334,3 +334,40 @@ a{color:inherit}
 }
 .doc .zipall:hover{opacity:.85}
 .doc .zipall:disabled{opacity:.6;cursor:default}
+
+/* Кнопка «Замечание» в шапке раздела */
+.doc .doc-head .fb-open{
+  margin-top:14px;padding:7px 14px;cursor:pointer;
+  border:1px solid var(--rule);border-radius:8px;
+  font:600 13px/1 var(--mono);color:var(--ink);background:var(--sand);
+}
+.doc .doc-head .fb-open:hover{border-color:var(--ink)}
+
+/* Окно замечания */
+.fb-back{
+  position:fixed;inset:0;z-index:60;display:flex;align-items:center;
+  justify-content:center;padding:20px;background:rgba(22,21,26,.45)
+}
+.fb-box{
+  width:100%;max-width:440px;background:var(--paper);border-radius:14px;
+  padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)
+}
+.fb-box h3{margin:0 0 4px;font-family:var(--display,Unbounded),sans-serif;font-size:1.1rem}
+.fb-box .fb-sec{margin:0 0 14px;color:var(--faint);font-size:.9rem}
+.fb-box input,.fb-box textarea{
+  width:100%;box-sizing:border-box;margin-bottom:10px;padding:10px 12px;
+  border:1px solid var(--rule);border-radius:9px;background:#fff;
+  font:400 15px/1.4 var(--body,'Golos Text'),sans-serif;color:var(--ink);resize:vertical
+}
+.fb-box input:focus,.fb-box textarea:focus{outline:none;border-color:var(--ink)}
+.fb-row{display:flex;gap:10px;justify-content:flex-end;margin-top:2px}
+.fb-row button{
+  padding:9px 18px;border-radius:9px;cursor:pointer;
+  font:600 14px/1 var(--mono);border:1px solid var(--ink)
+}
+.fb-cancel{background:transparent;color:var(--ink)}
+.fb-send{background:var(--ink);color:var(--paper)}
+.fb-send:disabled{opacity:.6;cursor:default}
+.fb-msg{margin:12px 0 0;font-size:.9rem}
+.fb-msg.ok{color:#2e7d32}
+.fb-msg.err{color:#c0392b}

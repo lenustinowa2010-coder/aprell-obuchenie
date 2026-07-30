@@ -150,7 +150,9 @@ function render(slug, anchor) {
   const head = el('header', 'doc-head');
   const n = state.parts.indexOf(p) + 1;
   head.innerHTML = `<div class="doc-eyebrow">Часть ${n}</div>
-    <h1>${p.title}</h1><p>${p.subtitle}</p>`;
+    <h1>${p.title}</h1><p>${p.subtitle}</p>
+    <button type="button" class="fb-open">\u{1F4AC} Замечание</button>`;
+  head.querySelector('.fb-open').addEventListener('click', () => openFeedback(p.title));
   doc.appendChild(head);
 
   const wrap = el('div');
@@ -365,4 +367,59 @@ async function zipDownload(btn) {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   btn.textContent = label; btn.disabled = false;
+}
+
+
+/* ---- Замечание менеджера -> Telegram (через Netlify-функцию) ---- */
+function openFeedback(section) {
+  const prevName = localStorage.getItem('fb_name') || '';
+  const back = document.createElement('div');
+  back.className = 'fb-back';
+  back.innerHTML = `
+    <div class="fb-box" role="dialog" aria-modal="true">
+      <h3>Замечание к разделу</h3>
+      <p class="fb-sec">${section}</p>
+      <input class="fb-name" type="text" placeholder="Ваше имя" value="${prevName.replace(/"/g,'&quot;')}" maxlength="80">
+      <textarea class="fb-text" rows="5" placeholder="Что поправить или добавить?" maxlength="2000"></textarea>
+      <div class="fb-row">
+        <button type="button" class="fb-cancel">Отмена</button>
+        <button type="button" class="fb-send">Отправить</button>
+      </div>
+      <p class="fb-msg" hidden></p>
+    </div>`;
+  document.body.appendChild(back);
+
+  const close = () => back.remove();
+  back.addEventListener('click', e => { if (e.target === back) close(); });
+  back.querySelector('.fb-cancel').addEventListener('click', close);
+
+  const nameEl = back.querySelector('.fb-name');
+  const textEl = back.querySelector('.fb-text');
+  const msgEl = back.querySelector('.fb-msg');
+  const sendBtn = back.querySelector('.fb-send');
+  setTimeout(() => (prevName ? textEl : nameEl).focus(), 50);
+
+  sendBtn.addEventListener('click', async () => {
+    const name = nameEl.value.trim();
+    const text = textEl.value.trim();
+    if (!text) { textEl.focus(); return; }
+    localStorage.setItem('fb_name', name);
+    sendBtn.disabled = true; sendBtn.textContent = 'Отправляю...';
+    msgEl.hidden = true;
+    try {
+      const res = await fetch('/.netlify/functions/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, section, text })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      msgEl.textContent = 'Спасибо! Замечание отправлено.';
+      msgEl.className = 'fb-msg ok'; msgEl.hidden = false;
+      setTimeout(close, 1400);
+    } catch (e) {
+      msgEl.textContent = 'Не удалось отправить. Попробуйте позже.';
+      msgEl.className = 'fb-msg err'; msgEl.hidden = false;
+      sendBtn.disabled = false; sendBtn.textContent = 'Отправить';
+    }
+  });
 }
