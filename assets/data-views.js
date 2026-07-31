@@ -25,7 +25,7 @@
   function zipBtn(list, name) {
     const files = (list || []).filter(Boolean).map(u => asset(u));
     if (files.length < 2) return '';
-    const data = esc(JSON.stringify({ name: String(name), files }));
+    const data = esc(JSON.stringify({ name: String(name), files })).replace(/"/g, '&quot;');
     return `<p><button type="button" class="zipall" data-zip="${data}">↓ Скачать всё архивом (${files.length})</button></p>`;
   }
 
