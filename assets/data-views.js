@@ -49,7 +49,7 @@
 
   function shots(list, alt) {
     if (!Array.isArray(list) || !list.length) return '';
-    const imgs = list.slice(0, 6).map(u => {
+    const imgs = list.map(u => {
       const url = esc(asset(u));
       const big = esc(fullRes(asset(u)));
       const name = esc(fileName(fullRes(u)));
