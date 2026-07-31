@@ -32,6 +32,23 @@
 
   const asset = u => /^https?:/i.test(u) ? u : 'katalog/' + String(u).replace(/^\.?\//, '');
 
+  /* встроенный плеер для видеообзоров (VK Clips / YouTube Shorts) */
+  function videoEmbed(url) {
+    if (!url) return '';
+    const u = String(url);
+    let src = '';
+    const vk = u.match(/clip(-?\d+)_(\d+)/i);
+    if (vk) {
+      src = 'https://vk.com/video_ext.php?oid=' + vk[1] + '&id=' + vk[2] + '&hd=2';
+    } else {
+      const yt = u.match(/(?:shorts\/|youtu\.be\/|[?&]v=)([\w-]{6,})/i);
+      if (yt) src = 'https://www.youtube.com/embed/' + yt[1];
+    }
+    if (!src) return `<p><a href="${esc(u)}" target="_blank" rel="noopener">Видеообзор</a></p>`;
+    return `<div class="video-embed"><iframe src="${esc(src)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0"></iframe></div>` +
+      `<p class="meta"><a href="${esc(u)}" target="_blank" rel="noopener">Открыть видео в новой вкладке</a></p>`;
+  }
+
   /* имя файла для скачивания */
   const fileName = u => String(u).split(/[\\/]/).pop().split('?')[0] || 'photo.jpg';
 
@@ -123,7 +140,8 @@
         pieces.push('<p class="flag">Готовой презентации нет — составить перед тем, как предлагать модель</p>');
       }
       if (m.video) {
-        pieces.push(`<p><a href="${esc(m.video)}" target="_blank" rel="noopener">Видеообзор</a></p>`);
+        pieces.push(`<h3>Видеообзор</h3>`);
+        pieces.push(videoEmbed(m.video));
       }
       if (m.vidLocal) {
         const vurl = esc(asset(m.vidLocal));
