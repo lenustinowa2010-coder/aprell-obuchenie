@@ -12,6 +12,24 @@
     ? Number(n).toLocaleString('ru-RU').replace(/\u00A0/g, ' ') + ' ₽' : '';
 
   /* локальные пути в data.json заданы относительно папки katalog/ */
+  /* полноразмерное фото вместо сжатого превью cache_image */
+  const fullRes = u => {
+    let x = String(u);
+    const gi = x.indexOf('/goods/');
+    if (gi < 0) return x;
+    const origin = x.slice(0, x.indexOf('/', x.indexOf('://') + 3));
+    let path = x.slice(gi);
+    const slash = path.lastIndexOf('/');
+    const dir = path.slice(0, slash + 1);
+    let file = path.slice(slash + 1);
+    const stripped = file.replace(/_\d+x\d+[^/]*$/i, '');
+    if (stripped !== file) {
+      const ext = (file.match(/\.[a-z0-9]+$/i) || [''])[0];
+      file = stripped + ext;
+    }
+    return origin + dir + file;
+  };
+
   const asset = u => /^https?:/i.test(u) ? u : 'katalog/' + String(u).replace(/^\.?\//, '');
 
   /* имя файла для скачивания */
@@ -33,12 +51,13 @@
     if (!Array.isArray(list) || !list.length) return '';
     const imgs = list.slice(0, 6).map(u => {
       const url = esc(asset(u));
-      const name = esc(fileName(u));
+      const big = esc(fullRes(asset(u)));
+      const name = esc(fileName(fullRes(u)));
       return `<div class="shot">
-         <a class="shot-view" href="${url}" target="_blank" rel="noopener">
+         <a class="shot-view" href="${big}" target="_blank" rel="noopener">
            <img src="${url}" alt="${esc(alt)}" loading="lazy">
          </a>
-         <a class="dl" href="${url}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
+         <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
        </div>`;
     }).join('');
     return `<div class="shots">${imgs}</div>`;

@@ -332,6 +332,25 @@ function proxied(url) {
   return m ? '/dl-proxy/' + m[1] : url;
 }
 
+// Полноразмерное фото вместо сжатого превью cache_image.
+// '.../cache_image/.../goods/0182-1/595025_500x775_8af.jpg' -> '.../goods/0182-1/595025.jpg'
+function fullRes(url) {
+  let u = String(url);
+  const gi = u.indexOf('/goods/');
+  if (gi < 0) return u;
+  const origin = u.slice(0, u.indexOf('/', u.indexOf('://') + 3));
+  let path = u.slice(gi); // начиная с /goods/
+  const slash = path.lastIndexOf('/');
+  const dir = path.slice(0, slash + 1);
+  let file = path.slice(slash + 1);
+  const stripped = file.replace(/_\d+x\d+[^/]*$/i, '');
+  if (stripped !== file) {
+    const ext = (file.match(/\.[a-z0-9]+$/i) || [''])[0];
+    file = stripped + ext;
+  }
+  return origin + dir + file;
+}
+
 async function zipDownload(btn) {
   let cfg;
   try { cfg = JSON.parse(btn.dataset.zip); } catch { return; }
@@ -345,10 +364,11 @@ async function zipDownload(btn) {
     done++;
     btn.textContent = 'Скачиваю ' + done + '/' + cfg.files.length + '…';
     try {
-      const res = await fetch(proxied(url));
+      const src = fullRes(url);
+      const res = await fetch(proxied(src));
       if (!res.ok) continue;
       const blob = await res.blob();
-      let name = (url.split('/').pop() || 'file').split('?')[0];
+      let name = (src.split('/').pop() || 'file').split('?')[0];
       if (seen[name]) name = (++seen[name]) + '-' + name; else seen[name] = 1;
       zip.file(name, blob);
       ok++;
