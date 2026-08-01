@@ -112,7 +112,8 @@
 
     const body = models.map(m => {
       const allShots = []
-        .concat(...(m.site || []).map(v => v.i || []));
+        .concat(...(m.site || []).map(v => v.i || []))
+        .concat(m.extra || []);
       const pieces = [];
 
       pieces.push(`<h2 id="${slugId(m)}">${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);

@@ -72,6 +72,20 @@ async function loadCatalogParts() {
   let d;
   try { d = await (await fetch('katalog/data.json', { cache: 'no-cache' })).json(); }
   catch { return; }
+  // доп. фото из админки (extra_photos.json) — подмешиваем к моделям по артикулу
+  try {
+    const ex = await (await fetch('katalog/extra_photos.json', { cache: 'no-cache' })).json();
+    const key = a => String(a || '').toLowerCase().replace(/[^0-9a-z]/g, '');
+    const map = {};
+    (ex.items || []).forEach(it => {
+      if (it && it.art && it.photos && it.photos.length)
+        map[key(it.art)] = (map[key(it.art)] || []).concat(it.photos);
+    });
+    (d.models || []).forEach(m => {
+      const extra = map[key(m.full)] || map[key(m.art)];
+      if (extra && extra.length) m.extra = extra;
+    });
+  } catch (e) { /* файла может не быть — не страшно */ }
   try {
     window.buildDataParts(d).forEach(p => {
       state.parts.push(p);

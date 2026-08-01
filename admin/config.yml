@@ -44,3 +44,25 @@ collections:
               - { name: subtitle, label: Подпись, widget: string, required: false }
               - { name: url,      label: Адрес, widget: string,
                   hint: "Внутри сайта — katalog/ ; внешний — полный адрес с https://" }
+
+  - name: extraphotos
+    label: Доп. фото моделей
+    files:
+      - name: extra
+        label: Фото по артикулам
+        file: katalog/extra_photos.json
+        media_folder: "/katalog/uploads"
+        public_folder: "uploads"
+        fields:
+          - name: items
+            label: Модели
+            widget: list
+            label_singular: Модель
+            summary: "{{fields.art}}"
+            fields:
+              - { name: art, label: Артикул, widget: string, hint: "Например 5118" }
+              - name: photos
+                label: Фото (JPG/PNG)
+                widget: list
+                label_singular: Фото
+                field: { name: img, label: Фото, widget: image }
