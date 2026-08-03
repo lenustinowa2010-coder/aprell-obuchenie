@@ -326,14 +326,19 @@ scrim.addEventListener('click', closeSide);
 $('#findBtn').addEventListener('click', () => { openSide(); setTimeout(() => $('#q').focus(), 220); });
 
 let timer;
-$('#q').addEventListener('input', e => {
+function onSearchInput(val, from) {
   clearTimeout(timer);
-  timer = setTimeout(() => search(e.target.value), 130);
-});
+  const other = from === 'q' ? '#q2' : '#q';
+  const o = $(other); if (o) o.value = val;
+  timer = setTimeout(() => search(val), 130);
+}
+$('#q').addEventListener('input', e => onSearchInput(e.target.value, 'q'));
+const q2 = $('#q2');
+if (q2) q2.addEventListener('input', e => onSearchInput(e.target.value, 'q2'));
 
 document.addEventListener('keydown', e => {
   if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); $('#q').focus(); }
-  if (e.key === 'Escape') { $('#q').value = ''; search(''); $('#q').blur(); closeSide(); }
+  if (e.key === 'Escape') { $('#q').value = ''; if ($('#q2')) $('#q2').value = ''; search(''); $('#q').blur(); closeSide(); }
 });
 
 boot();
