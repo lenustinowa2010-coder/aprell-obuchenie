@@ -2356,7 +2356,7 @@
    "art": "5301",
    "full": "Кредитница W5301",
    "cat": "",
-   "colors": "черный, красный, коричневый, бордовый, змеиный принт (коричневый)",
+   "colors": "чёрный, красный, коричневый, бордовый, змеиный принт",
    "material": "натуральная кожа",
    "lining": "нет",
    "price": 3900,
@@ -2372,19 +2372,73 @@
    "pres": "Отличный выбор — удобнее классического кошелька. Разгружает сумку: карты, купюры и мелочь в одном месте. Благодаря ремешку носится отдельно в руке или крепится на ручку сумки.\n\nСтоимость — 3 900 ₽ (5 цветов).\n\nПод какие задачи подбираете сумку? ✨",
    "site": [
     {
-     "a": "W5301",
-     "c": "Черный",
+     "a": "W5301-99",
+     "c": "Чёрный",
+     "price": 3900,
      "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5301-99",
      "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-99/090026_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-99/090987_680x1054_4a4.jpg",
       "https://aprellshop.ru/assets/cache_image/goods/W5301-99/099034_680x1054_4a4.jpg",
       "https://aprellshop.ru/assets/cache_image/goods/W5301-99/6709_680x1054_4a4.jpg",
       "https://aprellshop.ru/assets/cache_image/goods/W5301-99/909002_680x1054_4a4.jpg",
-      "https://aprellshop.ru/assets/cache_image/goods/W5301-99/090026_680x1054_4a4.jpg",
-      "https://aprellshop.ru/assets/cache_image/goods/W5301-99/909017_680x1054_4a4.jpg",
       "https://aprellshop.ru/assets/cache_image/goods/W5301-99/909006_680x1054_4a4.jpg",
-      "https://aprellshop.ru/assets/cache_image/goods/W5301-99/090987_680x1054_4a4.jpg"
-     ],
-     "price": 3900
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-99/909017_680x1054_4a4.jpg"
+     ]
+    },
+    {
+     "a": "W5301-50",
+     "c": "Красный",
+     "price": 3900,
+     "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5301-50",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-50/1421_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-50/red06_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-50/red07_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-50/red08_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-50/red15_680x1054_4a4.jpg"
+     ]
+    },
+    {
+     "a": "W5301-80",
+     "c": "Коричневый",
+     "price": 3900,
+     "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5301-80",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-80/1461_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-80/brown32_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-80/brown55_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-80/brown77_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-80/brown88_680x1054_4a4.jpg"
+     ]
+    },
+    {
+     "a": "W5301-55",
+     "c": "Бордовый",
+     "price": 3900,
+     "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5301-55",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-55/1051_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-55/bor231_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-55/bor3_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-55/bor5_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-55/bor75_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w5301-55/bor9_680x1054_4a4.jpg"
+     ]
+    },
+    {
+     "a": "W5301-81",
+     "c": "Змеиный принт",
+     "price": 3900,
+     "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5301-81",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-12/1521_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-12/zmeya13_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-12/zmeya18_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-12/zmeya20_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-12/zmeya55_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5301-12/zmeya76_680x1054_4a4.jpg"
+     ]
     }
    ]
   },
