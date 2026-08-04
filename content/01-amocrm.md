@@ -140,8 +140,8 @@ order: 1
       <div class="tl-arrow">→</div>
       <div class="tl-step">
         <div class="tl-step-time">день</div>
-        <div class="tl-step-name">Диалоги и заказы</div>
-        <div class="tl-step-note">Ведём «В работе», оформляем, контролируем оплату</div>
+        <div class="tl-step-name">Задачи + диалоги и заказы</div>
+        <div class="tl-step-note">Выполняем задачи на сегодня, ведём «В работе», оформляем, контролируем оплату. Новые догоны ставим на утро (08:00)</div>
       </div>
       <div class="tl-arrow">→</div>
       <div class="tl-step">
