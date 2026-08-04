@@ -28,5 +28,10 @@
     "file": "05-promo.md",
     "title": "Промокоды",
     "order": 6
+  },
+  {
+    "file": "06-site-orders.md",
+    "title": "Заказы с сайта",
+    "order": 7
   }
 ]
