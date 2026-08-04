@@ -2392,7 +2392,7 @@
    "art": "5302",
    "full": "Органайзер W5302",
    "cat": "",
-   "colors": "черный, змеиный принт бежевый, змеиный принт коричневый",
+   "colors": "чёрный, змеиный принт коричневый, змеиный принт бежевый, красный",
    "material": "натуральная кожа",
    "lining": "нет",
    "price": 5900,
@@ -2402,13 +2402,14 @@
    "weight": "110 г",
    "features": "минималистичный клатч, который легко адаптируется под разные задачи. Его можно использовать как кошелек для документов и карт, как косметичку или как самостоятельный аксессуар на выход. Внутри достаточно места для всего необходимого: телефон, картхолдер, ключи и базовые мелочи. Модель доступна в чёрном цвете и со змеиным принтом. Можно выбрать более сдержанный вариант или фактурный акцент --- в зависимости от настроения и образа.",
    "video": "https://vk.ru/clip-174823051_456239534",
-   "answer": "Модель 5302. Направляю видеообзор: https://vk.ru/clip-174823051_456239534\n\nОрганайзер представлен в черном, красном и двух змеиных принтах. \nСтоимость модели — 5 900 ₽.\n\nУниверсальный аксессуар 2 в 1: можно использовать как косметичку внутри сумки или носить отдельно как клатч. Удобное решение для тех, кто ценит практичность, стиль и многофункциональность.\n\nКак вам она? ✨",
+   "answer": "Модель 5302. Направляю видеообзор: https://vk.ru/clip-174823051_456239534\n\nОрганайзер представлен в чёрном, красном и двух змеиных принтах (коричневый и бежевый). \nСтоимость модели — 5 900 ₽.\n\nУниверсальный аксессуар 2 в 1: можно использовать как косметичку внутри сумки или носить отдельно как клатч. Удобное решение для тех, кто ценит практичность, стиль и многофункциональность.\n\nКак вам она? ✨",
    "status": "",
    "pres": "Очень полезная вещь. Решает две задачи сразу: внутри сумки наводит порядок и работает как косметичка, а вечером берётся отдельно как клатч — перекладывать ничего не нужно.\n\nСтоимость — 5 900 ₽.\n\nПод какие задачи подбираете сумку? ✨",
    "site": [
     {
-     "a": "W5302",
+     "a": "W5302-99",
      "c": "Чёрный",
+     "price": 5900,
      "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5302-99",
      "i": [
       "https://aprellshop.ru/assets/cache_image/goods/W5302-99/53024_680x1054_a18.png",
@@ -2417,8 +2418,42 @@
       "https://aprellshop.ru/assets/cache_image/goods/W5302-99/56968_680x1054_4a4.jpg",
       "https://aprellshop.ru/assets/cache_image/goods/W5302-99/34959_680x1054_4a4.jpg",
       "https://aprellshop.ru/assets/cache_image/goods/W5302-99/78966_680x1054_4a4.jpg"
-     ],
-     "price": 5900
+     ]
+    },
+    {
+     "a": "W5302-80",
+     "c": "Змеиный принт коричневый",
+     "price": 5900,
+     "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5302-80",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-12/53023_680x1054_a18.png",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-12/556527_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-12/556528_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-12/556537_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-12/556543_680x1054_4a4.jpg"
+     ]
+    },
+    {
+     "a": "W5302-15",
+     "c": "Змеиный принт бежевый",
+     "price": 5900,
+     "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5302-15",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-11/53021_680x1054_a18.png",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-11/776554_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-11/776556_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-11/776565_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-11/776570_680x1054_4a4.jpg"
+     ]
+    },
+    {
+     "a": "W5302-50",
+     "c": "Красный",
+     "price": 5900,
+     "u": "https://aprellshop.ru/catalog/aksessuary/nebolshie-aksessuaryi/koshelek/w5302-50",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/W5302-50/53022_680x1054_a18.png"
+     ]
     }
    ]
   },
