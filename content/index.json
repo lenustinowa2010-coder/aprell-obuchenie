@@ -5,33 +5,33 @@
     "order": 1
   },
   {
+    "file": "06-site-orders.md",
+    "title": "Заказы с сайта",
+    "order": 2
+  },
+  {
     "file": "02-script.md",
     "title": "Скрипт продаж",
-    "order": 2
+    "order": 3
   },
   {
     "file": "02-dialog.md",
     "title": "Карта диалога",
-    "order": 3
+    "order": 4
   },
   {
     "file": "03-delivery.md",
     "title": "Доставка и тарифы",
-    "order": 4
+    "order": 5
   },
   {
     "file": "04-returns.md",
     "title": "Возврат, отказ и брак",
-    "order": 5
+    "order": 6
   },
   {
     "file": "05-promo.md",
     "title": "Промокоды",
-    "order": 6
-  },
-  {
-    "file": "06-site-orders.md",
-    "title": "Заказы с сайта",
     "order": 7
   }
 ]
