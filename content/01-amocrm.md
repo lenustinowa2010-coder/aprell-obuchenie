@@ -90,6 +90,73 @@ order: 1
 
 ### Порядок в начале смены
 
+
+<div class="timeline">
+  <p class="timeline-title">Распорядок смены — сверху вниз по приоритету</p>
+
+  <div class="tl-shift">
+    <div class="tl-shift-head">
+      <span class="tl-shift-name">Утренняя смена</span>
+      <span class="tl-shift-hours">08:00 → 17:00</span>
+    </div>
+    <div class="tl-track">
+      <div class="tl-step is-priority">
+        <div class="tl-step-time">08:00 · 10–20 мин</div>
+        <div class="tl-step-name">Свежие неотвеченные</div>
+        <div class="tl-step-note">Ночь и утренний Reels. Первое касание, догон на 21:00</div>
+      </div>
+      <div class="tl-arrow">→</div>
+      <div class="tl-step">
+        <div class="tl-step-time">далее</div>
+        <div class="tl-step-name">Задачи на сегодня</div>
+        <div class="tl-step-note">Догоны вчерашней смены, проверки оплаты — сверху вниз</div>
+      </div>
+      <div class="tl-arrow">→</div>
+      <div class="tl-step">
+        <div class="tl-step-time">в течение дня</div>
+        <div class="tl-step-name">Оформление заказов</div>
+        <div class="tl-step-note">Бюджет, название сделки → «Отправили на оплату»</div>
+      </div>
+      <div class="tl-arrow">→</div>
+      <div class="tl-step">
+        <div class="tl-step-time">контроль</div>
+        <div class="tl-step-name">Отправили на оплату</div>
+        <div class="tl-step-note">Пришли деньги — сразу «Оплачен»</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-shift">
+    <div class="tl-shift-head">
+      <span class="tl-shift-name">Вечерняя смена</span>
+      <span class="tl-shift-hours">14:00 → 23:00</span>
+    </div>
+    <div class="tl-track">
+      <div class="tl-step is-priority">
+        <div class="tl-step-time">14:00</div>
+        <div class="tl-step-name">Свежие + передача смены</div>
+        <div class="tl-step-note">До 17:00 обе смены на месте — приём дел голосом</div>
+      </div>
+      <div class="tl-arrow">→</div>
+      <div class="tl-step">
+        <div class="tl-step-time">день</div>
+        <div class="tl-step-name">Диалоги и заказы</div>
+        <div class="tl-step-note">Ведём «В работе», оформляем, контролируем оплату</div>
+      </div>
+      <div class="tl-arrow">→</div>
+      <div class="tl-step">
+        <div class="tl-step-time">21:00</div>
+        <div class="tl-step-name">Догоны на вечер</div>
+        <div class="tl-step-note">Разбор догонов от утренней смены. Это начало диалога</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-legend">
+    <span class="tl-dot"></span> Всегда в приоритете: новые диалоги — быстро, ответил и дальше
+  </div>
+</div>
+
 **08:00 — утренняя смена**
 
 1. **Свежие неотвеченные** (10–20 минут). Всё, что пришло с ночи и с утреннего
