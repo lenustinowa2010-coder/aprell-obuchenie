@@ -23,5 +23,10 @@
     "file": "04-returns.md",
     "title": "Возврат, отказ и брак",
     "order": 5
+  },
+  {
+    "file": "05-promo.md",
+    "title": "Промокоды",
+    "order": 6
   }
 ]
