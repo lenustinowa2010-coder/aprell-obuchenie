@@ -191,14 +191,14 @@ a{color:inherit}
 
 /* цитата = готовая формулировка, её копируют */
 .doc blockquote{
-  position:relative;margin:20px 0;padding:16px 54px 16px 18px;
+  position:relative;margin:20px 0;padding:16px 18px 16px 18px;
   background:var(--card);border:1px solid var(--rule);
   border-left:2.5px solid var(--wine);border-radius:var(--r);
   font-size:15.5px;
 }
 .doc blockquote p:last-child{margin-bottom:0}
 .copy{
-  position:absolute;top:10px;right:10px;
+  display:inline-block;margin:12px 0 0;
   border:1px solid var(--rule);background:var(--paper);border-radius:7px;
   font:inherit;font-size:12px;color:var(--muted);padding:5px 9px;cursor:pointer;
 }
@@ -319,8 +319,7 @@ a{color:inherit}
     white-space:nowrap;
   }
   .doc h2{margin-top:38px}
-  .doc blockquote{padding-right:18px;padding-top:42px}
-  .copy{top:8px;left:12px;right:auto}
+  .doc blockquote{padding:16px 18px}
 }
 
 @media (prefers-reduced-motion:reduce){
