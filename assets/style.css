@@ -442,3 +442,27 @@ a{color:inherit}
   .tl-step{min-width:0}
   .tl-arrow{transform:rotate(90deg);align-self:flex-start;margin:1px 0 1px 18px}
 }
+
+/* ---------- блок «работа только с ПК» ---------- */
+.workstation{
+  margin:0 0 26px;
+  border:1px solid rgba(122,36,54,.28);
+  border-left:4px solid var(--wine);
+  border-radius:var(--r);
+  background:var(--wine-soft);
+  padding:18px clamp(14px,3vw,22px) 20px;
+}
+.workstation-title{
+  font-family:"Unbounded",sans-serif;font-weight:600;
+  font-size:14px;letter-spacing:.03em;
+  color:var(--wine);margin:0 0 10px;
+}
+.workstation p{margin:0 0 12px}
+.workstation ul{margin:0 0 12px;padding-left:20px}
+.workstation li{margin:4px 0}
+.workstation .ws-hard{
+  margin:12px 0 0;padding-top:12px;
+  border-top:1px solid rgba(122,36,54,.22);
+  font-size:14px;
+}
+.workstation strong{color:var(--wine)}
