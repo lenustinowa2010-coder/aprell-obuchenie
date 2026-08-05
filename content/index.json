@@ -33,5 +33,10 @@
     "file": "05-promo.md",
     "title": "Промокоды",
     "order": 7
+  },
+  {
+    "file": "99-changelog.md",
+    "title": "Журнал изменений",
+    "order": 99
   }
 ]
