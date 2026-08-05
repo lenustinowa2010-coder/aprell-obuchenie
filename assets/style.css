@@ -480,3 +480,23 @@ a{color:inherit}
   font-size:12px;line-height:1.5;color:var(--muted);margin:0;
 }
 .now-pc-text b{color:var(--ink);font-weight:600}
+
+/* ---------- приветственное обращение ---------- */
+.announce{
+  margin:0 0 22px;
+  border:1px solid var(--rule);
+  border-radius:var(--r);
+  background:var(--sand);
+  padding:20px clamp(16px,3vw,26px) 22px;
+}
+.announce-title{
+  font-family:"Unbounded",sans-serif;font-weight:600;
+  font-size:16px;margin:0 0 12px;
+}
+.announce p{margin:0 0 11px;line-height:1.6}
+.announce p:last-child{margin-bottom:0}
+.announce .a-flag{font-weight:600}
+.announce .a-sign{
+  margin-top:14px;font-style:italic;color:var(--muted);font-size:14px;
+}
+.announce strong{color:var(--wine)}
