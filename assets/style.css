@@ -112,6 +112,7 @@ a{color:inherit}
 /* ---------- «Сейчас» — закреплено в правом верхнем углу ---------- */
 .now{
   position:fixed;top:16px;right:18px;z-index:30;width:236px;
+  max-height:calc(100vh - 32px);overflow:auto;
   padding:13px 15px 14px;
   background:var(--card);border:1px solid var(--rule);border-radius:14px;
   box-shadow:0 6px 22px -12px rgba(22,21,26,.22);
@@ -469,15 +470,15 @@ a{color:inherit}
 
 /* ---------- компактное напоминание «только ПК» в панели «Сейчас» ---------- */
 .now-pc{
-  margin-top:16px;padding-top:14px;
+  margin-top:11px;padding-top:10px;
   border-top:1px solid var(--rule);
 }
 .now-pc-title{
-  font-size:11.5px;font-weight:600;letter-spacing:.04em;
-  color:var(--wine);margin:0 0 6px;text-transform:uppercase;
+  font-size:10.5px;font-weight:600;letter-spacing:.04em;
+  color:var(--wine);margin:0 0 4px;text-transform:uppercase;
 }
 .now-pc-text{
-  font-size:12px;line-height:1.5;color:var(--muted);margin:0;
+  font-size:11px;line-height:1.45;color:var(--muted);margin:0;
 }
 .now-pc-text b{color:var(--ink);font-weight:600}
 
