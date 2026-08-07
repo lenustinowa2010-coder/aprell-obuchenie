@@ -160,6 +160,9 @@ function render(slug, anchor) {
 
   const doc = $('#doc');
   doc.innerHTML = '';
+  const isModels = p.slug === 'models';
+  doc.classList.toggle('catalog-doc', isModels);
+  document.body.classList.toggle('catalog-page', isModels);
 
   const head = el('header', 'doc-head');
   const n = state.parts.indexOf(p) + 1;
@@ -199,6 +202,24 @@ function render(slug, anchor) {
 
   [...wrap.childNodes].forEach(n => doc.appendChild(n));
 
+  const modelQ = doc.querySelector('#model-q');
+  if (modelQ) {
+    const cards = [...doc.querySelectorAll('.model-card')];
+    const count = doc.querySelector('#model-count');
+    const norm = s => String(s || '').toLowerCase().replace(/ё/g, 'е')
+      .replace(/[^0-9a-zа-я]+/gi, ' ').trim();
+    modelQ.addEventListener('input', () => {
+      const words = norm(modelQ.value).split(/\s+/).filter(Boolean);
+      let visible = 0;
+      cards.forEach(card => {
+        const show = words.every(w => norm(card.textContent).includes(w));
+        card.hidden = !show;
+        if (show) visible++;
+      });
+      count.textContent = visible ? `Показано: ${visible}` : 'Ничего не найдено';
+    });
+  }
+
   $('#results').hidden = true;
   doc.hidden = false;
 
@@ -210,7 +231,12 @@ function render(slug, anchor) {
     const t = document.getElementById(anchor);
     const sub = document.querySelector(`.nav ol a[href="#/${p.slug}/${anchor}"]`);
     if (sub) sub.setAttribute('aria-current', 'true');
-    if (t) { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    if (t) {
+      const card = t.matches('details') ? t : t.closest('details');
+      if (card) card.open = true;
+      t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
   }
   window.scrollTo({ top: 0 });
 }
@@ -223,6 +249,14 @@ function buildSearchIndex() {
   state.parts.forEach(p => {
     const d = document.createElement('div');
     d.innerHTML = p.html;
+    const modelCards = [...d.querySelectorAll('.model-card')];
+    if (modelCards.length) {
+      modelCards.forEach(card => {
+        const name = card.querySelector('.model-art')?.textContent || 'Модель';
+        INDEX.push({ part: p, h2: name, id: card.id, text: card.textContent.trim() });
+      });
+      return;
+    }
     let h2 = '', h2id = '';
     [...d.children].forEach(node => {
       if (node.tagName === 'H2') { h2 = node.textContent; h2id = node.id || slugify(h2); return; }

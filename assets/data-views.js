@@ -45,7 +45,7 @@
       if (yt) src = 'https://www.youtube.com/embed/' + yt[1];
     }
     if (!src) return `<p><a href="${esc(u)}" target="_blank" rel="noopener">Видеообзор</a></p>`;
-    return `<div class="video-embed"><iframe src="${esc(src)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0"></iframe></div>` +
+    return `<div class="video-embed"><iframe src="${esc(src)}" loading="lazy" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen frameborder="0"></iframe></div>` +
       `<p class="meta"><a href="${esc(u)}" target="_blank" rel="noopener">Открыть видео в новой вкладке</a></p>`;
   }
 
@@ -106,19 +106,27 @@
   }
 
   /* ------------------------------------------------------------ модели ---- */
-  function buildModels(models) {
-    const chips = models.map(m =>
-      `<a class="chip" href="#/models/${encodeURIComponent(slugId(m))}">${esc(m.art)}</a>`).join('');
+  function modelPrice(m) {
+    const prices = (m.site || []).map(v => Number(v.price)).filter(n => n > 0);
+    if (!prices.length) return m.price ? money(m.price) : '';
+    const min = Math.min(...prices), max = Math.max(...prices);
+    return min === max ? money(min) : `от ${money(min)}`;
+  }
 
-    const body = models.map(m => {
+  function buildModels(models) {
+    const cards = models.map(m => {
       const allShots = []
         .concat(...(m.site || []).map(v => v.i || []))
         .concat(m.extra || []);
       const pieces = [];
+      const id = slugId(m);
+      const preview = allShots[0]
+        ? `<img src="${esc(asset(allShots[0]))}" alt="Модель ${esc(m.art)}" loading="lazy">`
+        : `<span class="model-no-photo">Фото пока нет</span>`;
 
-      pieces.push(`<h2 id="${slugId(m)}">${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);
+      pieces.push(`<h2>${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);
 
-      const head = [m.material && clean(m.material), m.price && money(m.price)]
+      const head = [m.material && clean(m.material), modelPrice(m)]
         .filter(Boolean).join(' · ');
       if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
 
@@ -149,12 +157,30 @@
         pieces.push(`<p><video src="${vurl}" controls preload="none" class="vid"></video><br><a class="dl dl-vid" href="${vurl}" download="${esc(fileName(m.vidLocal))}">↓ Скачать видео</a></p>`);
       }
       pieces.push(variants(m.site));
-      return pieces.filter(Boolean).join('\n');
-    }).join('\n<hr>\n');
+      return `<details class="model-card" id="${id}">
+        <summary class="model-summary">
+          <span class="model-preview">${preview}</span>
+          <span class="model-summary-text">
+            <strong class="model-art">${esc(m.art)}</strong>
+            ${m.full && m.full !== m.art ? `<span class="model-full">${esc(m.full)}</span>` : ''}
+            ${m.material ? `<span class="model-material">${esc(clean(m.material))}</span>` : ''}
+            ${modelPrice(m) ? `<span class="model-price">${modelPrice(m)}</span>` : ''}
+            <span class="model-open-label">Открыть карточку</span>
+          </span>
+        </summary>
+        <div class="model-detail">${pieces.filter(Boolean).join('\n')}</div>
+      </details>`;
+    }).join('\n');
 
     return `<p class="lead">Цены и фото приходят из базы каталога. Готовый текст —
       тот же, что в шаблонах амо: прочитать, подставить имя и цвет, отправить.</p>
-      <div class="chips">${chips}</div>${body}`;
+      <div class="model-finder">
+        <label for="model-q">Найти модель по номеру</label>
+        <input id="model-q" type="search" inputmode="search" autocomplete="off"
+          placeholder="Например: 5114 или W5125">
+        <p class="model-count" id="model-count">Показано: ${models.length}</p>
+      </div>
+      <div class="model-grid">${cards}</div>`;
   }
 
   const slugId = m => 'm-' + String(m.art).toLowerCase().replace(/[^\wа-яё\d]+/gi, '-').replace(/^-|-$/g, '');
