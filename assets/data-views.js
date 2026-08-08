@@ -127,7 +127,16 @@
         .concat(m.extra || []);
       const pieces = [];
       const id = slugId(m);
-      pieces.push(`<h2 class="model-art">${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);
+      const availableShots = []
+        .concat(...(m.site || []).filter(v => !v.oos).map(v => v.i || []));
+      const previewShot = availableShots[0] || allShots[0];
+      const preview = previewShot
+        ? `<img src="${esc(asset(previewShot))}" alt="Модель ${esc(m.art)}" loading="lazy">`
+        : '<span class="model-no-photo">Фото пока нет</span>';
+      const cardPrice = modelPrice(m);
+      const allOut = (m.site || []).length && !(m.site || []).some(v => !v.oos);
+
+      pieces.push(`<h2>${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);
 
       const head = [m.material && clean(m.material), modelPrice(m)]
         .filter(Boolean).join(' · ');
@@ -162,10 +171,20 @@
         pieces.push(`<p><video src="${vurl}" controls preload="none" class="vid"></video><br><a class="dl dl-vid" href="${vurl}" download="${esc(fileName(m.vidLocal))}">↓ Скачать видео</a></p>`);
       }
       pieces.push(variants(m.site));
-      return `<section class="model-card" id="${id}"
+      return `<details class="model-card" id="${id}"
         data-model-number="${esc([m.art, m.full].filter(Boolean).join(' '))}">
+        <summary class="model-summary">
+          <span class="model-preview">${preview}</span>
+          <span class="model-summary-text">
+            <strong class="model-art">${esc(m.art)}</strong>
+            ${m.full && m.full !== m.art ? `<span class="model-full">${esc(m.full)}</span>` : ''}
+            ${m.material ? `<span class="model-material">${esc(clean(m.material))}</span>` : ''}
+            ${cardPrice ? `<span class="model-price">${cardPrice}</span>` : ''}
+            ${allOut ? '<span class="model-stock">Нет в наличии</span>' : '<span class="model-open-label">Открыть карточку</span>'}
+          </span>
+        </summary>
         <div class="model-detail">${pieces.filter(Boolean).join('\n')}</div>
-      </section>`;
+      </details>`;
     }).join('\n');
 
     return `<p class="lead">Цены и фото приходят из базы каталога. Готовый текст —
