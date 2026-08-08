@@ -94,7 +94,9 @@
   function variants(list) {
     if (!Array.isArray(list) || !list.length) return '';
     const rows = list.map(v => {
-      const price = v.oldPrice
+      const price = v.oos
+        ? '<span class="stock-out">Нет в наличии</span>'
+        : v.oldPrice
         ? `<strong>${money(v.price)}</strong> <span class="was">${money(v.oldPrice)}</span>`
         : (v.price ? money(v.price) : '—');
       const link = v.u ? `<a href="${esc(v.u)}" target="_blank" rel="noopener">на сайте</a>` : '';
@@ -107,8 +109,9 @@
 
   /* ------------------------------------------------------------ модели ---- */
   function modelPrice(m) {
-    const prices = (m.site || []).map(v => Number(v.price)).filter(n => n > 0);
-    if (!prices.length) return m.price ? money(m.price) : '';
+    const variants = m.site || [];
+    const prices = variants.filter(v => !v.oos).map(v => Number(v.price)).filter(n => n > 0);
+    if (!prices.length) return variants.length ? '' : (m.price ? money(m.price) : '');
     const min = Math.min(...prices), max = Math.max(...prices);
     return min === max ? money(min) : `от ${money(min)}`;
   }
@@ -133,6 +136,8 @@
       if (isNote(m.status)) pieces.push(`<p class="flag">${esc(m.status)}</p>`);
       if (!(m.site || []).length)
         pieces.push('<p class="flag">На сайте вариантов нет — наличие и цену уточнить перед предложением</p>');
+      else if (!(m.site || []).some(v => !v.oos))
+        pieces.push('<p class="flag">Все варианты сейчас отсутствуют на сайте — наличие и цену уточнить перед предложением</p>');
 
       pieces.push(shots(allShots, m.art));
       pieces.push(zipBtn([].concat(allShots, m.vidLocal ? [m.vidLocal] : []), m.art));

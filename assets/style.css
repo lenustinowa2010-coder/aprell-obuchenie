@@ -301,6 +301,7 @@ a{color:inherit}
 .doc .dl-vid:hover{border-color:var(--ink)}
 .doc .vid{width:100%;max-width:420px;border-radius:10px;background:var(--sand)}
 .doc .was{color:var(--faint);text-decoration:line-through;font-size:.9em}
+.doc .stock-out{color:var(--faint);font-size:.92em}
 
 /* чек-листы */
 .doc input[type=checkbox]{
