@@ -245,6 +245,10 @@ function render(slug, anchor) {
     const sub = document.querySelector(`.nav ol a[href="#/${p.slug}/${anchor}"]`);
     if (sub) sub.setAttribute('aria-current', 'true');
     if (t) {
+      if (p.slug === 'models' && pendingModelOpen === anchor && t.matches('details')) {
+        t.open = true;
+        pendingModelOpen = '';
+      }
       t.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
@@ -254,6 +258,7 @@ function render(slug, anchor) {
 
 /* ---------- поиск ---------- */
 let INDEX = [];
+let pendingModelOpen = '';
 
 function buildSearchIndex() {
   INDEX = [];
@@ -319,6 +324,17 @@ function search(q) {
     a.innerHTML = `<div class="hit-where">${escHtml(h.part.title)}${h.h2 ? ' · ' + escHtml(h.h2) : ''}</div>
       <p class="hit-text">${t.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]))
         .replace(new RegExp(esc(query), 'gi'), m => `<mark>${m}</mark>`)}</p>`;
+    if (h.part.slug === 'models' && h.id) {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        pendingModelOpen = h.id;
+        $('#q').value = '';
+        if ($('#q2')) $('#q2').value = '';
+        const target = a.getAttribute('href');
+        if (location.hash === target) route();
+        else location.hash = target;
+      });
+    }
     box.appendChild(a);
   });
 
