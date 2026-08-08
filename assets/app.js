@@ -236,8 +236,6 @@ function render(slug, anchor) {
     const sub = document.querySelector(`.nav ol a[href="#/${p.slug}/${anchor}"]`);
     if (sub) sub.setAttribute('aria-current', 'true');
     if (t) {
-      const card = t.matches('details') ? t : t.closest('details');
-      if (card) card.open = true;
       t.scrollIntoView({ behavior: 'smooth', block: 'start' });
       return;
     }
