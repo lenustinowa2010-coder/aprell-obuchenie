@@ -222,6 +222,15 @@ function render(slug, anchor) {
       });
       count.textContent = visible ? `Показано: ${visible}` : 'Ничего не найдено';
     });
+    chips.forEach(chip => chip.addEventListener('click', e => {
+      e.preventDefault();
+      const id = decodeURIComponent(chip.getAttribute('href').split('/').pop());
+      const card = document.getElementById(id);
+      if (!card) return;
+      cards.forEach(item => { item.open = item === card; });
+      history.replaceState(null, '', chip.getAttribute('href'));
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
   }
 
   $('#results').hidden = true;
