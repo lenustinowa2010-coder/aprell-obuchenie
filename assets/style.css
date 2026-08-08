@@ -236,48 +236,21 @@ a{color:inherit}
 .model-count{margin:0!important;min-width:105px;font-size:13px;color:var(--faint);text-align:right}
 
 .model-grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));
-  align-items:start;gap:18px;
+  display:block;
 }
 .model-card{
-  min-width:0;background:#fff;border:1px solid var(--rule);border-radius:12px;
-  overflow:hidden;box-shadow:0 8px 26px -24px rgba(22,21,26,.45);
+  min-width:0;margin:0 0 24px;background:#fff;border:1px solid var(--rule);
+  border-radius:12px;overflow:hidden;scroll-margin-top:24px;
 }
 .model-card[hidden]{display:none!important}
-.model-card[open]{grid-column:1/-1}
-.model-summary{display:block;cursor:pointer;list-style:none;background:#fff}
-.model-summary::-webkit-details-marker{display:none}
-.model-summary::marker{display:none;content:""}
-.model-summary:focus-visible{outline:2px solid var(--wine);outline-offset:-2px}
-.model-preview{
-  display:flex;width:100%;aspect-ratio:4/3;align-items:center;justify-content:center;
-  overflow:hidden;background:#fff;border-bottom:1px solid var(--rule);
-}
-.model-preview img{display:block;width:100%;height:100%;object-fit:cover;background:#fff}
-.model-no-photo{font-size:13px;color:var(--faint)}
-.model-summary-text{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:13px 15px 15px}
-.model-art{font-family:"Unbounded",sans-serif;font-size:17px;line-height:1.25}
-.model-full{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--faint);text-align:right}
-.model-material{grid-column:1/-1;font-size:12.5px;line-height:1.4;color:var(--muted)}
-.model-price{font-size:14px;font-weight:600;color:var(--wine)}
-.model-open-label{font-size:12px;color:var(--faint);text-align:right}
-.model-card[open] .model-open-label{font-size:0}
-.model-card[open] .model-open-label::after{content:"Свернуть";font-size:12px}
-.model-card[open] .model-summary{
-  display:grid;grid-template-columns:180px 1fr;align-items:center;
-}
-.model-card[open] .model-preview{height:135px;aspect-ratio:auto;border:0;border-right:1px solid var(--rule)}
-.model-detail{padding:22px;background:#fff;border-top:1px solid var(--rule)}
+.model-detail{padding:22px;background:#fff}
 .model-detail h2{margin:0 0 10px!important;font-size:24px}
 .doc .model-detail .shots{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:10px;overflow:visible;margin:0 0 16px;padding:0;
+  display:flex;gap:8px;overflow-x:auto;margin:0 0 16px;padding:0 0 8px;
+  scroll-snap-type:x proximity;
 }
-.doc .model-detail .shot{min-width:0}
-.doc .model-detail .shot img{
-  display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:contain;
-  border-radius:8px;background:#fff;
-}
+.doc .model-detail .shot{flex:0 0 auto;scroll-snap-align:start}
+.doc .model-detail .shot img{display:block;width:auto;height:240px;object-fit:contain}
 .doc .model-detail .video-embed{background:#fff;max-width:300px}
 
 .doc .chips{
@@ -290,6 +263,8 @@ a{color:inherit}
   background:var(--card);
 }
 .doc .chip:hover{color:var(--wine);border-color:var(--wine)}
+.doc .chip[hidden]{display:none}
+.doc .model-chips{margin-top:-8px}
 
 .doc .meta{
   margin:-6px 0 12px;font-size:13.5px;color:var(--muted);
@@ -382,17 +357,13 @@ a{color:inherit}
   }
   .doc h2{margin-top:38px}
   .doc blockquote{padding:16px 18px}
-  .model-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 }
 
 @media (max-width:560px){
   .model-finder{grid-template-columns:1fr}
   .model-count{text-align:left}
-  .model-grid{grid-template-columns:1fr}
-  .model-card[open] .model-summary{grid-template-columns:96px 1fr}
-  .model-card[open] .model-preview{height:96px}
   .model-detail{padding:16px}
-  .doc .model-detail .shots{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .doc .model-detail .shot img{height:190px}
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -577,8 +548,6 @@ a{color:inherit}
 /* панель «Сейчас» не должна перекрывать конец строк на широких экранах */
 @media (min-width:901px){
   .main{padding-right:calc(var(--gap) + 260px)}
-  .catalog-page .main{padding-right:var(--gap)}
-  .catalog-page .doc-head{padding-right:255px}
 }
 @media (max-width:1330px) and (min-width:901px){
   .main{padding-right:var(--gap)}

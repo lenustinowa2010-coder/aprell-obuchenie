@@ -114,17 +114,17 @@
   }
 
   function buildModels(models) {
+    const chips = models.map(m =>
+      `<a class="chip" data-model-chip="${esc([m.art, m.full].filter(Boolean).join(' '))}"
+        href="#/models/${encodeURIComponent(slugId(m))}">${esc(m.art)}</a>`).join('');
+
     const cards = models.map(m => {
       const allShots = []
         .concat(...(m.site || []).map(v => v.i || []))
         .concat(m.extra || []);
       const pieces = [];
       const id = slugId(m);
-      const preview = allShots[0]
-        ? `<img src="${esc(asset(allShots[0]))}" alt="Модель ${esc(m.art)}" loading="lazy">`
-        : `<span class="model-no-photo">Фото пока нет</span>`;
-
-      pieces.push(`<h2>${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);
+      pieces.push(`<h2 class="model-art">${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);
 
       const head = [m.material && clean(m.material), modelPrice(m)]
         .filter(Boolean).join(' · ');
@@ -157,19 +157,10 @@
         pieces.push(`<p><video src="${vurl}" controls preload="none" class="vid"></video><br><a class="dl dl-vid" href="${vurl}" download="${esc(fileName(m.vidLocal))}">↓ Скачать видео</a></p>`);
       }
       pieces.push(variants(m.site));
-      return `<details class="model-card" id="${id}">
-        <summary class="model-summary">
-          <span class="model-preview">${preview}</span>
-          <span class="model-summary-text">
-            <strong class="model-art">${esc(m.art)}</strong>
-            ${m.full && m.full !== m.art ? `<span class="model-full">${esc(m.full)}</span>` : ''}
-            ${m.material ? `<span class="model-material">${esc(clean(m.material))}</span>` : ''}
-            ${modelPrice(m) ? `<span class="model-price">${modelPrice(m)}</span>` : ''}
-            <span class="model-open-label">Открыть карточку</span>
-          </span>
-        </summary>
+      return `<section class="model-card" id="${id}"
+        data-model-number="${esc([m.art, m.full].filter(Boolean).join(' '))}">
         <div class="model-detail">${pieces.filter(Boolean).join('\n')}</div>
-      </details>`;
+      </section>`;
     }).join('\n');
 
     return `<p class="lead">Цены и фото приходят из базы каталога. Готовый текст —
@@ -180,6 +171,7 @@
           placeholder="Например: 5114 или W5125">
         <p class="model-count" id="model-count">Показано: ${models.length}</p>
       </div>
+      <div class="chips model-chips" aria-label="Все модели">${chips}</div>
       <div class="model-grid">${cards}</div>`;
   }
 

@@ -205,6 +205,7 @@ function render(slug, anchor) {
   const modelQ = doc.querySelector('#model-q');
   if (modelQ) {
     const cards = [...doc.querySelectorAll('.model-card')];
+    const chips = [...doc.querySelectorAll('[data-model-chip]')];
     const count = doc.querySelector('#model-count');
     const norm = s => String(s || '').toLowerCase().replace(/ё/g, 'е')
       .replace(/[^0-9a-zа-я]+/gi, ' ').trim();
@@ -212,9 +213,12 @@ function render(slug, anchor) {
       const words = norm(modelQ.value).split(/\s+/).filter(Boolean);
       let visible = 0;
       cards.forEach(card => {
-        const show = words.every(w => norm(card.textContent).includes(w));
+        const show = words.every(w => norm(card.dataset.modelNumber).includes(w));
         card.hidden = !show;
         if (show) visible++;
+      });
+      chips.forEach(chip => {
+        chip.hidden = !words.every(w => norm(chip.dataset.modelChip).includes(w));
       });
       count.textContent = visible ? `Показано: ${visible}` : 'Ничего не найдено';
     });
