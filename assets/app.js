@@ -3,7 +3,7 @@
 const $ = (s, r = document) => r.querySelector(s);
 const el = (t, c) => { const n = document.createElement(t); if (c) n.className = c; return n; };
 
-const state = { parts: [], byslug: {}, links: [], current: null };
+const state = { parts: [], byslug: {}, links: [], cdekCities: {}, current: null };
 
 /* ---------- фронтматтер ---------- */
 function splitFront(raw) {
@@ -57,6 +57,7 @@ async function boot() {
     state.links = Array.isArray(lj) ? lj : (lj.items || []);
   } catch { state.links = []; }
 
+  await loadDeliveryCities();
   await loadCatalogParts();
 
   buildNav();
@@ -64,6 +65,13 @@ async function boot() {
   route();
   tickNow();
   setInterval(tickNow, 30000);
+}
+
+async function loadDeliveryCities() {
+  try {
+    const data = await (await fetch('content/cdek-cities.json', { cache: 'no-cache' })).json();
+    state.cdekCities = data || {};
+  } catch { state.cdekCities = {}; }
 }
 
 /* ---------- каталог: те же данные, свои разделы ---------- */
@@ -102,37 +110,66 @@ function headingsOf(part) {
   return [...d.querySelectorAll('h2')].map(h => ({ id: h.id || slugify(h.textContent), text: h.textContent }));
 }
 
-function prepareDeliveryContent(root, part, collapseTable = false) {
+function prepareDeliveryContent(root, part, interactive = false) {
   if (part.slug !== '03-delivery') return;
 
   let sectionId = '';
+  let sectionName = '';
   [...root.children].forEach(node => {
     if (node.tagName === 'H2') {
       if (!node.id) node.id = slugify(node.textContent);
       sectionId = node.id;
+      sectionName = node.textContent.trim();
       return;
     }
     if (node.tagName !== 'TABLE' || !sectionId) return;
-    node.querySelectorAll('tbody tr').forEach(row => {
+    [...node.querySelectorAll('tbody tr')].forEach(row => {
       const region = row.cells[0]?.textContent.trim();
       if (!region) return;
       row.id = `${sectionId}-${slugify(region)}`;
       row.classList.add('delivery-region-row');
+      if (sectionName !== 'Полная таблица') return;
+
+      const cities = state.cdekCities[region];
+      if (!Array.isArray(cities) || !cities.length) return;
+
+      const cityRow = el('tr', 'delivery-cities-row');
+      cityRow.id = `${row.id}-города`;
+      cityRow.hidden = true;
+      cityRow.dataset.deliveryRegion = region;
+      const cityCell = el('td');
+      cityCell.colSpan = row.cells.length;
+      const cityList = el('div', 'delivery-city-list');
+      cities.forEach(city => {
+        const item = el('span', 'delivery-city');
+        item.id = `${row.id}-${slugify(city)}`;
+        item.textContent = city;
+        item.dataset.deliveryCity = city;
+        cityList.appendChild(item);
+      });
+      cityCell.appendChild(cityList);
+      cityRow.appendChild(cityCell);
+      row.after(cityRow);
+
+      const firstCell = row.cells[0];
+      firstCell.textContent = '';
+      const toggle = el('button', 'delivery-region-toggle');
+      toggle.type = 'button';
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-controls', cityRow.id);
+      toggle.innerHTML = `<span class="delivery-region-plus" aria-hidden="true">+</span>
+        <span>${escHtml(region)}</span><small>${cities.length} г.</small>`;
+      if (interactive) {
+        toggle.addEventListener('click', () => {
+          const opening = cityRow.hidden;
+          cityRow.hidden = !opening;
+          toggle.setAttribute('aria-expanded', String(opening));
+          toggle.querySelector('.delivery-region-plus').textContent = opening ? '\u2212' : '+';
+        });
+      }
+      firstCell.appendChild(toggle);
     });
   });
-
-  if (!collapseTable) return;
-  const heading = [...root.querySelectorAll('h2')]
-    .find(h => h.textContent.trim() === 'Полная таблица');
-  const table = heading?.nextElementSibling;
-  if (!heading || table?.tagName !== 'TABLE') return;
-
-  const details = el('details', 'delivery-regions');
-  details.id = heading.id;
-  const summary = el('summary', 'delivery-regions-summary');
-  summary.innerHTML = '<span>Все города и регионы СДЭК</span><small>Показать тарифы</small>';
-  heading.replaceWith(details);
-  details.append(summary, table);
 }
 
 function buildNav() {
@@ -288,6 +325,15 @@ function render(slug, anchor) {
     const sub = document.querySelector(`.nav ol a[href="#/${p.slug}/${anchor}"]`);
     if (sub) sub.setAttribute('aria-current', 'true');
     if (t) {
+      const cityRow = t.closest('.delivery-cities-row');
+      if (cityRow) {
+        cityRow.hidden = false;
+        const toggle = cityRow.previousElementSibling?.querySelector('.delivery-region-toggle');
+        if (toggle) {
+          toggle.setAttribute('aria-expanded', 'true');
+          toggle.querySelector('.delivery-region-plus').textContent = '\u2212';
+        }
+      }
       const disclosure = t.matches('details') ? t : t.closest('details');
       if (disclosure) disclosure.open = true;
       if (p.slug === 'models' && pendingModelOpen === anchor && t.matches('details')) {
@@ -323,9 +369,23 @@ function buildSearchIndex() {
     [...d.children].forEach(node => {
       if (node.tagName === 'H2') { h2 = node.textContent; h2id = node.id || slugify(h2); return; }
       if (node.tagName === 'TABLE') {
-        node.querySelectorAll('tbody tr').forEach(tr => {
+        node.querySelectorAll('tbody tr.delivery-region-row').forEach(tr => {
           const cells = [...tr.children].map(td => td.textContent.trim());
-          INDEX.push({ part: p, h2, id: tr.id || h2id, text: cells.join(' · ') });
+          const cityRow = tr.nextElementSibling;
+          const region = cityRow?.classList.contains('delivery-cities-row')
+            ? cityRow.dataset.deliveryRegion
+            : cells[0];
+          const prices = cells.slice(1).join(' · ');
+          INDEX.push({ part: p, h2, id: tr.id || h2id, text: `${region} · ${prices}` });
+          if (!cityRow?.classList.contains('delivery-cities-row')) return;
+          cityRow.querySelectorAll('[data-delivery-city]').forEach(city => {
+            INDEX.push({
+              part: p,
+              h2: `${h2} · ${cityRow.dataset.deliveryRegion}`,
+              id: city.id,
+              text: `${city.dataset.deliveryCity} · ${cityRow.dataset.deliveryRegion} · ${prices}`
+            });
+          });
         });
         return;
       }
