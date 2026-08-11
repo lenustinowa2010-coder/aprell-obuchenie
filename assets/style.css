@@ -322,6 +322,19 @@ a{color:inherit}
   background:var(--wine-soft);color:var(--wine);border-radius:8px;
 }
 
+/* пошаговые скриншоты из рабочих инструкций */
+.doc .guide-shot{
+  margin:22px 0 28px;padding:10px;background:var(--card);
+  border:1px solid var(--rule);border-radius:12px;
+}
+.doc .guide-shot a{display:block;line-height:0}
+.doc .guide-shot img{
+  display:block;width:100%;height:auto;border-radius:7px;background:var(--sand);
+}
+.doc .guide-shot figcaption{
+  padding:10px 4px 2px;color:var(--muted);font-size:14px;line-height:1.5;
+}
+
 .doc .shots{
   display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin:0 0 16px;
   -webkit-overflow-scrolling:touch;scrollbar-width:thin;
