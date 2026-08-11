@@ -217,6 +217,35 @@ a{color:inherit}
 .doc tbody tr:hover{background:var(--sand)}
 .doc td:first-child{font-weight:500}
 
+/* полный список тарифов СДЭК */
+.delivery-regions{
+  margin:18px 0 22px;border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--card);overflow:hidden;scroll-margin-top:24px;
+}
+.delivery-regions-summary{
+  display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;
+  list-style:none;font-size:17px;font-weight:600;background:var(--paper);
+}
+.delivery-regions-summary::-webkit-details-marker{display:none}
+.delivery-regions-summary::marker{display:none;content:""}
+.delivery-regions-summary::before{
+  content:"+";display:grid;place-items:center;flex:0 0 28px;height:28px;
+  border:1px solid var(--wine);border-radius:50%;color:var(--wine);font-size:21px;
+  font-weight:400;line-height:1;
+}
+.delivery-regions[open] .delivery-regions-summary::before{content:"\2212"}
+.delivery-regions-summary small{margin-left:auto;color:var(--faint);font-size:12px;font-weight:400}
+.delivery-regions[open] .delivery-regions-summary small{font-size:0}
+.delivery-regions[open] .delivery-regions-summary small::after{content:"Скрыть тарифы";font-size:12px}
+.delivery-regions>.tw{margin:0;padding:0 18px 12px;background:var(--paper)}
+.delivery-region-row:target{background:#f7e9ec}
+
+@media(max-width:560px){
+  .delivery-regions-summary{padding:14px;font-size:15px}
+  .delivery-regions-summary small{display:none}
+  .delivery-regions>.tw{padding:0 14px 10px}
+}
+
 /* ---------- каталог внутри разделов ---------- */
 .doc .lead{color:var(--muted);font-size:14.5px;margin-bottom:18px}
 

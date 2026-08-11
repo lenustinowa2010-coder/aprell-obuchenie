@@ -102,6 +102,39 @@ function headingsOf(part) {
   return [...d.querySelectorAll('h2')].map(h => ({ id: h.id || slugify(h.textContent), text: h.textContent }));
 }
 
+function prepareDeliveryContent(root, part, collapseTable = false) {
+  if (part.slug !== '03-delivery') return;
+
+  let sectionId = '';
+  [...root.children].forEach(node => {
+    if (node.tagName === 'H2') {
+      if (!node.id) node.id = slugify(node.textContent);
+      sectionId = node.id;
+      return;
+    }
+    if (node.tagName !== 'TABLE' || !sectionId) return;
+    node.querySelectorAll('tbody tr').forEach(row => {
+      const region = row.cells[0]?.textContent.trim();
+      if (!region) return;
+      row.id = `${sectionId}-${slugify(region)}`;
+      row.classList.add('delivery-region-row');
+    });
+  });
+
+  if (!collapseTable) return;
+  const heading = [...root.querySelectorAll('h2')]
+    .find(h => h.textContent.trim() === 'Полная таблица');
+  const table = heading?.nextElementSibling;
+  if (!heading || table?.tagName !== 'TABLE') return;
+
+  const details = el('details', 'delivery-regions');
+  details.id = heading.id;
+  const summary = el('summary', 'delivery-regions-summary');
+  summary.innerHTML = '<span>Все города и регионы СДЭК</span><small>Показать тарифы</small>';
+  heading.replaceWith(details);
+  details.append(summary, table);
+}
+
 function buildNav() {
   const nav = $('#nav');
   nav.innerHTML = '';
@@ -185,6 +218,7 @@ function render(slug, anchor) {
   wrap.innerHTML = p.html;
 
   wrap.querySelectorAll('h2,h3').forEach(h => { if (!h.id) h.id = slugify(h.textContent); });
+  prepareDeliveryContent(wrap, p, true);
   wrap.querySelectorAll('input[type=checkbox]').forEach(i => i.disabled = false);
   wrap.querySelectorAll('table').forEach(t => {
     const box = el('div', 'tw');
@@ -254,6 +288,8 @@ function render(slug, anchor) {
     const sub = document.querySelector(`.nav ol a[href="#/${p.slug}/${anchor}"]`);
     if (sub) sub.setAttribute('aria-current', 'true');
     if (t) {
+      const disclosure = t.matches('details') ? t : t.closest('details');
+      if (disclosure) disclosure.open = true;
       if (p.slug === 'models' && pendingModelOpen === anchor && t.matches('details')) {
         t.open = true;
         pendingModelOpen = '';
@@ -274,6 +310,7 @@ function buildSearchIndex() {
   state.parts.forEach(p => {
     const d = document.createElement('div');
     d.innerHTML = p.html;
+    prepareDeliveryContent(d, p);
     const modelCards = [...d.querySelectorAll('.model-card')];
     if (modelCards.length) {
       modelCards.forEach(card => {
@@ -288,7 +325,7 @@ function buildSearchIndex() {
       if (node.tagName === 'TABLE') {
         node.querySelectorAll('tbody tr').forEach(tr => {
           const cells = [...tr.children].map(td => td.textContent.trim());
-          INDEX.push({ part: p, h2, id: h2id, text: cells.join(' · ') });
+          INDEX.push({ part: p, h2, id: tr.id || h2id, text: cells.join(' · ') });
         });
         return;
       }
@@ -333,10 +370,10 @@ function search(q) {
     a.innerHTML = `<div class="hit-where">${escHtml(h.part.title)}${h.h2 ? ' · ' + escHtml(h.h2) : ''}</div>
       <p class="hit-text">${t.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]))
         .replace(new RegExp(esc(query), 'gi'), m => `<mark>${m}</mark>`)}</p>`;
-    if (h.part.slug === 'models' && h.id) {
+    if (!h.url && h.id) {
       a.addEventListener('click', e => {
         e.preventDefault();
-        pendingModelOpen = h.id;
+        if (h.part.slug === 'models') pendingModelOpen = h.id;
         $('#q').value = '';
         if ($('#q2')) $('#q2').value = '';
         const target = a.getAttribute('href');
