@@ -152,6 +152,15 @@ function buildNav() {
 
 }
 
+function textForClipboard(node) {
+  if (!node.querySelector('br')) return node.innerText.trim();
+  const copy = node.cloneNode(true);
+  copy.querySelectorAll('br').forEach(br => {
+    br.replaceWith(document.createTextNode('\n'));
+  });
+  return copy.textContent.replace(/\r\n?/g, '\n').trim();
+}
+
 /* ---------- отрисовка раздела ---------- */
 function render(slug, anchor) {
   const p = state.byslug[slug] || state.parts[0];
@@ -182,7 +191,7 @@ function render(slug, anchor) {
     t.parentNode.insertBefore(box, t); box.appendChild(t);
   });
   wrap.querySelectorAll('blockquote').forEach(q => {
-    const phrase = q.innerText.trim();
+    const phrase = textForClipboard(q);
     const b = el('button', 'copy');
     b.type = 'button'; b.textContent = 'Копировать';
     b.addEventListener('click', () => {
