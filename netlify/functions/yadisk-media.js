@@ -4,6 +4,8 @@ const PUBLIC_URL = 'https://disk.yandex.ru/d/f0I39Hv9-mUcwQ';
 exports.handler = async event => {
   const mediaPath = event.queryStringParameters?.path;
   const download = event.queryStringParameters?.download === '1';
+  const poster = event.queryStringParameters?.poster === '1';
+  const isVideo = /\.(?:mp4|mov|m4v)$/i.test(mediaPath || '');
   if (!mediaPath || !mediaPath.startsWith('/')) {
     return { statusCode: 400, body: 'Missing media path' };
   }
@@ -17,8 +19,15 @@ exports.handler = async event => {
     const response = await fetch(url);
     if (!response.ok) return { statusCode: response.status, body: 'Media unavailable' };
     const data = await response.json();
-    // Preview is a browser-friendly JPEG even when the original is HEIC.
-    const target = download ? data.href : (data.preview || data.file);
+    // Images use a browser-friendly JPEG preview (including HEIC originals).
+    // Videos use the original stream, while poster=1 returns Yandex's preview frame.
+    const target = download
+      ? data.href
+      : poster
+        ? (data.preview || data.file)
+        : isVideo
+          ? data.file
+          : (data.preview || data.file);
     if (!target) return { statusCode: 404, body: 'Media unavailable' };
     return {
       statusCode: 302,

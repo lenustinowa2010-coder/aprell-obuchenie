@@ -61,6 +61,8 @@
     '/.netlify/functions/yadisk-media?path=' + encodeURIComponent(file.path) +
     (download ? '&download=1' : '');
 
+  const livePosterUrl = file => liveUrl(file) + '&poster=1';
+
   function colorTitle(name) {
     const raw = String(name || '').trim().toLowerCase().replace(/ё/g, 'е');
     const titles = {
@@ -95,9 +97,10 @@
         </div>`;
       }).join('') + videos.map(file => {
         const view = esc(liveUrl(file));
+        const poster = esc(livePosterUrl(file));
         const download = esc(liveUrl(file, true));
         return `<div class="live-video">
-          <video src="${view}" controls preload="none" playsinline></video>
+          <video src="${view}" poster="${poster}" controls preload="none" playsinline></video>
           <a class="dl-vid" href="${download}">↓ Скачать видео</a>
         </div>`;
       }).join('');
