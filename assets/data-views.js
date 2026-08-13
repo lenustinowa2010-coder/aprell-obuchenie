@@ -61,6 +61,24 @@
     '/.netlify/functions/yadisk-media?path=' + encodeURIComponent(file.path) +
     (download ? '&download=1' : '');
 
+  function colorTitle(name) {
+    const raw = String(name || '').trim().toLowerCase().replace(/ё/g, 'е');
+    const titles = {
+      'бежевый': 'Бежевая', 'бежевая': 'Бежевая',
+      'бежевый замша': 'Бежевая · замша', 'бежевый питон': 'Бежевая · питон',
+      'бордо': 'Бордовая', 'бордовый': 'Бордовая', 'бордовый (коричневый)': 'Бордовая · коричневая',
+      'черный': 'Чёрная', 'черная': 'Чёрная', 'черный кожа': 'Чёрная · кожа',
+      'белый': 'Белая', 'молочный': 'Молочная',
+      'коричневый': 'Коричневая', 'коричневый замша': 'Коричневая · замша',
+      'темно коричневый': 'Тёмно-коричневая', 'темно-коричневый': 'Тёмно-коричневая',
+      'темно коричневая': 'Тёмно-коричневая', 'темно коричневый замша': 'Тёмно-коричневая · замша',
+      'красный': 'Красная', 'зеленый': 'Зелёная', 'оливковый': 'Оливковая',
+      'синий': 'Синяя', 'голубой': 'Голубая', 'серый': 'Серая',
+      'розовый': 'Розовая', 'желтый': 'Жёлтая', 'бежевая кожа': 'Бежевая · кожа'
+    };
+    return titles[raw] || raw.charAt(0).toUpperCase() + raw.slice(1);
+  }
+
   function liveGroups(live) {
     if (!live || !Array.isArray(live.colors) || !live.colors.length) return '';
     const groups = live.colors.map(color => {
@@ -83,10 +101,11 @@
           <a class="dl-vid" href="${download}">↓ Скачать видео</a>
         </div>`;
       }).join('');
-      return `<section class="media-color">
-        <h4>${esc(color.name)} <span>${images.length} фото · ${videos.length} видео</span></h4>
+      return `<details class="media-color">
+        <summary><span class="media-color-title">${esc(colorTitle(color.name))}<i></i></span>
+          <span class="media-count">${images.length} фото · ${videos.length} видео</span></summary>
         <div class="live-media-row">${media}</div>
-      </section>`;
+      </details>`;
     }).join('');
     return `<section class="live-media"><h3>Живые фото и видео</h3>${groups}</section>`;
   }
