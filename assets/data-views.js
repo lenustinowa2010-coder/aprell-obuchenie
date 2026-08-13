@@ -52,6 +52,55 @@
   /* имя файла для скачивания */
   const fileName = u => String(u).split(/[\\/]/).pop().split('?')[0] || 'photo.jpg';
 
+  const modelKey = value => {
+    const m = String(value || '').match(/\d{3,5}/);
+    return m ? m[0].replace(/^0+(?=\d)/, '') : '';
+  };
+
+  const liveUrl = (file, download = false) =>
+    '/.netlify/functions/yadisk-media?path=' + encodeURIComponent(file.path) +
+    (download ? '&download=1' : '');
+
+  function liveGroups(live) {
+    if (!live || !Array.isArray(live.colors) || !live.colors.length) return '';
+    const groups = live.colors.map(color => {
+      const images = color.files.filter(file => file.type === 'image');
+      const videos = color.files.filter(file => file.type === 'video');
+      const media = images.map(file => {
+        const view = esc(liveUrl(file));
+        const download = esc(liveUrl(file, true));
+        return `<div class="shot live-shot">
+          <a class="shot-view" href="${view}" target="_blank" rel="noopener">
+            <img src="${view}" alt="${esc(color.name)}" loading="lazy">
+          </a>
+          <a class="dl" href="${download}" title="Скачать фото" aria-label="Скачать фото">↓</a>
+        </div>`;
+      }).join('') + videos.map(file => {
+        const view = esc(liveUrl(file));
+        const download = esc(liveUrl(file, true));
+        return `<div class="live-video">
+          <video src="${view}" controls preload="none" playsinline></video>
+          <a class="dl-vid" href="${download}">↓ Скачать видео</a>
+        </div>`;
+      }).join('');
+      return `<section class="media-color">
+        <h4>${esc(color.name)} <span>${images.length} фото · ${videos.length} видео</span></h4>
+        <div class="live-media-row">${media}</div>
+      </section>`;
+    }).join('');
+    return `<section class="live-media"><h3>Живые фото и видео</h3>${groups}</section>`;
+  }
+
+  function siteGroups(list, art) {
+    if (!Array.isArray(list) || !list.length) return '';
+    const groups = list.filter(v => Array.isArray(v.i) && v.i.length).map(v =>
+      `<section class="media-color site-media-color">
+        <h4>${esc(v.c || 'Цвет не указан')} <span>${v.i.length} фото</span></h4>
+        ${shots(v.i, `${art} · ${v.c || ''}`)}
+      </section>`).join('');
+    return groups ? `<section class="site-media"><h3>Фото с сайта</h3>${groups}</section>` : '';
+  }
+
   /* «переписать», «не нравится» — это редакторские пометки, не для менеджера */
   const isNote = s => s && s.trim().length > 25;
 
@@ -116,22 +165,28 @@
     return min === max ? money(min) : `от ${money(min)}`;
   }
 
-  function buildModels(models) {
+  function buildModels(models, liveMedia) {
+    const liveByModel = {};
+    ((liveMedia && liveMedia.models) || []).forEach(item => {
+      liveByModel[modelKey(item.model)] = item;
+    });
     const chips = models.map(m =>
       `<a class="chip" data-model-chip="${esc([m.art, m.full].filter(Boolean).join(' '))}"
         href="#/models/${encodeURIComponent(slugId(m))}">${esc(m.art)}</a>`).join('');
 
     const cards = models.map(m => {
-      const allShots = []
-        .concat(...(m.site || []).map(v => v.i || []))
-        .concat(m.extra || []);
+      const live = liveByModel[modelKey(m.full || m.art)] || liveByModel[modelKey(m.art)];
+      const liveImages = live ? [].concat(...live.colors.map(c => c.files.filter(f => f.type === 'image'))) : [];
+      const siteShots = [].concat(...(m.site || []).map(v => v.i || []));
+      const extraShots = m.extra || [];
+      const allShots = siteShots.concat(extraShots);
       const pieces = [];
       const id = slugId(m);
       const availableShots = []
         .concat(...(m.site || []).filter(v => !v.oos).map(v => v.i || []));
-      const previewShot = availableShots[0] || allShots[0];
+      const previewShot = liveImages[0] ? liveUrl(liveImages[0]) : (availableShots[0] || allShots[0]);
       const preview = previewShot
-        ? `<img src="${esc(asset(previewShot))}" alt="Модель ${esc(m.art)}" loading="lazy">`
+        ? `<img src="${esc(liveImages[0] ? previewShot : asset(previewShot))}" alt="Модель ${esc(m.art)}" loading="lazy">`
         : '<span class="model-no-photo">Фото пока нет</span>';
       const cardPrice = modelPrice(m);
       const allOut = (m.site || []).length && !(m.site || []).some(v => !v.oos);
@@ -148,8 +203,12 @@
       else if (!(m.site || []).some(v => !v.oos))
         pieces.push('<p class="flag">Все варианты сейчас отсутствуют на сайте — наличие и цену уточнить перед предложением</p>');
 
-      pieces.push(shots(allShots, m.art));
-      pieces.push(zipBtn([].concat(allShots, m.vidLocal ? [m.vidLocal] : []), m.art));
+      pieces.push(liveGroups(live));
+      pieces.push(siteGroups(m.site, m.art));
+      if (extraShots.length) {
+        pieces.push('<h3>Дополнительные фото</h3>');
+        pieces.push(shots(extraShots, m.art));
+      }
       pieces.push(specs(m));
 
       if (m.features) pieces.push(`<p>${esc(clean(m.features))}</p>`);
@@ -202,11 +261,16 @@
   const slugId = m => 'm-' + String(m.art).toLowerCase().replace(/[^\wа-яё\d]+/gi, '-').replace(/^-|-$/g, '');
 
   /* -------------------------------------------------------- аксессуары ---- */
-  function buildAcc(acc) {
+  function buildAcc(acc, liveMedia) {
+    const liveByModel = {};
+    ((liveMedia && liveMedia.models) || []).forEach(item => {
+      liveByModel[modelKey(item.model)] = item;
+    });
     const body = acc.map(a => {
       const pieces = [`<h2 id="a-${esc(String(a.art).toLowerCase().replace(/[^\wа-яё\d]+/gi, '-'))}">${esc(a.art)}</h2>`];
       const head = [a.material && clean(a.material), a.price && money(a.price)].filter(Boolean).join(' · ');
       if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
+      pieces.push(liveGroups(liveByModel[modelKey(a.full || a.art)] || liveByModel[modelKey(a.art)]));
       const accShots = []
         .concat(a.i || [], a.shots || [], a.photos || [],
           ...(a.site || []).map(v => v.i || []));
@@ -270,13 +334,13 @@
       out.push({
         slug: 'models', title: 'Модели', order: 6, noSub: true,
         subtitle: plural(d.models.length, ['модель', 'модели', 'моделей']) + ': цены, фото, готовый текст',
-        html: buildModels(d.models)
+        html: buildModels(d.models, d.liveMedia)
       });
     if (Array.isArray(d.acc) && d.acc.length)
       out.push({
         slug: 'accessories', title: 'Аксессуары', order: 7, noSub: true,
         subtitle: plural(d.acc.length, ['позиция', 'позиции', 'позиций']) + ': подвесы, перчатки, шапки',
-        html: buildAcc(d.acc)
+        html: buildAcc(d.acc, d.liveMedia)
       });
     if (Array.isArray(d.mats) && d.mats.length)
       out.push({

@@ -80,6 +80,9 @@ async function loadCatalogParts() {
   let d;
   try { d = await (await fetch('katalog/data.json', { cache: 'no-cache' })).json(); }
   catch { return; }
+  try {
+    d.liveMedia = await (await fetch('katalog/yadisk-media.json', { cache: 'no-cache' })).json();
+  } catch (e) { d.liveMedia = { models: [] }; }
   // доп. фото из админки (extra_photos.json) — подмешиваем к моделям по артикулу
   try {
     const ex = await (await fetch('katalog/extra_photos.json', { cache: 'no-cache' })).json();
