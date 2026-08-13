@@ -177,6 +177,7 @@ a{color:inherit}
 }
 .doc h2:first-of-type{margin-top:8px}
 .doc h3{font-size:17px;font-weight:600;margin:30px 0 8px;scroll-margin-top:24px}
+.doc [data-search-anchor]{scroll-margin-top:24px}
 .doc p{margin:0 0 14px}
 .doc ul,.doc ol{margin:0 0 16px;padding-left:22px}
 .doc li{margin-bottom:5px}

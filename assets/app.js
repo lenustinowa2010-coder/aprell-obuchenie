@@ -177,6 +177,26 @@ function prepareDeliveryContent(root, part, interactive = false) {
   });
 }
 
+/* Отдельный стабильный якорь для каждого блока, который попадает в поиск. */
+function prepareSearchAnchors(root) {
+  root.querySelectorAll('h2,h3').forEach(h => {
+    if (!h.id) h.id = slugify(h.textContent);
+  });
+
+  let sectionId = 'раздел';
+  let sequence = 0;
+  [...root.children].forEach(node => {
+    if (node.tagName === 'H2') {
+      sectionId = node.id;
+      sequence = 0;
+      return;
+    }
+    if (node.tagName === 'TABLE' || node.textContent.trim().length <= 12) return;
+    if (!node.id) node.id = `${sectionId}-поиск-${++sequence}`;
+    node.dataset.searchAnchor = 'true';
+  });
+}
+
 function buildNav() {
   const nav = $('#nav');
   nav.innerHTML = '';
@@ -261,6 +281,7 @@ function render(slug, anchor) {
 
   wrap.querySelectorAll('h2,h3').forEach(h => { if (!h.id) h.id = slugify(h.textContent); });
   prepareDeliveryContent(wrap, p, true);
+  prepareSearchAnchors(wrap);
   wrap.querySelectorAll('input[type=checkbox]').forEach(i => i.disabled = false);
   wrap.querySelectorAll('table').forEach(t => {
     const box = el('div', 'tw');
@@ -370,9 +391,10 @@ function buildSearchIndex() {
       });
       return;
     }
+    prepareSearchAnchors(d);
     let h2 = '', h2id = '';
     [...d.children].forEach(node => {
-      if (node.tagName === 'H2') { h2 = node.textContent; h2id = node.id || slugify(h2); return; }
+      if (node.tagName === 'H2') { h2 = node.textContent; h2id = node.id; return; }
       if (node.tagName === 'TABLE') {
         node.querySelectorAll('tbody tr.delivery-region-row').forEach(tr => {
           const cells = [...tr.children].map(td => td.textContent.trim());
@@ -395,7 +417,7 @@ function buildSearchIndex() {
         return;
       }
       const txt = node.textContent.trim();
-      if (txt.length > 12) INDEX.push({ part: p, h2, id: h2id, text: txt });
+      if (txt.length > 12) INDEX.push({ part: p, h2, id: node.id || h2id, text: txt });
     });
   });
 }
