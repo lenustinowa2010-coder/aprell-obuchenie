@@ -2,6 +2,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const el = (t, c) => { const n = document.createElement(t); if (c) n.className = c; return n; };
+const CONTENT_VERSION = '20260813-5';
 
 const state = { parts: [], byslug: {}, links: [], cdekCities: {}, current: null };
 
@@ -37,7 +38,8 @@ async function boot() {
   }
 
   const loaded = await Promise.all(index.map(async it => {
-    const raw = await (await fetch('content/' + it.file, { cache: 'no-cache' })).text();
+    const raw = await (await fetch('content/' + it.file + '?v=' + CONTENT_VERSION,
+      { cache: 'no-store' })).text();
     const { meta, body } = splitFront(raw);
     return {
       slug: it.file.replace(/\.md$/, ''),
