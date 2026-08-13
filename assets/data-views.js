@@ -113,16 +113,6 @@
     return `<section class="live-media"><h3>Живые фото и видео</h3>${groups}</section>`;
   }
 
-  function siteGroups(list, art) {
-    if (!Array.isArray(list) || !list.length) return '';
-    const groups = list.filter(v => Array.isArray(v.i) && v.i.length).map(v =>
-      `<section class="media-color site-media-color">
-        <h4>${esc(v.c || 'Цвет не указан')} <span>${v.i.length} фото</span></h4>
-        ${shots(v.i, `${art} · ${v.c || ''}`)}
-      </section>`).join('');
-    return groups ? `<section class="site-media"><h3>Фото с сайта</h3>${groups}</section>` : '';
-  }
-
   /* «переписать», «не нравится» — это редакторские пометки, не для менеджера */
   const isNote = s => s && s.trim().length > 25;
 
@@ -226,7 +216,6 @@
         pieces.push('<p class="flag">Все варианты сейчас отсутствуют на сайте — наличие и цену уточнить перед предложением</p>');
 
       pieces.push(liveGroups(live));
-      pieces.push(siteGroups(m.site, m.art));
       if (extraShots.length) {
         pieces.push('<h3>Дополнительные фото</h3>');
         pieces.push(shots(extraShots, m.art));
