@@ -86,7 +86,7 @@
     const groups = live.colors.map(color => {
       const images = color.files.filter(file => file.type === 'image');
       const videos = color.files.filter(file => file.type === 'video');
-      const media = images.map(file => {
+      const imageMedia = images.map(file => {
         const view = esc(liveUrl(file));
         const download = esc(liveUrl(file, true));
         return `<div class="shot live-shot">
@@ -96,7 +96,8 @@
           <a class="dl" href="${download}" target="_blank" rel="noopener"
             title="Скачать фото" aria-label="Скачать фото">↓</a>
         </div>`;
-      }).join('') + videos.map(file => {
+      }).join('');
+      const videoMedia = videos.map(file => {
         const view = esc(liveUrl(file));
         const poster = esc(livePosterUrl(file));
         const download = esc(liveUrl(file, true));
@@ -109,6 +110,7 @@
           <a class="dl-vid" href="${download}" target="_blank" rel="noopener">↓ Скачать видео</a>
         </div>`;
       }).join('');
+      const media = videoMedia + imageMedia;
       return `<details class="media-color">
         <summary><span class="media-color-title">${esc(colorTitle(color.name))}<i></i></span>
           <span class="media-count">${images.length} фото · ${videos.length} видео</span></summary>
@@ -117,6 +119,30 @@
       </details>`;
     }).join('');
     return `<section class="live-media"><h3>Живые фото и видео</h3>${groups}</section>`;
+  }
+
+  function siteGroups(list, art) {
+    if (!Array.isArray(list) || !list.length) return '';
+    const groups = list.filter(v => Array.isArray(v.i) && v.i.length).map(v => {
+      const items = v.i.map(u => {
+        const url = esc(asset(u));
+        const big = esc(fullRes(asset(u)));
+        const name = esc(fileName(fullRes(u)));
+        return `<div class="shot">
+          <a class="shot-view" href="${big}" target="_blank" rel="noopener">
+            <img data-src="${url}" alt="${esc(`${art} · ${v.c || ''}`)}" loading="lazy">
+          </a>
+          <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
+        </div>`;
+      }).join('');
+      return `<details class="media-color site-media-color">
+        <summary><span class="media-color-title">${esc(v.c || 'Цвет не указан')}<i></i></span>
+          <span class="media-count">${v.i.length} фото</span></summary>
+        <div class="live-media-row" data-live-media></div>
+        <template class="live-media-template">${items}</template>
+      </details>`;
+    }).join('');
+    return groups ? `<section class="site-media"><h3>Фото с сайта</h3>${groups}</section>` : '';
   }
 
   /* «переписать», «не нравится» — это редакторские пометки, не для менеджера */
@@ -229,6 +255,7 @@
         pieces.push('<h3>Дополнительные фото</h3>');
         pieces.push(shots(extraShots, m.art, true));
       }
+      pieces.push(siteGroups(m.site, m.art));
       pieces.push(specs(m));
 
       if (m.features) pieces.push(`<p>${esc(clean(m.features))}</p>`);
