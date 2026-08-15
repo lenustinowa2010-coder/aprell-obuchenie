@@ -91,23 +91,29 @@
         const download = esc(liveUrl(file, true));
         return `<div class="shot live-shot">
           <a class="shot-view" href="${view}" target="_blank" rel="noopener">
-            <img src="${view}" alt="${esc(color.name)}" loading="lazy">
+            <img data-src="${view}" alt="${esc(color.name)}" loading="lazy">
           </a>
-          <a class="dl" href="${download}" title="Скачать фото" aria-label="Скачать фото">↓</a>
+          <a class="dl" href="${download}" target="_blank" rel="noopener"
+            title="Скачать фото" aria-label="Скачать фото">↓</a>
         </div>`;
       }).join('') + videos.map(file => {
         const view = esc(liveUrl(file));
         const poster = esc(livePosterUrl(file));
         const download = esc(liveUrl(file, true));
         return `<div class="live-video">
-          <video src="${view}" poster="${poster}" controls preload="none" playsinline></video>
-          <a class="dl-vid" href="${download}">↓ Скачать видео</a>
+          <button type="button" class="live-video-play" data-video-src="${view}"
+            data-video-poster="${poster}" aria-label="Загрузить видео">
+            <img data-src="${poster}" alt="Видео: ${esc(color.name)}" loading="lazy">
+            <span aria-hidden="true">▶</span>
+          </button>
+          <a class="dl-vid" href="${download}" target="_blank" rel="noopener">↓ Скачать видео</a>
         </div>`;
       }).join('');
       return `<details class="media-color">
         <summary><span class="media-color-title">${esc(colorTitle(color.name))}<i></i></span>
           <span class="media-count">${images.length} фото · ${videos.length} видео</span></summary>
-        <div class="live-media-row">${media}</div>
+        <div class="live-media-row" data-live-media></div>
+        <template class="live-media-template">${media}</template>
       </details>`;
     }).join('');
     return `<section class="live-media"><h3>Живые фото и видео</h3>${groups}</section>`;
@@ -125,19 +131,22 @@
     return `<p><button type="button" class="zipall" data-zip="${data}">↓ Скачать всё архивом (${files.length})</button></p>`;
   }
 
-  function shots(list, alt) {
+  function shots(list, alt, lazy = false) {
     if (!Array.isArray(list) || !list.length) return '';
     const imgs = list.map(u => {
       const url = esc(asset(u));
       const big = esc(fullRes(asset(u)));
       const name = esc(fileName(fullRes(u)));
+      const source = lazy ? `data-src="${url}"` : `src="${url}"`;
       return `<div class="shot">
          <a class="shot-view" href="${big}" target="_blank" rel="noopener">
-           <img src="${url}" alt="${esc(alt)}" loading="lazy">
+           <img ${source} alt="${esc(alt)}" loading="lazy">
          </a>
          <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
        </div>`;
     }).join('');
+    if (lazy) return `<div class="shots" data-extra-media></div>
+      <template class="extra-media-template">${imgs}</template>`;
     return `<div class="shots">${imgs}</div>`;
   }
 
@@ -218,7 +227,7 @@
       pieces.push(liveGroups(live));
       if (extraShots.length) {
         pieces.push('<h3>Дополнительные фото</h3>');
-        pieces.push(shots(extraShots, m.art));
+        pieces.push(shots(extraShots, m.art, true));
       }
       pieces.push(specs(m));
 

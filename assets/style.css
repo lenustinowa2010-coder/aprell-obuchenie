@@ -318,7 +318,13 @@ a{color:inherit}
 .live-media-row{display:flex;gap:8px;overflow-x:auto;padding:0 14px 14px;scroll-snap-type:x proximity}
 .live-video{flex:0 0 auto;width:min(230px,75vw);scroll-snap-align:start}
 .live-video video{display:block;width:100%;height:240px;object-fit:contain;background:#111;border-radius:8px}
+.live-video-play{position:relative;display:block;width:100%;height:240px;padding:0;border:0;border-radius:8px;overflow:hidden;background:#111;cursor:pointer}
+.live-video-play img{display:block;width:100%;height:100%;object-fit:contain}
+.live-video-play span{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:48px;height:48px;transform:translate(-50%,-50%);border-radius:50%;color:#fff;background:rgba(0,0,0,.68);font-size:20px;padding-left:3px}
+.live-video-play:hover span{background:var(--wine)}
 .live-video .dl-vid{margin-top:6px}
+.live-media-more{flex:0 0 160px;align-self:stretch;min-height:240px;border:1px dashed var(--rule);border-radius:8px;color:var(--wine);background:var(--sand);font:600 13px/1.5 var(--mono);cursor:pointer}
+.live-media-more:hover{border-color:var(--wine)}
 
 .doc .chips{
   display:flex;flex-wrap:wrap;gap:6px;margin:0 0 30px;

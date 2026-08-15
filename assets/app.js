@@ -256,6 +256,165 @@ function textForClipboard(node) {
   return copy.textContent.replace(/\r\n?/g, '\n').trim();
 }
 
+/* ---------- медиа каталога: загружаем только раскрытый цвет ---------- */
+const mediaImageQueue = [];
+let activeMediaImages = 0;
+const MEDIA_IMAGE_LIMIT = 4;
+
+function runMediaImageQueue() {
+  while (activeMediaImages < MEDIA_IMAGE_LIMIT && mediaImageQueue.length) {
+    const image = mediaImageQueue.shift();
+    if (!image.isConnected || !image.dataset.src) continue;
+    activeMediaImages++;
+    let settled = false;
+    let timeoutId;
+    const finish = loaded => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      image.removeEventListener('load', onLoad);
+      image.removeEventListener('error', onError);
+      activeMediaImages--;
+      delete image.dataset.queued;
+      if (loaded) {
+        delete image.dataset.src;
+      } else if (image.isConnected && Number(image.dataset.retries || 0) < 1) {
+        image.dataset.retries = String(Number(image.dataset.retries || 0) + 1);
+        image.removeAttribute('src');
+        image.dataset.queued = '1';
+        setTimeout(() => {
+          mediaImageQueue.push(image);
+          runMediaImageQueue();
+        }, 700);
+      }
+      runMediaImageQueue();
+    };
+    const onLoad = () => finish(true);
+    const onError = () => finish(false);
+    image.addEventListener('load', onLoad);
+    image.addEventListener('error', onError);
+    image.src = image.dataset.src;
+    timeoutId = setTimeout(() => {
+      image.removeAttribute('src');
+      finish(false);
+    }, 12000);
+  }
+}
+
+function queueMediaImages(root) {
+  root.querySelectorAll('img[data-src]:not([data-queued])').forEach(image => {
+    image.dataset.queued = '1';
+    mediaImageQueue.push(image);
+  });
+  runMediaImageQueue();
+}
+
+function clearLiveMedia(group) {
+  const row = group.querySelector('[data-live-media]');
+  if (!row || !row.dataset.mounted) return;
+  row.querySelectorAll('video').forEach(video => {
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+  });
+  row.replaceChildren();
+  delete row.dataset.mounted;
+  delete row.dataset.next;
+}
+
+function appendLiveMediaBatch(group) {
+  const row = group.querySelector('[data-live-media]');
+  const template = group.querySelector('.live-media-template');
+  if (!row || !template) return;
+  row.querySelector('.live-media-more')?.remove();
+  const items = [...template.content.children];
+  const start = Number(row.dataset.next || 0);
+  const end = Math.min(start + 8, items.length);
+  const batch = document.createDocumentFragment();
+  items.slice(start, end).forEach(item => batch.appendChild(item.cloneNode(true)));
+  row.appendChild(batch);
+  row.dataset.next = String(end);
+  if (end < items.length) {
+    const more = document.createElement('button');
+    more.type = 'button';
+    more.className = 'live-media-more';
+    more.textContent = `Показать ещё (${items.length - end})`;
+    row.appendChild(more);
+  }
+  queueMediaImages(row);
+}
+
+function mountLiveMedia(group) {
+  const card = group.closest('.model-card');
+  if (!group.open || (card && !card.open)) return;
+  const row = group.querySelector('[data-live-media]');
+  const template = group.querySelector('.live-media-template');
+  if (!row || !template || row.dataset.mounted) return;
+  row.dataset.mounted = '1';
+  row.dataset.next = '0';
+  appendLiveMediaBatch(group);
+}
+
+function mountExtraMedia(card) {
+  card.querySelectorAll('[data-extra-media]').forEach(row => {
+    if (row.dataset.mounted) return;
+    const template = row.nextElementSibling;
+    if (!template?.matches('.extra-media-template')) return;
+    row.appendChild(template.content.cloneNode(true));
+    row.dataset.mounted = '1';
+    queueMediaImages(row);
+  });
+}
+
+function clearExtraMedia(card) {
+  card.querySelectorAll('[data-extra-media][data-mounted]').forEach(row => {
+    row.replaceChildren();
+    delete row.dataset.mounted;
+  });
+}
+
+function setupLazyMedia(root) {
+  const groups = [...root.querySelectorAll('.media-color')];
+  groups.forEach(group => {
+    const row = group.querySelector('[data-live-media]');
+    group.addEventListener('toggle', () => {
+      if (group.open) {
+        mountLiveMedia(group);
+      } else {
+        clearLiveMedia(group);
+      }
+    });
+    row?.addEventListener('click', event => {
+      const more = event.target.closest('.live-media-more');
+      if (more) {
+        appendLiveMediaBatch(group);
+        return;
+      }
+      const button = event.target.closest('.live-video-play');
+      if (!button) return;
+      const video = document.createElement('video');
+      video.src = button.dataset.videoSrc;
+      video.poster = button.dataset.videoPoster || '';
+      video.controls = true;
+      video.autoplay = true;
+      video.preload = 'metadata';
+      video.playsInline = true;
+      button.replaceWith(video);
+    });
+  });
+
+  root.querySelectorAll('.model-card').forEach(card => {
+    card.addEventListener('toggle', () => {
+      if (card.open) mountExtraMedia(card);
+      else clearExtraMedia(card);
+      card.querySelectorAll('.media-color').forEach(group => {
+        if (card.open && group.open) mountLiveMedia(group);
+        else if (!card.open) clearLiveMedia(group);
+      });
+    });
+  });
+}
+
 /* ---------- отрисовка раздела ---------- */
 function render(slug, anchor) {
   const p = state.byslug[slug] || state.parts[0];
@@ -307,6 +466,7 @@ function render(slug, anchor) {
   });
 
   [...wrap.childNodes].forEach(n => doc.appendChild(n));
+  setupLazyMedia(doc);
 
   const modelQ = doc.querySelector('#model-q');
   if (modelQ) {
