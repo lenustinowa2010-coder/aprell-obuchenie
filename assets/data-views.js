@@ -81,12 +81,62 @@
     return titles[raw] || raw.charAt(0).toUpperCase() + raw.slice(1);
   }
 
-  function liveGroups(live) {
-    if (!live || !Array.isArray(live.colors) || !live.colors.length) return '';
-    const groups = live.colors.map(color => {
-      const images = color.files.filter(file => file.type === 'image');
-      const videos = color.files.filter(file => file.type === 'video');
-      const imageMedia = images.map(file => {
+  function colorKey(name) {
+    const value = String(name || '').toLowerCase().replace(/ё/g, 'е');
+    if (!value || /без указания цвета/.test(value)) return '';
+    if (/темн.*корич/.test(value)) return 'темно-коричневый';
+    const colors = [
+      ['корич', 'коричневый'], ['черн', 'черный'], ['беж', 'бежевый'],
+      ['борд', 'бордовый'], ['молоч', 'молочный'], ['бел', 'белый'],
+      ['тауп', 'тауп'], ['голуб', 'голубой'], ['син', 'синий'],
+      ['олив', 'оливковый'], ['зелен', 'зеленый'], ['красн', 'красный'],
+      ['сер', 'серый'], ['розов', 'розовый'], ['желт', 'желтый']
+    ];
+    const found = colors.find(([part]) => value.includes(part));
+    return found ? found[1] : value.replace(/[^a-zа-я0-9]+/g, ' ').trim();
+  }
+
+  function mediaGroups(live, site, extras, art, extraColor) {
+    const liveColors = live && Array.isArray(live.colors) ? live.colors : [];
+    const siteColors = Array.isArray(site) ? site.filter(v => Array.isArray(v.i) && v.i.length) : [];
+    const groups = liveColors.map(color => ({
+      name: color.name,
+      key: colorKey(color.name),
+      images: color.files.filter(file => file.type === 'image'),
+      videos: color.files.filter(file => file.type === 'video'),
+      extras: [],
+      site: []
+    }));
+
+    siteColors.forEach(variant => {
+      const key = colorKey(variant.c);
+      let group = groups.find(item => item.key && item.key === key);
+      if (!group && groups.length === 1 && !groups[0].key && siteColors.length === 1) {
+        group = groups[0];
+        group.name = variant.c;
+        group.key = key;
+      }
+      if (!group) {
+        group = { name: variant.c || 'Цвет не указан', key, images: [], videos: [], extras: [], site: [] };
+        groups.push(group);
+      }
+      group.site.push(...variant.i);
+    });
+
+    if (Array.isArray(extras) && extras.length) {
+      const key = colorKey(extraColor);
+      let group = groups.find(item => key && item.key === key);
+      if (!group && groups.length === 1) group = groups[0];
+      if (!group) {
+        group = { name: extraColor || 'Дополнительные фото', key, images: [], videos: [], extras: [], site: [] };
+        groups.push(group);
+      }
+      group.extras.push(...extras);
+    }
+
+    if (!groups.length) return '';
+    const rendered = groups.map(color => {
+      const imageMedia = color.images.map(file => {
         const view = esc(liveUrl(file));
         const download = esc(liveUrl(file, true));
         return `<div class="shot live-shot">
@@ -97,7 +147,7 @@
             title="Скачать фото" aria-label="Скачать фото">↓</a>
         </div>`;
       }).join('');
-      const videoMedia = videos.map(file => {
+      const videoMedia = color.videos.map(file => {
         const view = esc(liveUrl(file));
         const poster = esc(livePosterUrl(file));
         const download = esc(liveUrl(file, true));
@@ -110,39 +160,38 @@
           <a class="dl-vid" href="${download}" target="_blank" rel="noopener">↓ Скачать видео</a>
         </div>`;
       }).join('');
-      const media = videoMedia + imageMedia;
-      return `<details class="media-color">
-        <summary><span class="media-color-title">${esc(colorTitle(color.name))}<i></i></span>
-          <span class="media-count">${images.length} фото · ${videos.length} видео</span></summary>
-        <div class="live-media-row" data-live-media></div>
-        <template class="live-media-template">${media}</template>
-      </details>`;
-    }).join('');
-    return `<section class="live-media"><h3>Живые фото и видео</h3>${groups}</section>`;
-  }
-
-  function siteGroups(list, art) {
-    if (!Array.isArray(list) || !list.length) return '';
-    const groups = list.filter(v => Array.isArray(v.i) && v.i.length).map(v => {
-      const items = v.i.map(u => {
+      const extraMedia = color.extras.map(u => {
         const url = esc(asset(u));
         const big = esc(fullRes(asset(u)));
         const name = esc(fileName(fullRes(u)));
         return `<div class="shot">
           <a class="shot-view" href="${big}" target="_blank" rel="noopener">
-            <img data-src="${url}" alt="${esc(`${art} · ${v.c || ''}`)}" loading="lazy">
+            <img data-src="${url}" alt="${esc(`${art} · ${color.name || ''}`)}" loading="lazy">
           </a>
           <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
         </div>`;
       }).join('');
-      return `<details class="media-color site-media-color">
-        <summary><span class="media-color-title">${esc(v.c || 'Цвет не указан')}<i></i></span>
-          <span class="media-count">${v.i.length} фото</span></summary>
+      const siteMedia = color.site.map(u => {
+        const url = esc(asset(u));
+        const big = esc(fullRes(asset(u)));
+        const name = esc(fileName(fullRes(u)));
+        return `<div class="shot">
+          <a class="shot-view" href="${big}" target="_blank" rel="noopener">
+            <img data-src="${url}" alt="${esc(`${art} · ${color.name || ''}`)}" loading="lazy">
+          </a>
+          <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
+        </div>`;
+      }).join('');
+      const photoCount = color.images.length + color.extras.length + color.site.length;
+      const media = videoMedia + imageMedia + extraMedia + siteMedia;
+      return `<details class="media-color">
+        <summary><span class="media-color-title">${esc(colorTitle(color.name))}<i></i></span>
+          <span class="media-count">${photoCount} фото · ${color.videos.length} видео</span></summary>
         <div class="live-media-row" data-live-media></div>
-        <template class="live-media-template">${items}</template>
+        <template class="live-media-template">${media}</template>
       </details>`;
     }).join('');
-    return groups ? `<section class="site-media"><h3>Фото с сайта</h3>${groups}</section>` : '';
+    return `<section class="live-media"><h3>Фото и видео по цветам</h3>${rendered}</section>`;
   }
 
   /* «переписать», «не нравится» — это редакторские пометки, не для менеджера */
@@ -250,12 +299,7 @@
       else if (!(m.site || []).some(v => !v.oos))
         pieces.push('<p class="flag">Все варианты сейчас отсутствуют на сайте — наличие и цену уточнить перед предложением</p>');
 
-      pieces.push(liveGroups(live));
-      if (extraShots.length) {
-        pieces.push('<h3>Дополнительные фото</h3>');
-        pieces.push(shots(extraShots, m.art, true));
-      }
-      pieces.push(siteGroups(m.site, m.art));
+      pieces.push(mediaGroups(live, m.site, extraShots, m.art, m.extraColor));
       pieces.push(specs(m));
 
       if (m.features) pieces.push(`<p>${esc(clean(m.features))}</p>`);
@@ -317,7 +361,10 @@
       const pieces = [`<h2 id="a-${esc(String(a.art).toLowerCase().replace(/[^\wа-яё\d]+/gi, '-'))}">${esc(a.art)}</h2>`];
       const head = [a.material && clean(a.material), a.price && money(a.price)].filter(Boolean).join(' · ');
       if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
-      pieces.push(liveGroups(liveByModel[modelKey(a.full || a.art)] || liveByModel[modelKey(a.art)]));
+      pieces.push(mediaGroups(
+        liveByModel[modelKey(a.full || a.art)] || liveByModel[modelKey(a.art)],
+        [], [], a.art, ''
+      ));
       const accShots = []
         .concat(a.i || [], a.shots || [], a.photos || [],
           ...(a.site || []).map(v => v.i || []));

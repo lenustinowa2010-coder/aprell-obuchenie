@@ -61,6 +61,8 @@ collections:
             summary: "{{fields.art}}"
             fields:
               - { name: art, label: Артикул, widget: string, hint: "Например 5118" }
+              - { name: color, label: Цвет, widget: string, required: false,
+                  hint: "Чтобы фото попали в правильный цветовой спойлер" }
               - name: photos
                 label: Фото (JPG/PNG)
                 widget: list

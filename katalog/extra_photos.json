@@ -2,6 +2,7 @@
   "items": [
     {
       "art": "5125",
+      "color": "Голубой",
       "photos": [
         "uploads/2026-08-01-10.45.38.jpg",
         "uploads/2026-08-01-10.45.49.jpg",
@@ -11,6 +12,7 @@
     },
     {
       "art": "5112",
+      "color": "Чёрный",
       "photos": [
         "uploads/2026-08-01-10.48.33.jpg",
         "uploads/2026-08-01-10.48.52.jpg",
@@ -19,6 +21,7 @@
     },
     {
       "art": "7010",
+      "color": "Чёрный",
       "photos": [
         "uploads/2026-08-01-11.14.43.jpg",
         "uploads/img_1854.jpg",
@@ -28,6 +31,7 @@
     },
     {
       "art": "5103",
+      "color": "Коричневый",
       "photos": [
         "uploads/5103-new-01.jpg",
         "uploads/5103-new-02.jpg",

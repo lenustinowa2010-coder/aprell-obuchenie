@@ -92,11 +92,14 @@ async function loadCatalogParts() {
     const map = {};
     (ex.items || []).forEach(it => {
       if (it && it.art && it.photos && it.photos.length)
-        map[key(it.art)] = (map[key(it.art)] || []).concat(it.photos);
+        map[key(it.art)] = { photos: it.photos, color: it.color || '' };
     });
     (d.models || []).forEach(m => {
       const extra = map[key(m.full)] || map[key(m.art)];
-      if (extra && extra.length) m.extra = extra;
+      if (extra && extra.photos.length) {
+        m.extra = extra.photos;
+        m.extraColor = extra.color;
+      }
     });
   } catch (e) { /* файла может не быть — не страшно */ }
   try {
