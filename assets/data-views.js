@@ -383,6 +383,10 @@
       if (a.offline) pieces.push('<p class="flag">Только в офлайн-магазинах — в директе не предлагаем</p>');
       if (a.colors) pieces.push(`<p><strong>Цвета:</strong> ${esc(clean(a.colors))}</p>`);
       if (a.features) pieces.push(`<p>${esc(clean(a.features))}</p>`);
+      if (a.pres) {
+        pieces.push('<h3>Готовый шаблон</h3>');
+        pieces.push(`<blockquote>${esc(a.pres).replace(/\n/g, '<br>')}</blockquote>`);
+      }
       return pieces.join('\n');
     }).join('\n<hr>\n');
     return `<p class="lead">Подвесы, перчатки, шапки, бумажники и модели, которые
