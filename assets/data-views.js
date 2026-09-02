@@ -304,11 +304,16 @@
 
       if (m.features) pieces.push(`<p>${esc(clean(m.features))}</p>`);
 
-      const talk = m.pres || m.answer;
-      if (talk) {
+      const talks = Array.isArray(m.presentations)
+        ? m.presentations.filter(item => item && item.text)
+        : (m.pres || m.answer ? [{ text: m.pres || m.answer }] : []);
+      if (talks.length) {
         pieces.push(`<h3>Презентация модели</h3>`);
-        if (!m.pres) pieces.push('<p class="meta">Презентации нет — текст из старого шаблона, сверить перед отправкой</p>');
-        pieces.push(`<blockquote>${esc(talk).replace(/\n/g, '<br>')}</blockquote>`);
+        if (!m.presentations && !m.pres) pieces.push('<p class="meta">Презентации нет — текст из старого шаблона, сверить перед отправкой</p>');
+        talks.forEach(item => {
+          if (item.label) pieces.push(`<h4>${esc(item.label)}</h4>`);
+          pieces.push(`<blockquote>${esc(item.text).replace(/\n/g, '<br>')}</blockquote>`);
+        });
       } else {
         pieces.push('<p class="flag">Готовой презентации нет — составить перед тем, как предлагать модель</p>');
       }

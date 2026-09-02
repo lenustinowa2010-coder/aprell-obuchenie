@@ -259,6 +259,24 @@ function textForClipboard(node) {
   return copy.textContent.replace(/\r\n?/g, '\n').trim();
 }
 
+async function writeClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return;
+  } catch { /* для браузеров, где Clipboard API недоступен */ }
+
+  const input = el('textarea');
+  input.value = text;
+  input.setAttribute('readonly', '');
+  input.style.position = 'fixed';
+  input.style.opacity = '0';
+  document.body.appendChild(input);
+  input.select();
+  const copied = document.execCommand('copy');
+  input.remove();
+  if (!copied) throw new Error('Не удалось скопировать текст');
+}
+
 /* ---------- медиа каталога: загружаем только раскрытый цвет ---------- */
 const mediaImageQueue = [];
 let activeMediaImages = 0;
@@ -454,7 +472,7 @@ function render(slug, anchor) {
     const b = el('button', 'copy');
     b.type = 'button'; b.textContent = 'Копировать';
     b.addEventListener('click', () => {
-      navigator.clipboard.writeText(phrase)
+      writeClipboard(phrase)
         .then(() => {
           b.textContent = 'Скопировано'; b.classList.add('done');
           setTimeout(() => { b.textContent = 'Копировать'; b.classList.remove('done'); }, 1600);
