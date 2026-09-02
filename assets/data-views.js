@@ -294,9 +294,9 @@
       if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
 
       if (isNote(m.status)) pieces.push(`<p class="flag">${esc(m.status)}</p>`);
-      if (!(m.site || []).length)
+      if (!(m.site || []).length && !m.showInModels)
         pieces.push('<p class="flag">На сайте вариантов нет — наличие и цену уточнить перед предложением</p>');
-      else if (!(m.site || []).some(v => !v.oos))
+      else if ((m.site || []).length && !(m.site || []).some(v => !v.oos))
         pieces.push('<p class="flag">Все варианты сейчас отсутствуют на сайте — наличие и цену уточнить перед предложением</p>');
 
       pieces.push(mediaGroups(live, m.site, extraShots, m.art, m.extraColor));
@@ -433,11 +433,15 @@
   /* ------------------------------------------------------------ сборка ---- */
   window.buildDataParts = function (d) {
     const out = [];
-    if (Array.isArray(d.models) && d.models.length)
+    const featuredAccessories = (Array.isArray(d.acc) ? d.acc : [])
+      .filter(item => item.showInModels)
+      .map(item => Object.assign({}, item, { extra: item.i || [] }));
+    const modelItems = (Array.isArray(d.models) ? d.models : []).concat(featuredAccessories);
+    if (modelItems.length)
       out.push({
         slug: 'models', title: 'Модели', order: 6, noSub: true,
-        subtitle: plural(d.models.length, ['модель', 'модели', 'моделей']) + ': цены, фото, готовый текст',
-        html: buildModels(d.models, d.liveMedia)
+        subtitle: plural(modelItems.length, ['модель', 'модели', 'моделей']) + ': цены, фото, готовый текст',
+        html: buildModels(modelItems, d.liveMedia)
       });
     if (Array.isArray(d.acc) && d.acc.length)
       out.push({
