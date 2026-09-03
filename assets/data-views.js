@@ -362,17 +362,36 @@
     ((liveMedia && liveMedia.models) || []).forEach(item => {
       liveByModel[modelKey(item.model)] = item;
     });
-    const body = acc.map(a => {
-      const pieces = [`<h2 id="a-${esc(String(a.art).toLowerCase().replace(/[^\wа-яё\d]+/gi, '-'))}">${esc(a.art)}</h2>`];
-      const head = [a.material && clean(a.material), a.price && money(a.price)].filter(Boolean).join(' · ');
-      if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
-      pieces.push(mediaGroups(
-        liveByModel[modelKey(a.full || a.art)] || liveByModel[modelKey(a.art)],
-        [], [], a.art, ''
-      ));
+
+    const attr = s => esc(s).replace(/"/g, '&quot;');
+    const searchData = a => [a.art, a.colors, a.material].filter(Boolean).join(' ');
+    const cardId = a => 'a-' + String(a.art).toLowerCase()
+      .replace(/[^\wа-яё\d]+/gi, '-').replace(/^-|-$/g, '');
+
+    const chips = acc.map(a =>
+      `<a class="chip" data-model-chip="${attr(a.art)}"
+        href="#/accessories/${encodeURIComponent(cardId(a))}">${esc(a.art)}</a>`
+    ).join('');
+
+    const cards = acc.map(a => {
+      const live = liveByModel[modelKey(a.full || a.art)] || liveByModel[modelKey(a.art)];
+      const liveImages = live
+        ? [].concat(...live.colors.map(c => c.files.filter(f => f.type === 'image')))
+        : [];
       const accShots = []
         .concat(a.i || [], a.shots || [], a.photos || [],
           ...(a.site || []).map(v => v.i || []));
+      const previewShot = liveImages[0] ? liveUrl(liveImages[0]) : accShots[0];
+      const preview = previewShot
+        ? `<img src="${esc(liveImages[0] ? previewShot : asset(previewShot))}" alt="Аксессуар ${esc(a.art)}" loading="lazy">`
+        : '<span class="model-no-photo">Фото пока нет</span>';
+      const pieces = [`<h2>${esc(a.art)}</h2>`];
+      const head = [a.material && clean(a.material), a.price && money(a.price)].filter(Boolean).join(' · ');
+      if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
+      pieces.push(mediaGroups(
+        live,
+        [], [], a.art, ''
+      ));
       if (accShots.length) pieces.push(shots(accShots, a.art));
       pieces.push(zipBtn([].concat(accShots, (a.vid||a.vidLocal) ? [a.vid||a.vidLocal] : []), a.art));
       const accVid = a.vid || a.vidLocal;
@@ -387,10 +406,33 @@
         pieces.push('<h3>Готовый шаблон</h3>');
         pieces.push(`<blockquote>${esc(a.pres).replace(/\n/g, '<br>')}</blockquote>`);
       }
-      return pieces.join('\n');
-    }).join('\n<hr>\n');
+      return `<details class="model-card" id="${cardId(a)}"
+        data-model-number="${attr(a.art)}"
+        data-model-search="${attr(searchData(a))}">
+        <summary class="model-summary">
+          <span class="model-preview">${preview}</span>
+          <span class="model-summary-text">
+            <strong class="model-art">${esc(a.art)}</strong>
+            ${a.material ? `<span class="model-material">${esc(clean(a.material))}</span>` : ''}
+            ${a.price ? `<span class="model-price">${money(a.price)}</span>` : ''}
+            <span class="model-open-label">Открыть карточку</span>
+            ${a.offline ? '<span class="model-stock">Только в офлайн-магазинах</span>' : ''}
+          </span>
+        </summary>
+        <div class="model-detail">${pieces.filter(Boolean).join('\n')}</div>
+      </details>`;
+    }).join('\n');
+
     return `<p class="lead">Подвесы, перчатки, шапки, бумажники и модели, которые
-      есть только в офлайне.</p>${body}`;
+      есть только в офлайне.</p>
+      <div class="model-finder">
+        <label for="model-q">Найти аксессуар по артикулу</label>
+        <input id="model-q" type="search" inputmode="search" autocomplete="off"
+          placeholder="Например: 821 или W5213">
+        <p class="model-count" id="model-count">Показано: ${acc.length}</p>
+      </div>
+      <div class="chips model-chips" aria-label="Все аксессуары">${chips}</div>
+      <div class="model-grid">${cards}</div>`;
   }
 
   /* ---------------------------------------------------------- материалы ---- */

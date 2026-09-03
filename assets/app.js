@@ -444,9 +444,9 @@ function render(slug, anchor) {
 
   const doc = $('#doc');
   doc.innerHTML = '';
-  const isModels = p.slug === 'models';
-  doc.classList.toggle('catalog-doc', isModels);
-  document.body.classList.toggle('catalog-page', isModels);
+  const isCatalog = p.slug === 'models' || p.slug === 'accessories';
+  doc.classList.toggle('catalog-doc', isCatalog);
+  document.body.classList.toggle('catalog-page', isCatalog);
 
   const head = el('header', 'doc-head');
   const n = state.parts.indexOf(p) + 1;
