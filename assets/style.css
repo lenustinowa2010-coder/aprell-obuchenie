@@ -410,6 +410,7 @@ a{color:inherit}
 .hit-text{margin:5px 0 0;font-size:14.5px;line-height:1.5}
 .hit mark{background:#F7E9A8;color:inherit;border-radius:3px;padding:0 2px}
 .empty{color:var(--muted);font-size:15px}
+.mobile-results{display:none}
 
 /* ---------- мобильные ---------- */
 .scrim{position:fixed;inset:0;background:rgba(22,21,26,.4);z-index:44}
@@ -433,6 +434,14 @@ a{color:inherit}
     padding-left:max(24px,env(safe-area-inset-left));
   }
   .side.open{transform:none;box-shadow:0 0 60px rgba(0,0,0,.16)}
+  .side.searching .nav{display:none}
+  .side.searching .search{margin-bottom:12px}
+  .mobile-results:not([hidden]){display:block;padding-bottom:20px}
+  .mobile-results .results-meta{margin:0 0 10px}
+  .mobile-results .hit{padding:12px 13px;margin-bottom:8px}
+  .mobile-results .hit-where{font-size:10.5px;line-height:1.4}
+  .mobile-results .hit-text{font-size:13.5px;line-height:1.45}
+  .mobile-results .empty{font-size:14px;line-height:1.45}
   .nav a.part{min-height:44px;align-content:center}
   .nav ol a{padding-top:7px;padding-bottom:7px}
   .main{

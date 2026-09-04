@@ -692,9 +692,16 @@ function route() {
 /* ---------- события ---------- */
 window.addEventListener('hashchange', route);
 
-const side = $('#side'), scrim = $('#scrim');
+const side = $('#side'), scrim = $('#scrim'), mobileResults = $('#mobileResults');
 function openSide() { side.classList.add('open'); scrim.hidden = false; $('#burger').setAttribute('aria-expanded', 'true'); }
 function closeSide() { side.classList.remove('open'); scrim.hidden = true; $('#burger').setAttribute('aria-expanded', 'false'); }
+
+function syncMobileSearch(val) {
+  const active = val.trim().length >= 2 && window.matchMedia('(max-width: 900px)').matches;
+  side.classList.toggle('searching', active);
+  mobileResults.hidden = !active;
+  mobileResults.innerHTML = active ? $('#results').innerHTML : '';
+}
 
 $('#burger').addEventListener('click', () => side.classList.contains('open') ? closeSide() : openSide());
 scrim.addEventListener('click', closeSide);
@@ -705,15 +712,34 @@ function onSearchInput(val, from) {
   clearTimeout(timer);
   const other = from === 'q' ? '#q2' : '#q';
   const o = $(other); if (o) o.value = val;
-  timer = setTimeout(() => search(val), 130);
+  timer = setTimeout(() => {
+    search(val);
+    syncMobileSearch(val);
+  }, 130);
 }
 $('#q').addEventListener('input', e => onSearchInput(e.target.value, 'q'));
 const q2 = $('#q2');
 if (q2) q2.addEventListener('input', e => onSearchInput(e.target.value, 'q2'));
 
+mobileResults.addEventListener('click', e => {
+  const link = e.target.closest('a.hit');
+  if (!link) return;
+  const target = link.getAttribute('href') || '';
+  if (!target.startsWith('#/')) return;
+  e.preventDefault();
+  if (target.startsWith('#/models/')) pendingModelOpen = decodeURIComponent(target.split('/').pop());
+  $('#q').value = '';
+  if ($('#q2')) $('#q2').value = '';
+  search('');
+  syncMobileSearch('');
+  closeSide();
+  if (location.hash === target) route();
+  else location.hash = target;
+});
+
 document.addEventListener('keydown', e => {
   if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); $('#q').focus(); }
-  if (e.key === 'Escape') { $('#q').value = ''; if ($('#q2')) $('#q2').value = ''; search(''); $('#q').blur(); closeSide(); }
+  if (e.key === 'Escape') { $('#q').value = ''; if ($('#q2')) $('#q2').value = ''; search(''); syncMobileSearch(''); $('#q').blur(); closeSide(); }
 });
 
 boot();
