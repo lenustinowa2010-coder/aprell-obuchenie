@@ -234,8 +234,8 @@ a{color:inherit}
 .delivery-cities-row[hidden]{display:none}
 .doc .delivery-cities-row:hover{background:transparent}
 .doc .delivery-cities-row td{padding:0 14px 12px 31px;background:var(--card)}
-.delivery-city-list{display:flex;flex-wrap:wrap;gap:6px 8px;padding:10px 12px;border-radius:8px;background:var(--sand)}
-.delivery-city{padding:3px 7px;border:1px solid var(--rule);border-radius:5px;background:var(--paper);font-size:12px;color:var(--muted);scroll-margin-top:28px}
+.delivery-city-list{display:flex;flex-wrap:wrap;gap:6px 8px;padding:10px 12px;border-radius:8px;background:var(--card)}
+.delivery-city{padding:3px 7px;border:1px solid var(--rule);border-radius:5px;background:var(--card);font-size:12px;color:var(--muted);scroll-margin-top:28px}
 .delivery-region-row:target{background:#f7e9ec}
 .delivery-city:target{color:var(--wine);border-color:var(--wine);background:#fff}
 
