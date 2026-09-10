@@ -281,6 +281,9 @@ a{color:inherit}
   overflow:hidden;background:#fff;border-bottom:1px solid var(--rule);
 }
 .model-preview img{display:block;width:100%;height:100%;object-fit:cover;background:#fff}
+.model-card:not([open]) .model-preview{aspect-ratio:1/1}
+.model-card:not([open]) .model-preview img{object-position:center 75%}
+.model-card:not([open]) .model-preview-full img{object-fit:contain;object-position:center}
 .model-no-photo{font-size:13px;color:var(--faint)}
 .model-summary-text{display:grid;grid-template-columns:1fr auto;gap:3px 10px;padding:13px 15px 15px}
 .model-art{font-family:"Unbounded",sans-serif;font-size:17px;line-height:1.25}

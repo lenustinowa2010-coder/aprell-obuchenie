@@ -331,7 +331,7 @@
       return `<details class="model-card" id="${id}"
         data-model-number="${esc([m.art, m.full].filter(Boolean).join(' '))}">
         <summary class="model-summary">
-          <span class="model-preview">${preview}</span>
+          <span class="model-preview${modelKey(m.art) === '5111' ? ' model-preview-full' : ''}">${preview}</span>
           <span class="model-summary-text">
             <strong class="model-art">${esc(m.art)}</strong>
             ${m.full && m.full !== m.art ? `<span class="model-full">${esc(m.full)}</span>` : ''}
