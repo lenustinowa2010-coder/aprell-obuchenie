@@ -335,7 +335,7 @@
           <span class="model-summary-text">
             <strong class="model-art">${esc(m.art)}</strong>
             ${m.full && m.full !== m.art ? `<span class="model-full">${esc(m.full)}</span>` : ''}
-            ${m.material ? `<span class="model-material">${esc(clean(m.material))}</span>` : ''}
+            ${m.material ? `<span class="model-material">${esc(clean(m.previewMaterial || m.material))}</span>` : ''}
             ${cardPrice ? `<span class="model-price">${cardPrice}</span>` : ''}
             ${allOut ? '<span class="model-stock">Нет в наличии</span>' : '<span class="model-open-label">Открыть карточку</span>'}
           </span>
