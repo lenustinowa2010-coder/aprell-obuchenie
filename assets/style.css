@@ -278,9 +278,9 @@ a{color:inherit}
 .model-summary:focus-visible{outline:2px solid var(--wine);outline-offset:-2px}
 .model-preview{
   display:flex;width:100%;aspect-ratio:4/3;align-items:center;justify-content:center;
-  overflow:hidden;background:#fff;border-bottom:1px solid var(--rule);
+  overflow:hidden;background:#eeeade;border-bottom:1px solid var(--rule);
 }
-.model-preview img{display:block;width:100%;height:100%;object-fit:cover;background:#fff}
+.model-preview img{display:block;width:100%;height:100%;object-fit:cover;background:#eeeade}
 .model-card:not([open]) .model-preview{aspect-ratio:1/1}
 .model-card:not([open]) .model-preview img{object-position:center 75%}
 .model-card:not([open]) .model-preview-full img{object-fit:contain;object-position:center}
