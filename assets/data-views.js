@@ -58,10 +58,10 @@
   };
 
   const liveUrl = (file, download = false) =>
-    '/.netlify/functions/yadisk-media?path=' + encodeURIComponent(file.path) +
-    (download ? '&download=1' : '');
+    file.url || ('/.netlify/functions/yadisk-media?path=' + encodeURIComponent(file.path) +
+    (download ? '&download=1' : ''));
 
-  const livePosterUrl = file => liveUrl(file) + '&poster=1';
+  const livePosterUrl = file => file.poster || (liveUrl(file) + '&poster=1');
 
   function colorTitle(name) {
     const raw = String(name || '').trim().toLowerCase().replace(/ё/g, 'е');
@@ -157,7 +157,7 @@
             <img data-src="${poster}" alt="Видео: ${esc(color.name)}" loading="lazy">
             <span aria-hidden="true">▶</span>
           </button>
-          <a class="dl-vid" href="${download}" target="_blank" rel="noopener">↓ Скачать видео</a>
+          <a class="dl-vid" href="${download}"${file.url ? ` download="${esc(file.name)}"` : ''} target="_blank" rel="noopener">↓ Скачать видео</a>
         </div>`;
       }).join('');
       const extraMedia = color.extras.map(u => {

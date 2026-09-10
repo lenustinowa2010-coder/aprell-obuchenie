@@ -1556,6 +1556,56 @@
               "size": 2804329
             }
           ]
+        },
+        {
+          "name": "Змея",
+          "files": [
+            {
+              "name": "4630-snake.mp4",
+              "url": "/katalog/media/4630/4630-snake.mp4",
+              "poster": "/katalog/media/4630/4630-snake.jpg",
+              "type": "video",
+              "size": 8571909
+            }
+          ]
+        },
+        {
+          "name": "Бордовый",
+          "files": [
+            {
+              "name": "4630-burgundy.mp4",
+              "url": "/katalog/media/4630/4630-burgundy.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy.jpg",
+              "type": "video",
+              "size": 4411121
+            },
+            {
+              "name": "4630-burgundy-dark-brown.mp4",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
+              "type": "video",
+              "size": 2086547
+            }
+          ]
+        },
+        {
+          "name": "Тёмно-коричневый",
+          "files": [
+            {
+              "name": "4630-dark-brown.mp4",
+              "url": "/katalog/media/4630/4630-dark-brown.mp4",
+              "poster": "/katalog/media/4630/4630-dark-brown.jpg",
+              "type": "video",
+              "size": 5166563
+            },
+            {
+              "name": "4630-burgundy-dark-brown.mp4",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
+              "type": "video",
+              "size": 2086547
+            }
+          ]
         }
       ]
     },
