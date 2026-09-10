@@ -2574,6 +2574,67 @@
               "path": "/5110/бордо/home 3.mp4",
               "type": "video",
               "size": 1382554
+            },
+            {
+              "name": "5110-burgundy-20260910-153142.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153142.jpg",
+              "type": "image",
+              "size": 99934
+            },
+            {
+              "name": "5110-burgundy-20260910-153114.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153114.jpg",
+              "type": "image",
+              "size": 175120
+            },
+            {
+              "name": "5110-burgundy-20260910-153126.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153126.jpg",
+              "type": "image",
+              "size": 104730
+            },
+            {
+              "name": "5110-burgundy-20260910-153123.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153123.jpg",
+              "type": "image",
+              "size": 92541
+            },
+            {
+              "name": "5110-burgundy-20260910-153111.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153111.jpg",
+              "type": "image",
+              "size": 154498
+            },
+            {
+              "name": "5110-burgundy-20260910-153108.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153108.jpg",
+              "type": "image",
+              "size": 115232
+            },
+            {
+              "name": "5110-burgundy-20260910-153103.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153103.jpg",
+              "type": "image",
+              "size": 139738
+            },
+            {
+              "name": "5110-burgundy-20260910-153428.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153428.jpg",
+              "type": "image",
+              "size": 148394
+            },
+            {
+              "name": "5110-burgundy-20260910-153424.jpg",
+              "url": "/katalog/media/5110/5110-burgundy-20260910-153424.jpg",
+              "type": "image",
+              "size": 161047
+            },
+            {
+              "name": "5110-burgundy-6912.mp4",
+              "url": "/katalog/media/5110/5110-burgundy-6912.mp4",
+              "poster": "/katalog/media/5110/5110-burgundy-6912-poster.jpg",
+              "type": "video",
+              "size": 1343919
             }
           ]
         },

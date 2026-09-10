@@ -145,7 +145,7 @@
           <a class="shot-view" href="${view}" target="_blank" rel="noopener">
             <img data-src="${view}" alt="${esc(color.name)}" loading="lazy">
           </a>
-          <a class="dl" href="${download}" target="_blank" rel="noopener"
+          <a class="dl" href="${download}"${file.url ? ` download="${esc(file.name)}"` : ''} target="_blank" rel="noopener"
             title="Скачать фото" aria-label="Скачать фото">↓</a>
         </div>`;
       }).join('');
