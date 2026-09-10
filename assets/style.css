@@ -292,6 +292,14 @@ a{color:inherit}
 .model-price{font-size:14px;font-weight:600;color:var(--wine)}
 .model-open-label,.model-stock{font-size:12px;color:var(--faint);text-align:right}
 .model-stock{grid-column:1/-1;text-align:left;color:var(--wine)}
+.model-card:not([open]) .model-summary-text{grid-template-rows:44px 35px 24px;align-items:start}
+.model-card:not([open]) .model-art{grid-row:1;grid-column:1;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.model-card:not([open]) .model-full{grid-row:1;grid-column:2}
+.model-card:not([open]) .model-material{grid-row:2;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.model-card:not([open]) .model-price{grid-row:3;grid-column:1;align-self:end}
+.model-card:not([open]) .model-open-label{grid-row:3;grid-column:2;align-self:end}
+.model-card:not([open]) .model-stock{grid-row:3;align-self:end}
+
 .model-card[open] .model-open-label{font-size:0}
 .model-card[open] .model-open-label::after{content:"Свернуть";font-size:12px}
 .model-card[open] .model-summary{display:grid;grid-template-columns:180px 1fr;align-items:center}
