@@ -282,9 +282,9 @@
       const id = slugId(m);
       const availableShots = []
         .concat(...(m.site || []).filter(v => !v.oos).map(v => v.i || []));
-      const previewShot = liveImages[0] ? liveUrl(liveImages[0]) : (availableShots[0] || allShots[0]);
+      const previewShot = m.cover ? asset(m.cover) : (liveImages[0] ? liveUrl(liveImages[0]) : asset(availableShots[0] || allShots[0] || ''));
       const preview = previewShot
-        ? `<img src="${esc(liveImages[0] ? previewShot : asset(previewShot))}" alt="Модель ${esc(m.art)}" loading="lazy">`
+        ? `<img src="${esc(previewShot)}" alt="Модель ${esc(m.art)}" loading="lazy">`
         : '<span class="model-no-photo">Фото пока нет</span>';
       const cardPrice = modelPrice(m);
       const allOut = (m.site || []).length && !(m.site || []).some(v => !v.oos);
