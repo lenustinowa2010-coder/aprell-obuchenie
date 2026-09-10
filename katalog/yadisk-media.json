@@ -432,6 +432,18 @@
               "size": 2247246
             }
           ]
+        },
+        {
+          "name": "Пекан",
+          "files": [
+            {
+              "name": "0360-pecan-3096.mp4",
+              "url": "/katalog/media/0360/0360-pecan-3096.mp4",
+              "poster": "/katalog/media/0360/0360-pecan-3096-poster.jpg",
+              "type": "video",
+              "size": 5694493
+            }
+          ]
         }
       ]
     },
