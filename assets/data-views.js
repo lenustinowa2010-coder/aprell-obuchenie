@@ -102,6 +102,7 @@
     const groups = liveColors.map(color => ({
       name: color.name,
       key: colorKey(color.name),
+      siteArt: color.siteArt,
       images: color.files.filter(file => file.type === 'image'),
       videos: color.files.filter(file => file.type === 'video'),
       extras: [],
@@ -110,7 +111,8 @@
 
     siteColors.forEach(variant => {
       const key = colorKey(variant.c);
-      let group = groups.find(item => item.key && item.key === key);
+      let group = groups.find(item => item.key && item.key === key &&
+        (!item.siteArt || item.siteArt === variant.a));
       if (!group && groups.length === 1 && !groups[0].key && siteColors.length === 1) {
         group = groups[0];
         group.name = variant.c;

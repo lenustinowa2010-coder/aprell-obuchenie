@@ -1369,7 +1369,129 @@
               "path": "/4630/WV4630 велюр/красный/home 1.mp4",
               "type": "video",
               "size": 10030824
+            }
+          ]
+        },
+        {
+          "name": "К4630 корова",
+          "files": [
+            {
+              "name": "4630 корова обзор.mp4",
+              "path": "/4630/К4630 корова/4630 корова обзор.mp4",
+              "type": "video",
+              "size": 1090549
             },
+            {
+              "name": "IMG17581.jpg",
+              "path": "/4630/К4630 корова/IMG17581.jpg",
+              "type": "image",
+              "size": 3482030
+            },
+            {
+              "name": "IMG37321.jpg",
+              "path": "/4630/К4630 корова/IMG37321.jpg",
+              "type": "image",
+              "size": 2346361
+            },
+            {
+              "name": "IMG37672.jpg",
+              "path": "/4630/К4630 корова/IMG37672.jpg",
+              "type": "image",
+              "size": 2395272
+            },
+            {
+              "name": "IMG_2051.JPG",
+              "path": "/4630/К4630 корова/IMG_2051.JPG",
+              "type": "image",
+              "size": 4210940
+            },
+            {
+              "name": "IMG_2403.JPG",
+              "path": "/4630/К4630 корова/IMG_2403.JPG",
+              "type": "image",
+              "size": 258977
+            },
+            {
+              "name": "IMG_2407.JPG",
+              "path": "/4630/К4630 корова/IMG_2407.JPG",
+              "type": "image",
+              "size": 276386
+            },
+            {
+              "name": "IMG_3681.HEIC",
+              "path": "/4630/К4630 корова/IMG_3681.HEIC",
+              "type": "image",
+              "size": 1348306
+            },
+            {
+              "name": "IMG_4865.HEIC",
+              "path": "/4630/К4630 корова/IMG_4865.HEIC",
+              "type": "image",
+              "size": 2412865
+            },
+            {
+              "name": "IMG_4867.HEIC",
+              "path": "/4630/К4630 корова/IMG_4867.HEIC",
+              "type": "image",
+              "size": 2804329
+            }
+          ]
+        },
+        {
+          "name": "Змея",
+          "files": [
+            {
+              "name": "4630-snake.mp4",
+              "url": "/katalog/media/4630/4630-snake.mp4",
+              "poster": "/katalog/media/4630/4630-snake.jpg",
+              "type": "video",
+              "size": 8571909
+            }
+          ]
+        },
+        {
+          "name": "Бордовый",
+          "files": [
+            {
+              "name": "4630-burgundy.mp4",
+              "url": "/katalog/media/4630/4630-burgundy.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy.jpg",
+              "type": "video",
+              "size": 4411121
+            },
+            {
+              "name": "4630-burgundy-dark-brown.mp4",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
+              "type": "video",
+              "size": 2086547
+            }
+          ]
+        },
+        {
+          "name": "Тёмно-коричневый · кожа",
+          "files": [
+            {
+              "name": "4630-dark-brown.mp4",
+              "url": "/katalog/media/4630/4630-dark-brown.mp4",
+              "poster": "/katalog/media/4630/4630-dark-brown.jpg",
+              "type": "video",
+              "size": 5166563
+            },
+            {
+              "name": "4630-burgundy-dark-brown.mp4",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
+              "type": "video",
+              "size": 2086547
+            }
+          ],
+          "siteArt": "4630"
+        },
+        {
+          "name": "Тёмно-коричневый · велюр",
+          "siteArt": "WV4630",
+          "files": [
             {
               "name": "4630 т-к 11.jpg",
               "path": "/4630/WV4630 велюр/темно-коричневый/4630 т-к 11.jpg",
@@ -1489,121 +1611,6 @@
               "path": "/4630/WV4630 велюр/темно-коричневый/home 2.mp4",
               "type": "video",
               "size": 24540099
-            }
-          ]
-        },
-        {
-          "name": "К4630 корова",
-          "files": [
-            {
-              "name": "4630 корова обзор.mp4",
-              "path": "/4630/К4630 корова/4630 корова обзор.mp4",
-              "type": "video",
-              "size": 1090549
-            },
-            {
-              "name": "IMG17581.jpg",
-              "path": "/4630/К4630 корова/IMG17581.jpg",
-              "type": "image",
-              "size": 3482030
-            },
-            {
-              "name": "IMG37321.jpg",
-              "path": "/4630/К4630 корова/IMG37321.jpg",
-              "type": "image",
-              "size": 2346361
-            },
-            {
-              "name": "IMG37672.jpg",
-              "path": "/4630/К4630 корова/IMG37672.jpg",
-              "type": "image",
-              "size": 2395272
-            },
-            {
-              "name": "IMG_2051.JPG",
-              "path": "/4630/К4630 корова/IMG_2051.JPG",
-              "type": "image",
-              "size": 4210940
-            },
-            {
-              "name": "IMG_2403.JPG",
-              "path": "/4630/К4630 корова/IMG_2403.JPG",
-              "type": "image",
-              "size": 258977
-            },
-            {
-              "name": "IMG_2407.JPG",
-              "path": "/4630/К4630 корова/IMG_2407.JPG",
-              "type": "image",
-              "size": 276386
-            },
-            {
-              "name": "IMG_3681.HEIC",
-              "path": "/4630/К4630 корова/IMG_3681.HEIC",
-              "type": "image",
-              "size": 1348306
-            },
-            {
-              "name": "IMG_4865.HEIC",
-              "path": "/4630/К4630 корова/IMG_4865.HEIC",
-              "type": "image",
-              "size": 2412865
-            },
-            {
-              "name": "IMG_4867.HEIC",
-              "path": "/4630/К4630 корова/IMG_4867.HEIC",
-              "type": "image",
-              "size": 2804329
-            }
-          ]
-        },
-        {
-          "name": "Змея",
-          "files": [
-            {
-              "name": "4630-snake.mp4",
-              "url": "/katalog/media/4630/4630-snake.mp4",
-              "poster": "/katalog/media/4630/4630-snake.jpg",
-              "type": "video",
-              "size": 8571909
-            }
-          ]
-        },
-        {
-          "name": "Бордовый",
-          "files": [
-            {
-              "name": "4630-burgundy.mp4",
-              "url": "/katalog/media/4630/4630-burgundy.mp4",
-              "poster": "/katalog/media/4630/4630-burgundy.jpg",
-              "type": "video",
-              "size": 4411121
-            },
-            {
-              "name": "4630-burgundy-dark-brown.mp4",
-              "url": "/katalog/media/4630/4630-burgundy-dark-brown.mp4",
-              "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
-              "type": "video",
-              "size": 2086547
-            }
-          ]
-        },
-        {
-          "name": "Тёмно-коричневый",
-          "files": [
-            {
-              "name": "4630-dark-brown.mp4",
-              "url": "/katalog/media/4630/4630-dark-brown.mp4",
-              "poster": "/katalog/media/4630/4630-dark-brown.jpg",
-              "type": "video",
-              "size": 5166563
-            },
-            {
-              "name": "4630-burgundy-dark-brown.mp4",
-              "url": "/katalog/media/4630/4630-burgundy-dark-brown.mp4",
-              "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
-              "type": "video",
-              "size": 2086547
             }
           ]
         }
