@@ -1465,6 +1465,25 @@
               "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
               "type": "video",
               "size": 2086547
+            },
+            {
+              "name": "4630-burgundy-dark-brown-20260910-153053.jpg",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown-20260910-153053.jpg",
+              "type": "image",
+              "size": 71895
+            },
+            {
+              "name": "4630-burgundy-dark-brown-20260910-153049.jpg",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown-20260910-153049.jpg",
+              "type": "image",
+              "size": 80521
+            },
+            {
+              "name": "4630-burgundy-dark-brown-1440.mp4",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown-1440.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy-dark-brown-1440-poster.jpg",
+              "type": "video",
+              "size": 6984216
             }
           ]
         },
@@ -1484,6 +1503,25 @@
               "poster": "/katalog/media/4630/4630-burgundy-dark-brown.jpg",
               "type": "video",
               "size": 2086547
+            },
+            {
+              "name": "4630-burgundy-dark-brown-20260910-153053.jpg",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown-20260910-153053.jpg",
+              "type": "image",
+              "size": 71895
+            },
+            {
+              "name": "4630-burgundy-dark-brown-20260910-153049.jpg",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown-20260910-153049.jpg",
+              "type": "image",
+              "size": 80521
+            },
+            {
+              "name": "4630-burgundy-dark-brown-1440.mp4",
+              "url": "/katalog/media/4630/4630-burgundy-dark-brown-1440.mp4",
+              "poster": "/katalog/media/4630/4630-burgundy-dark-brown-1440-poster.jpg",
+              "type": "video",
+              "size": 6984216
             }
           ],
           "siteArt": "4630"
