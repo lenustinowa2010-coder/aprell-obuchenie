@@ -6479,6 +6479,19 @@
               "path": "/5120/черный/home 1.mp4",
               "type": "video",
               "size": 8072531
+            },
+            {
+              "name": "5120-black-leather-20260910-153004.jpg",
+              "url": "/katalog/media/5120/5120-black-leather-20260910-153004.jpg",
+              "type": "image",
+              "size": 125342
+            },
+            {
+              "name": "5120-black-leather-20260910-153011.mp4",
+              "url": "/katalog/media/5120/5120-black-leather-20260910-153011.mp4",
+              "poster": "/katalog/media/5120/5120-black-leather-20260910-153011-poster.jpg",
+              "type": "video",
+              "size": 7127085
             }
           ]
         }
