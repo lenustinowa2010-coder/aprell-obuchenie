@@ -6076,7 +6076,7 @@
       "folder": "5120",
       "colors": [
         {
-          "name": "бежевый замша",
+          "name": "Бежевый · велюр",
           "files": [
             {
               "name": "5120 бежевый замша 11.jpg",
@@ -6137,11 +6137,31 @@
               "path": "/5120/бежевый замша/home 1.mp4",
               "type": "video",
               "size": 8542464
+            },
+            {
+              "name": "5120-20260911-194359.jpg",
+              "url": "/katalog/media/5120/5120-20260911-194359.jpg",
+              "type": "image",
+              "size": 164901
+            },
+            {
+              "name": "5120-20260911-194407.jpg",
+              "url": "/katalog/media/5120/5120-20260911-194407.jpg",
+              "type": "image",
+              "size": 158570
+            },
+            {
+              "name": "5120-1421.mp4",
+              "url": "/katalog/media/5120/5120-1421.mp4",
+              "poster": "/katalog/media/5120/5120-1421-poster.png",
+              "type": "video",
+              "size": 4724600
             }
-          ]
+          ],
+          "siteArt": "WV5120"
         },
         {
-          "name": "коричневый",
+          "name": "Коричневый · кожа",
           "files": [
             {
               "name": "5120 вместимость 2.mp4",
@@ -6310,8 +6330,28 @@
               "path": "/5120/коричневый/5120 коричневый вместимость 2.mp4",
               "type": "video",
               "size": 1798379
+            },
+            {
+              "name": "5120-20260911-194359.jpg",
+              "url": "/katalog/media/5120/5120-20260911-194359.jpg",
+              "type": "image",
+              "size": 164901
+            },
+            {
+              "name": "5120-20260911-194407.jpg",
+              "url": "/katalog/media/5120/5120-20260911-194407.jpg",
+              "type": "image",
+              "size": 158570
+            },
+            {
+              "name": "5120-1421.mp4",
+              "url": "/katalog/media/5120/5120-1421.mp4",
+              "poster": "/katalog/media/5120/5120-1421-poster.png",
+              "type": "video",
+              "size": 4724600
             }
-          ]
+          ],
+          "siteArt": "W5120"
         },
         {
           "name": "темно коричневый замша",
@@ -6373,7 +6413,7 @@
           ]
         },
         {
-          "name": "черный",
+          "name": "Чёрный · кожа",
           "files": [
             {
               "name": "5120 черный 11.jpg",
@@ -6501,8 +6541,28 @@
               "poster": "/katalog/media/5120/5120-black-leather-20260910-153011-poster.jpg",
               "type": "video",
               "size": 7127085
+            },
+            {
+              "name": "5120-20260911-194345.jpg",
+              "url": "/katalog/media/5120/5120-20260911-194345.jpg",
+              "type": "image",
+              "size": 149651
+            },
+            {
+              "name": "5120-20260911-194349.jpg",
+              "url": "/katalog/media/5120/5120-20260911-194349.jpg",
+              "type": "image",
+              "size": 198289
+            },
+            {
+              "name": "5120-1425.mp4",
+              "url": "/katalog/media/5120/5120-1425.mp4",
+              "poster": "/katalog/media/5120/5120-1425-poster.png",
+              "type": "video",
+              "size": 606216
             }
-          ]
+          ],
+          "siteArt": "W5120"
         }
       ]
     },
