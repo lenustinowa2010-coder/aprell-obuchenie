@@ -170,7 +170,7 @@
           <a class="shot-view" href="${big}" target="_blank" rel="noopener">
             <img data-src="${url}" alt="${esc(`${art} · ${color.name || ''}`)}" loading="lazy">
           </a>
-          <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
+          <a class="dl" href="${big}" download="${name}" target="_blank" rel="noopener" title="Скачать" aria-label="Скачать">↓</a>
         </div>`;
       }).join('');
       const siteMedia = color.site.map(u => {
@@ -181,7 +181,7 @@
           <a class="shot-view" href="${big}" target="_blank" rel="noopener">
             <img data-src="${url}" alt="${esc(`${art} · ${color.name || ''}`)}" loading="lazy">
           </a>
-          <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
+          <a class="dl" href="${big}" download="${name}" target="_blank" rel="noopener" title="Скачать" aria-label="Скачать">↓</a>
         </div>`;
       }).join('');
       const photoCount = color.images.length + color.extras.length + color.site.length;
@@ -219,7 +219,7 @@
          <a class="shot-view" href="${big}" target="_blank" rel="noopener">
            <img ${source} alt="${esc(alt)}" loading="lazy">
          </a>
-         <a class="dl" href="${big}" download="${name}" title="Скачать" aria-label="Скачать">↓</a>
+         <a class="dl" href="${big}" download="${name}" target="_blank" rel="noopener" title="Скачать" aria-label="Скачать">↓</a>
        </div>`;
     }).join('');
     if (lazy) return `<div class="shots" data-extra-media></div>
