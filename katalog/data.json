@@ -2199,6 +2199,19 @@
      ],
      "price": 9900,
      "oos": true
+    },
+    {
+     "a": "W5120",
+     "c": "Тёмно-коричневый · кожа",
+     "u": "https://aprellshop.ru/catalog/sumka/mini-sumki/w5120-92",
+     "i": [
+      "https://aprellshop.ru/goods/W5120-92/tm51203.jpg",
+      "https://aprellshop.ru/goods/W5120-92/tm51201.jpg",
+      "https://aprellshop.ru/goods/W5120-92/tm51205.jpg",
+      "https://aprellshop.ru/goods/W5120-92/tm51204.jpg"
+     ],
+     "price": 8900,
+     "oos": false
     }
    ],
    "presentations": [
