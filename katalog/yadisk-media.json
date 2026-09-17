@@ -6587,6 +6587,19 @@
               "size": 297701
             }
           ]
+        },
+        {
+          "name": "Синий · велюр",
+          "siteArt": "WV5120",
+          "files": [
+            {
+              "name": "5120-blue-velour-1111112.mp4",
+              "url": "/katalog/media/5120/5120-blue-velour-1111112.mp4",
+              "poster": "/katalog/media/5120/5120-blue-velour-1111112-poster.jpg",
+              "type": "video",
+              "size": 3668396
+            }
+          ]
         }
       ]
     },
