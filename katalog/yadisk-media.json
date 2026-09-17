@@ -6409,6 +6409,25 @@
               "path": "/5120/темно-коричневый замша/home 3.mp4",
               "type": "video",
               "size": 6210932
+            },
+            {
+              "name": "5120-dark-brown-velour-3681.jpg",
+              "url": "/katalog/media/5120/5120-dark-brown-velour-3681.jpg",
+              "type": "image",
+              "size": 3171920
+            },
+            {
+              "name": "5120-dark-brown-velour-3677.jpg",
+              "url": "/katalog/media/5120/5120-dark-brown-velour-3677.jpg",
+              "type": "image",
+              "size": 3221978
+            },
+            {
+              "name": "5120-dark-brown-velour-3684.mp4",
+              "url": "/katalog/media/5120/5120-dark-brown-velour-3684.mp4",
+              "type": "video",
+              "size": 5765587,
+              "poster": "/katalog/media/5120/5120-dark-brown-velour-3684-poster.jpg"
             }
           ],
           "siteArt": "WV5120"
