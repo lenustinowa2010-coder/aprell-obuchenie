@@ -6091,6 +6091,24 @@
               "path": "/5119/home 1.mp4",
               "type": "video",
               "size": 172978017
+            },
+            {
+              "name": "5119-20260917-114215.jpg",
+              "url": "/katalog/media/5119/5119-20260917-114215.jpg",
+              "type": "image",
+              "size": 2374144
+            },
+            {
+              "name": "5119-20260917-114210.jpg",
+              "url": "/katalog/media/5119/5119-20260917-114210.jpg",
+              "type": "image",
+              "size": 3416584
+            },
+            {
+              "name": "5119-20260917-114219.jpg",
+              "url": "/katalog/media/5119/5119-20260917-114219.jpg",
+              "type": "image",
+              "size": 6518481
             }
           ]
         }
