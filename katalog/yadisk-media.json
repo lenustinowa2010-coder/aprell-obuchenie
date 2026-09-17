@@ -5157,7 +5157,7 @@
           ]
         },
         {
-          "name": "черный",
+          "name": "Чёрный · кожа",
           "files": [
             {
               "name": "5116 черный 11.jpg",
@@ -5308,8 +5308,21 @@
               "path": "/5116/черный/home 1.mp4",
               "type": "video",
               "size": 7036283
+            },
+            {
+              "name": "5116-black-leather-20260917-113957.jpg",
+              "url": "/katalog/media/5116/5116-black-leather-20260917-113957.jpg",
+              "type": "image",
+              "size": 173430
+            },
+            {
+              "name": "5116-black-leather-20260917-114004.jpg",
+              "url": "/katalog/media/5116/5116-black-leather-20260917-114004.jpg",
+              "type": "image",
+              "size": 254275
             }
-          ]
+          ],
+          "siteArt": "W5116"
         }
       ]
     },
