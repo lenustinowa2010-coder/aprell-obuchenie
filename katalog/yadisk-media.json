@@ -6569,6 +6569,24 @@
           "name": "Тёмно-коричневый · кожа",
           "siteArt": "W5120",
           "files": []
+        },
+        {
+          "name": "Бордовый · кожа",
+          "siteArt": "W5120",
+          "files": [
+            {
+              "name": "5120-burgundy-leather-20260917-113704.jpg",
+              "url": "/katalog/media/5120/5120-burgundy-leather-20260917-113704.jpg",
+              "type": "image",
+              "size": 292174
+            },
+            {
+              "name": "5120-burgundy-leather-20260917-113700.jpg",
+              "url": "/katalog/media/5120/5120-burgundy-leather-20260917-113700.jpg",
+              "type": "image",
+              "size": 297701
+            }
+          ]
         }
       ]
     },
