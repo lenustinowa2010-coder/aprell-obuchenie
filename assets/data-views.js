@@ -403,6 +403,7 @@
       }
       if (a.offline) pieces.push('<p class="flag">Только в офлайн-магазинах — в директе не предлагаем</p>');
       if (a.colors) pieces.push(`<p><strong>Цвета:</strong> ${esc(clean(a.colors))}</p>`);
+      if (a.lining) pieces.push(`<p><strong>Подкладка:</strong> ${esc(clean(a.lining))}</p>`);
       if (a.features) pieces.push(`<p>${esc(clean(a.features))}</p>`);
       if (a.pres) {
         pieces.push('<h3>Готовый шаблон</h3>');
