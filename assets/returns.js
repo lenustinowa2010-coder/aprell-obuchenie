@@ -10,13 +10,13 @@ const cases={
  defect:{title:'Заявленный брак',sub:'Сначала видео, затем дальнейшие действия',steps:['Сразу зафиксируйте обращение. Номер заказа берём из сделки, у клиента повторно не запрашиваем.','Запросите только видео: общий план, недостаток крупно, работа фурнитуры. Отсутствие видео не отменяет обращение.','Передайте видео Сергею. Менеджер не подтверждает брак и не выбирает за клиента способ решения.','Если клиент уже заявил требование, укажите его и исходную дату. Ожидание видео или посылки не запускает срок заново.','По решению Сергея организуйте передачу сумки для проверки. В ответе клиенту имя проверяющего не называем.','Контролируйте срок. Если сумка не передана или срок заканчивается, срочно напишите Сергею. После проверки получите решение и подтверждение исполнения.']},
  wrong:{title:'Ошибка комплектации',sub:'Другой товар или чего-то не хватает',steps:['Сверьте заказ и сообщение клиента. Запросите видео полученного товара.','Сразу передайте обращение Сергею, зафиксируйте уже заявленное требование и дату.','Согласуйте исправление ошибки и доставку за счёт магазина. Не обещайте замену без проверки наличия.','Следите за сроком и сообщите клиенту результат. Закройте обращение после исполнения.']}
 };
-let saved={case:'cancel',request:'refund',paid:'yes',payment:'card',split:'full',written:'yes',noAnalog:'no',check:'7',stage:'initial'};
+let saved={demand:C.today(),case:'cancel',request:'refund',paid:'yes',payment:'card',split:'full',written:'yes',noAnalog:'no',check:'7',stage:'initial'};
 function mount(root){
  const host=root.querySelector('#returns-workspace');if(!host)return;
  host.className='returns-workspace';
  host.innerHTML=`<div class="rt-choices" aria-label="Ситуация клиента">${Object.entries(cases).map(([id,c])=>`<button type="button" data-case="${id}" aria-pressed="false"><strong>${c.title}</strong><span>${c.sub}</span></button>`).join('')}</div>
  <section class="rt-guide"><h3 id="rt-case-title"></h3><ol id="rt-steps"></ol></section>
- <h3>Срок и данные обращения</h3><p class="rt-help">Сверьте данные со сделкой. Дата и сумма подставятся в оба сообщения. Введённые данные не отправляются на сервер.</p>
+ <h3>Срок и данные обращения</h3><p class="rt-help">Дата обращения по умолчанию — сегодня по Москве. Если клиент обратился раньше, измените дату. Дата и сумма подставятся в оба сообщения. Введённые данные не отправляются на сервер.</p>
  <form id="rt-form" autocomplete="off"><div class="rt-grid">
  <label data-field="request">Требование<select name="request"></select></label>
  <label data-field="demand">Дата обращения / требования<input name="demand" type="date"></label>
@@ -89,7 +89,7 @@ function mount(root){
   const text=host.querySelector('#rt-'+button.dataset.copy).textContent;
   try{await writeClipboard(text);host.querySelector('.rt-copy-status').textContent='Скопировано. Проверьте текст перед отправкой.';}catch{host.querySelector('.rt-copy-status').textContent='Не удалось скопировать. Выделите текст вручную.';}
  }));
- host.querySelector('.rt-reset').addEventListener('click',()=>{saved={case:saved.case,request:saved.request,paid:'yes',payment:'card',split:'full',written:'yes',noAnalog:'no',check:'7',stage:'initial'};mount(root);});
+ host.querySelector('.rt-reset').addEventListener('click',()=>{saved={demand:C.today(),case:saved.case,request:saved.request,paid:'yes',payment:'card',split:'full',written:'yes',noAnalog:'no',check:'7',stage:'initial'};mount(root);});
  setup();
 }
 window.mountReturns=mount;
