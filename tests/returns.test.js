@@ -4,7 +4,7 @@ const calc=v=>C.calculate({...base,...v},'2026-09-22');
 test('three-day cancellation, reminder and identical customer/chat date',()=>{const c=calc({});assert.equal(c.due,'2026-09-24');assert.equal(c.reminder,'2026-09-23');const m=C.messages(base,c);assert.match(m.client,/24.09.2026/);assert.match(m.chat,/24.09.2026/);assert.match(m.client,/350 ₽/);});
 test('PVZ refund includes delivery-only payment and ten-day date',()=>{const v={...base,case:'pvz'};const c=calc(v);assert.equal(c.due,'2026-10-01');const m=C.messages(v,c);assert.match(m.client,/350 ₽/);assert.match(m.client,/01.10.2026/);assert.match(m.chat,/01.10.2026/);assert.doesNotMatch(m.client,/Если заказ оплачен/);});
 test('unpaid cancellation has no monetary deadline',()=>{assert.equal(calc({paid:'no'}).due,'');});
-test('defect receipt never restarts demand deadline',()=>{const c=calc({case:'defect',shopReceived:'2026-09-22'});assert.equal(c.due,'2026-10-01');assert.equal(c.internal,'2026-10-02');});
+test('defect receipt never restarts demand deadline',()=>{const c=calc({case:'defect',shopReceived:'2026-09-22'});assert.equal(c.due,'2026-10-01');});
 test('first defect inquiry has no invented money deadline',()=>{assert.equal(calc({case:'defect',request:'initial'}).due,'');});
 test('retail refund needs returned goods and missing analog',()=>{assert.equal(calc({case:'retail',shopReceived:'2026-09-21'}).due,'');assert.equal(calc({case:'retail',shopReceived:'2026-09-21',noAnalog:'yes'}).due,'2026-09-24');});
 test('7-day eligibility is distinct from money deadline',()=>{const c=calc({case:'quality',received:'2026-09-18'});assert.equal(c.eligibility,'2026-09-25');assert.equal(c.due,'2026-10-01');});

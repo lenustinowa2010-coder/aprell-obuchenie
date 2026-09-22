@@ -49,7 +49,7 @@ function calculate(v,now=today()){
  if(eligibility&&v.demand>eligibility)warning+=' Срок обращения по качественному товару требует проверки ответственным. Не отказывайте автоматически.';
  const remaining=due?days(due,now):null;
  const reminder=due?add(due,-1):'';
- return {due,label,basis,eligibility,warning:warning.trim(),remaining,reminder,reminderOverdue:reminder&&reminder<now,internal:v.case==='defect'&&v.request==='refund'?add(v.shopReceived,10):''};
+ return {due,label,basis,eligibility,warning:warning.trim(),remaining,reminder,reminderOverdue:reminder&&reminder<now};
 }
 const address='Получатель: Мирфазы Сергей Владимирович\nТелефон: +7 985 899-53-98\nПункт СДЭК: Санкт-Петербург, пр-т Юрия Гагарина, 2, корп. 3.';
 const form='https://aprellshop.ru/assets/files/Заявление%20на%20возврат%20товара_08-2024.pdf';
@@ -89,7 +89,6 @@ function messages(v,c){
  if(v.case==='quality'&&v.request==='refund')chat+='Бланк: отправить клиенту / проверить заполнение.\n';
  if(v.payment==='split'||v.payment==='super')chat+=`${payment}: ${v.split==='partial'?'частичный':'полный'} возврат. Позиции: ${model}.\n`;
  chat+=`\n${c.basis}\n`+(c.due?`Крайняя дата контроля: ${deadline}.\nЗадача в amoCRM: ${fmt(c.reminder)}${c.reminderOverdue?' (дата уже прошла — поставить на сегодня)':''}.\n`:'Срок: '+(c.warning||'уточнить исходные даты / требование')+'.\n');
- if(c.internal)chat+=`Внутренний ориентир после получения: ${fmt(c.internal)}. Законный срок не переносит.\n`;
  const action={cancel:'Остановить отправку, подтвердить отмену'+(v.paid==='no'?'.':' и возврат оплаты.'),pvz:'Проверить отказ'+(v.paid==='no'?'.':' и оформить возврат оплаты, включая оплаченную доставку.'),quality:'Подтвердить получение и результат проверки, согласовать исполнение требования.',retail:'Подтвердить покупку и приём товара точкой, согласовать исполнение требования.',defect:'Посмотреть видео, сообщить дальнейшие действия и порядок передачи товара на проверку.',wrong:'Проверить ошибку и согласовать её исправление, включая доставку.'}[v.case];
  chat+='\nНужно: '+action;
  if(stage==='urgent'||stage==='waiting')client=`${name}, уточняю статус вашего обращения у ответственного. Сообщу вам подтверждённую информацию и дальнейшие действия.`;

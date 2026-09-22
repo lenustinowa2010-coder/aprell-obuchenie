@@ -81,7 +81,6 @@ function mount(root){
   if(c.due){line('p',c.remaining<0?`Срок контроля прошёл ${-c.remaining} дн. назад — срочно Сергею.`:c.remaining===0?'Последний день — сегодня.':`До срока: ${c.remaining} дн.`);line('p',`Задача в amoCRM: ${C.fmt(c.reminder)}${c.reminderOverdue?' — дата прошла, поставьте на сегодня.':''}`);}
   if(c.eligibility)line('p',`Обратиться по качественному товару можно до ${C.fmt(c.eligibility)}. Это отдельный срок, не дата выплаты.`);
   if(v.case==='quality'&&v.written==='unknown')line('p','Передачу письменных правил нужно проверить: при их отсутствии срок отказа может составить 3 месяца.');
-  if(c.internal)line('p',`Внутренний ориентир после получения: ${C.fmt(c.internal)}. Он не продлевает срок от требования.`);
   if(flaw&&v.request==='refund'&&!v.shopReceived)line('p','Сумка ещё не получена. Организуйте передачу для проверки. Если срок заканчивается — срочно Сергею; отсчёт не обнуляется.');
   if(c.warning)line('p',c.warning);
   const texts=C.messages(v,c);host.querySelector('#rt-client').textContent=texts.client;host.querySelector('#rt-chat').textContent=texts.chat;
