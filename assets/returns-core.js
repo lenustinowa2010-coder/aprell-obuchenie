@@ -18,7 +18,7 @@ function calculate(v,now=today()){
   eligibility=v.case==='retail'?add(v.received,14):v.written==='no'?months(v.received,3):add(v.received,7);
  }
  if(v.paid==='no'&&(v.case==='cancel'||v.case==='pvz'))return {due:'',label:'Возврат денег не нужен',basis:'Оплаты не было.',eligibility};
- if(v.case==='cancel'){due=add(v.demand,3);label='Возврат оплаты';basis='3 календарных дня от требования — внутренний срок APRELL.';}
+ if(v.case==='cancel'){due=add(v.demand,3);label='Возврат оплаты';basis='3 календарных дня от требования.';}
  if(v.case==='pvz'||v.case==='quality'&&v.request==='refund'){
   due=add(v.demand,10);label='Возврат денег';basis='10 календарных дней от требования — ст. 26.1.';
  }
