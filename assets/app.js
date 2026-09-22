@@ -488,6 +488,7 @@ function render(slug, anchor) {
 
   [...wrap.childNodes].forEach(n => doc.appendChild(n));
   setupLazyMedia(doc);
+  if (p.slug === "04-returns") window.mountReturns?.(doc);
 
   const modelQ = doc.querySelector('#model-q');
   if (modelQ) {
@@ -738,7 +739,7 @@ mobileResults.addEventListener('click', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); $('#q').focus(); }
+  if (e.key === '/' && !document.activeElement.matches('input,textarea,select,[contenteditable=true]')) { e.preventDefault(); $('#q').focus(); }
   if (e.key === 'Escape') { $('#q').value = ''; if ($('#q2')) $('#q2').value = ''; search(''); syncMobileSearch(''); $('#q').blur(); closeSide(); }
 });
 

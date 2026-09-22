@@ -1,0 +1,16 @@
+const test=require('node:test');const assert=require('node:assert/strict');const C=require('../assets/returns-core.js');
+const base={case:'cancel',request:'refund',demand:'2026-09-21',paid:'yes',payment:'card',amount:'350',stage:'initial'};
+const calc=v=>C.calculate({...base,...v},'2026-09-22');
+test('three-day cancellation, reminder and identical customer/chat date',()=>{const c=calc({});assert.equal(c.due,'2026-09-24');assert.equal(c.reminder,'2026-09-23');const m=C.messages(base,c);assert.match(m.client,/24.09.2026/);assert.match(m.chat,/24.09.2026/);assert.match(m.client,/350 ₽/);});
+test('PVZ refund includes delivery-only payment and ten-day date',()=>{const v={...base,case:'pvz'};const c=calc(v);assert.equal(c.due,'2026-10-01');const m=C.messages(v,c);assert.match(m.client,/350 ₽/);assert.match(m.client,/01.10.2026/);assert.match(m.chat,/01.10.2026/);assert.doesNotMatch(m.client,/Если заказ оплачен/);});
+test('unpaid cancellation has no monetary deadline',()=>{assert.equal(calc({paid:'no'}).due,'');});
+test('defect receipt never restarts demand deadline',()=>{const c=calc({case:'defect',shopReceived:'2026-09-22'});assert.equal(c.due,'2026-10-01');assert.equal(c.internal,'2026-10-02');});
+test('first defect inquiry has no invented money deadline',()=>{assert.equal(calc({case:'defect',request:'initial'}).due,'');});
+test('retail refund needs returned goods and missing analog',()=>{assert.equal(calc({case:'retail',shopReceived:'2026-09-21'}).due,'');assert.equal(calc({case:'retail',shopReceived:'2026-09-21',noAnalog:'yes'}).due,'2026-09-24');});
+test('7-day eligibility is distinct from money deadline',()=>{const c=calc({case:'quality',received:'2026-09-18'});assert.equal(c.eligibility,'2026-09-25');assert.equal(c.due,'2026-10-01');});
+test('month arithmetic clamps end of month, leap year',()=>{assert.equal(C.months('2026-01-31',1),'2026-02-28');assert.equal(C.months('2024-01-31',1),'2024-02-29');assert.equal(C.add('2024-02-28',3),'2024-03-02');assert.equal(C.add('2026-12-30',3),'2027-01-02');});
+test('without written information uses calendar months',()=>{assert.equal(calc({case:'quality',received:'2026-08-31',written:'no'}).eligibility,'2026-11-30');});
+test('replacement variations and repair limit',()=>{assert.equal(calc({case:'defect',request:'replace',check:'20'}).due,'2026-10-11');assert.equal(calc({case:'defect',request:'replace',check:'month'}).due,'2026-10-21');assert.equal(calc({case:'defect',request:'repair',agreed:'2026-12-01'}).due,'');});
+test('invalid and future dates have no computed deadline',()=>{assert.equal(C.parse('2026-02-30'),null);assert.equal(calc({demand:'2026-09-23'}).due,'');assert.equal(calc({case:'quality',received:'2026-09-22'}).due,'');});
+test('partial split never promises full cancellation',()=>{const m=C.messages({...base,payment:'split',split:'partial'},calc({}));assert.match(m.client,/пересчитает/);assert.doesNotMatch(m.client,/аннулируется/);});
+test('expiry remains visible rather than silently moving deadline',()=>{const c=calc({demand:'2026-09-01'});assert.equal(c.remaining,-18);assert.equal(c.reminderOverdue,true);});
