@@ -17,6 +17,7 @@ function mount(root){
  host.innerHTML=`<div class="rt-choices" aria-label="Ситуация клиента">${Object.entries(cases).map(([id,c])=>`<button type="button" data-case="${id}" aria-pressed="false"><strong>${c.title}</strong><span>${c.sub}</span></button>`).join('')}</div>
  <section class="rt-guide"><h3 id="rt-case-title"></h3><ol id="rt-steps"></ol></section>
  <h3>Срок и данные обращения</h3><p class="rt-help">Дата обращения по умолчанию — сегодня по Москве. Если клиент обратился раньше, измените дату. Дата и сумма подставятся в оба сообщения. Введённые данные не отправляются на сервер.</p>
+ <label class="rt-stage">Этап обращения<select id="rt-stage"></select></label>
  <form id="rt-form" autocomplete="off"><div class="rt-grid">
  <label data-field="request">Требование<select name="request"></select></label>
  <label data-field="demand">Дата обращения / требования<input name="demand" type="date"></label>
@@ -30,14 +31,14 @@ function mount(root){
  <label data-field="amount">Сумма возврата, ₽<input name="amount" type="number" min="0" step="0.01" placeholder="Фактически возвращаемая сумма"></label>
  <label data-field="payment">Способ оплаты<select name="payment"><option value="card">Карта через ЮKassa</option><option value="split">Обычный Сплит</option><option value="super">Супер Сплит</option><option value="other">Другой</option></select></label>
  <label data-field="split">Объём возврата<select name="split"><option value="full">Полный</option><option value="partial">Частичный</option></select></label></div>
- <details class="rt-details"><summary>Данные для подстановки в сообщения</summary><div class="rt-grid">
- ${[['name','Имя клиента'],['deal','Ссылка на сделку'],['order','Номер заказа'],['model','Модель и цвет / возвращаемые позиции'],['store','Розничная точка'],['replacement','Модель и цвет для обмена'],['track','Трек-номер'],['video','Ссылка на видео'],['terms','Согласованные условия / запрос передачи'],['proof','Подтверждение операции / акт']].map(([name,label])=>`<label>${label}<input name="${name}" type="text" maxlength="1000"></label>`).join('')}
- <label>Причина / недостаток со слов клиента<textarea name="reason" rows="2" maxlength="2000"></textarea></label>
- <label>Результат проверки / чего ожидаем<textarea name="result" rows="2" maxlength="2000"></textarea></label>
- <label>Дата выполненной операции<input name="paidAt" type="date"></label></div></details></form>
+ <details class="rt-details"><summary>Данные для сообщений (необязательно)</summary><div class="rt-grid">
+ ${[['name','Имя клиента'],['deal','Ссылка на сделку'],['model','Модель и цвет / возвращаемые позиции'],['store','Розничная точка'],['replacement','Модель и цвет для обмена'],['track','Трек-номер'],['terms','Согласованные условия / запрос передачи'],['proof','Подтверждение операции / акт']].map(([name,label])=>`<label data-extra="${name}">${label}<input name="${name}" type="text" maxlength="1000"></label>`).join('')}
+ <label data-extra="reason">Причина / недостаток со слов клиента<textarea name="reason" rows="2" maxlength="2000"></textarea></label>
+ <label data-extra="result">Результат проверки / чего ожидаем<textarea name="result" rows="2" maxlength="2000"></textarea></label>
+ <label data-extra="paidAt">Дата выполненной операции<input name="paidAt" type="date"></label></div></details></form>
  <div class="rt-deadline" aria-live="polite" id="rt-deadline"></div>
  <p class="rt-help">Считаем календарные дни со следующего дня после события. Для контроля APRELL не переносим дату на более поздний день из-за выходных и праздников. Применимость переноса по ст. 193 ГК РФ проверяет ответственный; автоматически клиенту продление не обещаем.</p>
- <h3>Готовые сообщения</h3><label class="rt-stage">Этап обращения<select id="rt-stage"></select></label>
+ <h3>Готовые сообщения</h3><p id="rt-video-note" class="rt-help" hidden>Видео перешлите или прикрепите в чат с Сергеем отдельным сообщением. Ссылка не нужна.</p>
  <p class="rt-help" id="rt-copy-hint">Перед отправкой замените оставшиеся поля в квадратных скобках. Кнопка только копирует текст.</p>
  <div class="rt-scripts"><section><div class="rt-script-head"><h4>Клиенту</h4><button type="button" data-copy="client">Копировать клиенту</button></div><pre id="rt-client"></pre></section><section><div class="rt-script-head"><h4>В чат «Обмены/возвраты»</h4><button type="button" data-copy="chat">Копировать в чат</button></div><pre id="rt-chat"></pre></section></div>
  <p class="rt-copy-status" role="status"></p><button class="rt-reset" type="button">Очистить данные обращения</button>`;
@@ -63,10 +64,16 @@ function mount(root){
  }
  function update(){
   read();const v=saved,c=C.calculate(v);const flaw=['defect','wrong'].includes(v.case);
-  show('received',!['cancel','pvz'].includes(v.case));show('shopReceived',!['cancel','pvz'].includes(v.case));
+  show('request',!['cancel','pvz'].includes(v.case));
+  show('received',!['cancel','pvz'].includes(v.case));
+  show('shopReceived',(v.case==='retail'&&v.request==='refund')||(!['cancel','pvz'].includes(v.case)&&['received','approved','dispute','urgent','done'].includes(v.stage)));
+  const extra={name:true,deal:true,model:true,store:v.case==='retail',replacement:v.request==='replace',track:!['cancel'].includes(v.case)&&v.stage!=='initial',terms:v.request==='replace'||['send','waiting'].includes(v.stage),proof:['approved','dispute','done'].includes(v.stage),reason:!['cancel','pvz'].includes(v.case),result:['approved','dispute','urgent','waiting'].includes(v.stage),paidAt:v.stage==='done'};
+  host.querySelectorAll('[data-extra]').forEach(label=>label.hidden=!extra[label.dataset.extra]);
+  host.querySelector('#rt-video-note').hidden=!flaw;
   show('written',v.case==='quality');show('noAnalog',v.case==='retail'&&v.request==='refund');
   show('check',flaw&&v.request==='replace');show('agreed',v.request==='repair'||['quality','retail'].includes(v.case)&&v.request==='replace');
-  show('paid',['cancel','pvz'].includes(v.case));show('amount',v.paid!=='no');show('payment',v.paid!=='no');show('split',v.paid!=='no'&&['split','super'].includes(v.payment));
+  const money=v.paid!=='no'&&v.request==='refund';
+  show('paid',['cancel','pvz'].includes(v.case));show('amount',money);show('payment',money);show('split',money&&['split','super'].includes(v.payment));
   const box=host.querySelector('#rt-deadline');box.replaceChildren();
   function line(tag,text){const node=document.createElement(tag);node.textContent=text;box.append(node);}
   line('span',c.label);line('strong',c.due?C.fmt(c.due):c.label==='Возврат денег не нужен'?'Без выплаты':'Укажите данные для расчёта');line('p',c.basis);
