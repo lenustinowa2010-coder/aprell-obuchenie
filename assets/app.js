@@ -613,7 +613,11 @@ function search(q) {
   if (query.length < 2) { box.hidden = true; $('#doc').hidden = false; return; }
 
   const re = new RegExp(esc(query), 'i');
-  const hits = INDEX.filter(i => re.test(i.text)).slice(0, 40);
+  // Название раздела точнее отвечает на общий запрос, чем упоминание в тексте.
+  const sectionHits = state.parts.filter(p => re.test(p.title)).map(p => ({
+    part: p, id: '', h2: '', text: p.subtitle || 'Открыть раздел целиком'
+  }));
+  const hits = [...sectionHits, ...INDEX.filter(i => re.test(i.text))].slice(0, 40);
 
   box.innerHTML = '';
   const meta = el('p', 'results-meta');
@@ -630,7 +634,7 @@ function search(q) {
 
   hits.forEach(h => {
     const a = el('a', 'hit');
-    a.href = h.url ? h.url : '#/' + h.part.slug + '/' + h.id;
+    a.href = h.url ? h.url : '#/' + h.part.slug + (h.id ? '/' + h.id : '');
     let t = h.text;
     if (t.length > 240) {
       const at = t.search(new RegExp(esc(query), 'i'));
@@ -639,10 +643,10 @@ function search(q) {
     a.innerHTML = `<div class="hit-where">${escHtml(h.part.title)}${h.h2 ? ' · ' + escHtml(h.h2) : ''}</div>
       <p class="hit-text">${t.replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]))
         .replace(new RegExp(esc(query), 'gi'), m => `<mark>${m}</mark>`)}</p>`;
-    if (!h.url && h.id) {
+    if (!h.url) {
       a.addEventListener('click', e => {
         e.preventDefault();
-        if (h.part.slug === 'models') pendingModelOpen = h.id;
+        if (h.part.slug === 'models' && h.id) pendingModelOpen = h.id;
         $('#q').value = '';
         if ($('#q2')) $('#q2').value = '';
         const target = a.getAttribute('href');
