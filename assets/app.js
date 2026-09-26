@@ -619,6 +619,16 @@ function search(q) {
   }));
   const hits = [...sectionHits, ...INDEX.filter(i => re.test(i.text))].slice(0, 40);
 
+  // Оба названия страны и их падежные формы ведут к тарифам доставки.
+  if (/беларус|белорус/i.test(query)) {
+    const delivery = state.parts.find(p => p.slug === '03-delivery');
+    const heading = delivery && headingsOf(delivery).find(h => /доставка в беларус/i.test(h.text));
+    if (heading) hits.unshift({
+      part: delivery, id: heading.id, h2: heading.text,
+      text: 'Беларусь / Белоруссия — доставка СДЭК в Минск и другие города. Тарифы и условия доставки в Брест.'
+    });
+  }
+
   // Общие запросы о коже сначала показывают раздел с материалами и уходом.
   if (/(^|[^а-яё])кож(?:а|и|е|у|ей|ою)?(?=$|[^а-яё])/i.test(query)) {
     const materials = state.parts.find(p => p.slug === 'materials');
