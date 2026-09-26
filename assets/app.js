@@ -659,7 +659,7 @@ function search(q) {
         $('#q').value = '';
         if ($('#q2')) $('#q2').value = '';
         const target = a.getAttribute('href');
-        if (location.hash === target) route();
+        if (location.hash === new URL(target, location.href).hash) route();
         else location.hash = target;
       });
     }
@@ -747,7 +747,7 @@ mobileResults.addEventListener('click', e => {
   search('');
   syncMobileSearch('');
   closeSide();
-  if (location.hash === target) route();
+  if (location.hash === new URL(target, location.href).hash) route();
   else location.hash = target;
 });
 
