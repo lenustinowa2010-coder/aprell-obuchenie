@@ -619,6 +619,15 @@ function search(q) {
   }));
   const hits = [...sectionHits, ...INDEX.filter(i => re.test(i.text))].slice(0, 40);
 
+  // Общие запросы о коже сначала показывают раздел с материалами и уходом.
+  if (/(^|[^а-яё])кож(?:а|и|е|у|ей|ою)?(?=$|[^а-яё])/i.test(query)) {
+    const materials = state.parts.find(p => p.slug === 'materials');
+    if (materials) hits.unshift({
+      part: materials, id: '', h2: '',
+      text: 'Натуральная кожа: виды, свойства материалов и рекомендации по уходу.'
+    });
+  }
+
   // Запрос о велюре ведёт к готовым ответам о натуральных материалах.
   if (/велюр/i.test(query)) {
     const materialFaq = state.parts.find(p => p.slug === 'faq');
