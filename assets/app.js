@@ -619,6 +619,15 @@ function search(q) {
   }));
   const hits = [...sectionHits, ...INDEX.filter(i => re.test(i.text))].slice(0, 40);
 
+  // Запрос о велюре ведёт к готовым ответам о натуральных материалах.
+  if (/велюр/i.test(query)) {
+    const materialFaq = state.parts.find(p => p.slug === 'faq');
+    if (materialFaq) hits.unshift({
+      part: materialFaq, id: 'faq-материал', h2: 'Материал',
+      text: 'Что такое натуральный велюр и натуральная замша? Готовые ответы о материалах.'
+    });
+  }
+
   box.innerHTML = '';
   const meta = el('p', 'results-meta');
   meta.textContent = hits.length
