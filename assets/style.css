@@ -729,6 +729,7 @@ a{color:inherit}
 .mobile-chrome{display:contents}
 .mobile-search{display:none}
 .doc,.results{min-width:0;overflow-wrap:anywhere}
+.doc table{overflow-wrap:normal}
 .doc img,.doc video{max-width:100%}
 @media (max-width:1330px) and (min-width:901px){
   .main{padding-top:60px}
