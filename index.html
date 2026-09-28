@@ -10,20 +10,41 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=cyrillic,latin" rel="stylesheet">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="assets/style.css?v=20260908-2">
+<link rel="stylesheet" href="assets/style.css?v=20260928-mobile">
 <link rel="stylesheet" href="assets/returns.css?v=20260922-1">
 </head>
 <body>
 
 <a class="skip" href="#doc">К содержанию</a>
 
+<div class="mobile-chrome" id="mobileChrome">
 <header class="topbar">
   <button class="burger" id="burger" aria-label="Разделы" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
   <a class="wordmark" href="#/">APRELL</a>
-  <button class="find" id="findBtn" aria-label="Поиск">Поиск</button>
+  <input class="mobile-search" type="search" id="qMobile" placeholder="Найти правило, модель, город…"
+         autocomplete="off" spellcheck="false" aria-label="Поиск по всему сайту">
 </header>
+<aside class="now" id="now" aria-live="polite">
+  <h2 class="now-cap">Сейчас</h2>
+  <p class="now-time" id="nowTime">—</p>
+  <p class="now-shift" id="nowShift">—</p>
+  <p class="now-shift-s" id="nowShiftShort">—</p>
+  <div class="now-rule">
+    <span class="now-label">Если клиент не ответил — напоминание (догон) отправляем:</span>
+    <strong id="nowSlot">—</strong>
+    <em id="nowSlotShort">—</em>
+  </div>
+  <div class="now-pc">
+    <p class="now-pc-title">Только с ПК</p>
+    <p class="now-pc-text"><b>VPN</b> включён · вкладки <b>ЮKassa, amoCRM, LifeDune</b> · приём звонков.</p>
+  </div>
+  <div class="now-search">
+    <input type="search" id="q2" placeholder="Поиск по всему сайту…" autocomplete="off" spellcheck="false" aria-label="Поиск по всему сайту">
+  </div>
+</aside>
+</div>
 
 <div class="shell">
 
@@ -52,24 +73,7 @@
 
 </div>
 
-<aside class="now" id="now" aria-live="polite">
-  <h2 class="now-cap">Сейчас</h2>
-  <p class="now-time" id="nowTime">—</p>
-  <p class="now-shift" id="nowShift">—</p>
-  <p class="now-shift-s" id="nowShiftShort">—</p>
-  <div class="now-rule">
-    <span class="now-label">Если клиент не ответил — напоминание (догон) отправляем:</span>
-    <strong id="nowSlot">—</strong>
-    <em id="nowSlotShort">—</em>
-  </div>
-  <div class="now-pc">
-    <p class="now-pc-title">Только с ПК</p>
-    <p class="now-pc-text"><b>VPN</b> включён · вкладки <b>ЮKassa, amoCRM, LifeDune</b> · приём звонков.</p>
-  </div>
-  <div class="now-search">
-    <input type="search" id="q2" placeholder="Поиск по всему сайту…" autocomplete="off" spellcheck="false" aria-label="Поиск по всему сайту">
-  </div>
-</aside>
+
 
 <div class="scrim" id="scrim" hidden></div>
 
@@ -78,6 +82,6 @@
 <script src="assets/data-views.js?v=20260903-1"></script>
 <script src="assets/returns-core.js?v=20260922-5"></script>
 <script src="assets/returns.js?v=20260922-4"></script>
-<script src="assets/app.js?v=20260922-search"></script>
+<script src="assets/app.js?v=20260928-mobile"></script>
 </body>
 </html>

@@ -675,8 +675,9 @@ function search(q) {
       a.addEventListener('click', e => {
         e.preventDefault();
         if (h.part.slug === 'models' && h.id) pendingModelOpen = h.id;
-        $('#q').value = '';
-        if ($('#q2')) $('#q2').value = '';
+        setSearchValue('');
+        syncMobileSearch('');
+        $('#qMobile').blur();
         const target = a.getAttribute('href');
         if (location.hash === new URL(target, location.href).hash) route();
         else location.hash = target;
@@ -738,21 +739,37 @@ function syncMobileSearch(val) {
 
 $('#burger').addEventListener('click', () => side.classList.contains('open') ? closeSide() : openSide());
 scrim.addEventListener('click', closeSide);
-$('#findBtn').addEventListener('click', () => { openSide(); setTimeout(() => $('#q').focus(), 220); });
+// Reserve the actual header height, including safe areas, wrapping and font changes.
+const mobileLayout = window.matchMedia('(max-width: 900px)');
+function measureMobileChrome() {
+  const height = mobileLayout.matches ? $('#mobileChrome').getBoundingClientRect().height : 0;
+  document.documentElement.style.setProperty('--mobile-chrome-height', `${height}px`);
+}
+new ResizeObserver(measureMobileChrome).observe($('#mobileChrome'));
+mobileLayout.addEventListener('change', () => {
+  closeSide();
+  syncMobileSearch($('#q').value);
+  measureMobileChrome();
+});
+measureMobileChrome();
+
+function setSearchValue(value) {
+  clearTimeout(timer);
+  ['q', 'q2', 'qMobile'].forEach(id => { const input = $('#' + id); if (input && input.value !== value) input.value = value; });
+}
 
 let timer;
-function onSearchInput(val, from) {
-  clearTimeout(timer);
-  const other = from === 'q' ? '#q2' : '#q';
-  const o = $(other); if (o) o.value = val;
+function onSearchInput(val) {
+  setSearchValue(val);
   timer = setTimeout(() => {
     search(val);
     syncMobileSearch(val);
   }, 130);
 }
-$('#q').addEventListener('input', e => onSearchInput(e.target.value, 'q'));
+$('#q').addEventListener('input', e => onSearchInput(e.target.value));
 const q2 = $('#q2');
-if (q2) q2.addEventListener('input', e => onSearchInput(e.target.value, 'q2'));
+if (q2) q2.addEventListener('input', e => onSearchInput(e.target.value));
+$('#qMobile').addEventListener('input', e => onSearchInput(e.target.value));
 
 mobileResults.addEventListener('click', e => {
   const link = e.target.closest('a.hit');
@@ -761,8 +778,7 @@ mobileResults.addEventListener('click', e => {
   if (!target.startsWith('#/')) return;
   e.preventDefault();
   if (target.startsWith('#/models/')) pendingModelOpen = decodeURIComponent(target.split('/').pop());
-  $('#q').value = '';
-  if ($('#q2')) $('#q2').value = '';
+  setSearchValue('');
   search('');
   syncMobileSearch('');
   closeSide();
@@ -771,8 +787,8 @@ mobileResults.addEventListener('click', e => {
 });
 
 document.addEventListener('keydown', e => {
-  if (e.key === '/' && !document.activeElement.matches('input,textarea,select,[contenteditable=true]')) { e.preventDefault(); $('#q').focus(); }
-  if (e.key === 'Escape') { $('#q').value = ''; if ($('#q2')) $('#q2').value = ''; search(''); syncMobileSearch(''); $('#q').blur(); closeSide(); }
+  if (e.key === '/' && !document.activeElement.matches('input,textarea,select,[contenteditable=true]')) { e.preventDefault(); $(mobileLayout.matches ? '#qMobile' : '#q').focus(); }
+  if (e.key === 'Escape') { setSearchValue(''); search(''); syncMobileSearch(''); document.activeElement.blur(); closeSide(); }
 });
 
 boot();
