@@ -8,6 +8,10 @@
   const esc = s => String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+  const firstContact = item => item.firstContact
+    ? `<h3>Первое сообщение — 1 ${esc(item.art)}</h3><blockquote>${esc(item.firstContact).replace(/\n/g, '<br>')}</blockquote>`
+    : '';
+
   const money = n => (n || n === 0)
     ? Number(n).toLocaleString('ru-RU').replace(/\u00A0/g, ' ') + ' ₽' : '';
 
@@ -306,6 +310,8 @@
 
       if (m.features) pieces.push(`<p>${esc(clean(m.features))}</p>`);
 
+      pieces.push(firstContact(m));
+
       const talks = Array.isArray(m.presentations)
         ? m.presentations.filter(item => item && item.text)
         : (m.pres || m.answer ? [{ text: m.pres || m.answer }] : []);
@@ -405,6 +411,7 @@
       if (a.colors) pieces.push(`<p><strong>Цвета:</strong> ${esc(clean(a.colors))}</p>`);
       if (a.lining) pieces.push(`<p><strong>Подкладка:</strong> ${esc(clean(a.lining))}</p>`);
       if (a.features) pieces.push(`<p>${esc(clean(a.features))}</p>`);
+      pieces.push(firstContact(a));
       if (a.pres) {
         pieces.push('<h3>Готовый шаблон</h3>');
         pieces.push(`<blockquote>${esc(a.pres).replace(/\n/g, '<br>')}</blockquote>`);
