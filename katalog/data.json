@@ -797,7 +797,7 @@
    "art": "4101",
    "full": "W4101",
    "cat": "L большая",
-   "colors": "коричневая, темно-коричневая, красный",
+   "colors": "коричневая, темно-коричневая, красный, чёрный",
    "material": "натуральная зернистая кожа коровы",
    "lining": "хлопок",
    "price": 26900,
@@ -857,6 +857,20 @@
       "https://aprellshop.ru/assets/cache_image/goods/W4101-80/image7789_680x1054_a18.png"
      ],
      "price": 26900
+    },
+    {
+     "a": "W4101",
+     "c": "Чёрный",
+     "u": "https://aprellshop.ru/catalog/sumka/bolshie-sumki/w4101-99",
+     "i": [
+      "https://aprellshop.ru/assets/cache_image/goods/w4101-99/black12_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w4101-99/67675_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w4101-99/0890_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w4101-99/black18_680x1054_4a4.jpg",
+      "https://aprellshop.ru/assets/cache_image/goods/w4101-99/black15_680x1054_4a4.jpg"
+     ],
+     "price": 26900,
+     "oos": false
     }
    ],
    "pres": "Очень практичный выбор — её обожают те, кто часто в дороге. Подходит под ручную кладь Аэрофлота, S7, России и Turkish Airlines, так что за багаж доплачивать не придётся. Широкий кожаный ремень снимает вес с руки.\n\nСтоимость — 26 900 ₽.\n\nПод какие задачи подбираете сумку? 🧡"
