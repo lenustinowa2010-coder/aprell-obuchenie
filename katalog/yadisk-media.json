@@ -3,8 +3,8 @@
   "syncedAt": "2026-08-13T08:30:13.437Z",
   "stats": {
     "images": 927,
-    "videos": 284,
-    "bytes": 5039379088
+    "videos": 286,
+    "bytes": 5079710637
   },
   "models": [
     {
@@ -6630,7 +6630,22 @@
         {
           "name": "Тёмно-коричневый · кожа",
           "siteArt": "W5120",
-          "files": []
+          "files": [
+            {
+              "name": "5120-dark-brown-leather-2632.mp4",
+              "url": "/katalog/media/5120/5120-dark-brown-leather-2632.mp4",
+              "poster": "/katalog/media/5120/5120-dark-brown-leather-2632-poster.jpg",
+              "type": "video",
+              "size": 6787712
+            },
+            {
+              "name": "5120-dark-brown-leather-2589.mp4",
+              "url": "/katalog/media/5120/5120-dark-brown-leather-2589.mp4",
+              "poster": "/katalog/media/5120/5120-dark-brown-leather-2589-poster.jpg",
+              "type": "video",
+              "size": 33543837
+            }
+          ]
         },
         {
           "name": "Бордовый · кожа",
