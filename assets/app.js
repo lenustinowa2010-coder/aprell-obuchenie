@@ -578,7 +578,8 @@ function buildSearchIndex() {
     [...d.children].forEach(node => {
       if (node.tagName === 'H2') { h2 = node.textContent; h2id = node.id; return; }
       if (node.tagName === 'TABLE') {
-        node.querySelectorAll('tbody tr.delivery-region-row').forEach(tr => {
+        // Индексируем все таблицы, включая промокоды; города добавляются ниже.
+        node.querySelectorAll('tbody tr:not(.delivery-cities-row)').forEach(tr => {
           const cells = [...tr.children].map(td => td.textContent.trim());
           const cityRow = tr.nextElementSibling;
           const region = cityRow?.classList.contains('delivery-cities-row')
