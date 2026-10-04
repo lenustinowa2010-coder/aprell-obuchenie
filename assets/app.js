@@ -559,6 +559,18 @@ function render(slug, anchor) {
 let INDEX = [];
 let pendingModelOpen = '';
 
+// Для поставок поддерживаем артикул вместе с цветом и сокращение «ТК».
+function normalizeArrivalSearch(value) {
+  return String(value || '').toLowerCase().replace(/ё/g, 'е')
+    .replace(/темно\s*[-–—]?\s*коричнев(?:ый|ая|ое|ые)/g, 'тк')
+    .replace(/борд(?:овый|овая|овое|овые)/g, 'бордо')
+    .replace(/черн(?:ая|ое|ые)/g, 'черный')
+    .replace(/коричнев(?:ая|ое|ые)/g, 'коричневый')
+    .replace(/красн(?:ая|ое|ые)/g, 'красный')
+    .replace(/син(?:яя|ее|ие)/g, 'синий')
+    .replace(/[^0-9a-zа-я]+/gi, ' ').trim();
+}
+
 function buildSearchIndex() {
   INDEX = [];
   state.parts.forEach(p => {
@@ -586,7 +598,13 @@ function buildSearchIndex() {
             ? cityRow.dataset.deliveryRegion
             : cells[0];
           const prices = cells.slice(1).join(' · ');
-          INDEX.push({ part: p, h2, id: tr.id || h2id, text: `${region} · ${prices}` });
+          const arrival = p.slug === '07-arrivals';
+          INDEX.push({
+            part: p, h2, id: tr.id || h2id,
+            text: `${region} · ${prices}`,
+            arrival,
+            arrivalSearch: arrival ? normalizeArrivalSearch(`${region} ${prices} ${h2} поставка поступление приедет`) : ''
+          });
           if (!cityRow?.classList.contains('delivery-cities-row')) return;
           cityRow.querySelectorAll('[data-delivery-city]').forEach(city => {
             INDEX.push({
@@ -618,7 +636,11 @@ function search(q) {
   const sectionHits = state.parts.filter(p => re.test(p.title)).map(p => ({
     part: p, id: '', h2: '', text: p.subtitle || 'Открыть раздел целиком'
   }));
-  const hits = [...sectionHits, ...INDEX.filter(i => re.test(i.text))].slice(0, 40);
+  const arrivalWords = normalizeArrivalSearch(query).split(/\s+/).filter(Boolean);
+  const arrivalHits = arrivalWords.length ? INDEX.filter(i => i.arrival &&
+    arrivalWords.every(word => i.arrivalSearch.includes(word))) : [];
+  const hits = [...sectionHits, ...arrivalHits,
+    ...INDEX.filter(i => !i.arrival && re.test(i.text))].slice(0, 80);
 
   // Оба названия страны и их падежные формы ведут к тарифам доставки.
   if (/беларус|белорус/i.test(query)) {
