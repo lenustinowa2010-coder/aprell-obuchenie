@@ -626,6 +626,13 @@ function buildSearchIndex() {
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const escHtml = s => String(s == null ? '' : s).replace(/[<>&]/g, c => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
 
+// Русские написания и слитные варианты названия ведут к условиям Sample sale.
+function isSampleSaleQuery(query) {
+  return String(query).toLowerCase().replace(/ё/g, 'е')
+    .split(/[^a-zа-я]+/).some(word =>
+      /^(?:samples?(?:sale)?|samp[el]l?sale|[сc][еэа]мпл[а-я]*)$/.test(word));
+}
+
 function search(q) {
   const box = $('#results');
   const query = q.trim();
@@ -641,6 +648,13 @@ function search(q) {
     arrivalWords.every(word => i.arrivalSearch.includes(word))) : [];
   const hits = [...sectionHits, ...arrivalHits,
     ...INDEX.filter(i => !i.arrival && re.test(i.text))].slice(0, 80);
+
+  if (isSampleSaleQuery(query)) {
+    const sampleSale = state.parts.find(p => p.slug === '08-sample-sale');
+    if (sampleSale && !sectionHits.some(hit => hit.part === sampleSale)) hits.unshift({
+      part: sampleSale, id: '', h2: '', text: sampleSale.subtitle
+    });
+  }
 
   // Оба названия страны и их падежные формы ведут к тарифам доставки.
   if (/беларус|белорус/i.test(query)) {

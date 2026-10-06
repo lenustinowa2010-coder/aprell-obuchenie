@@ -40,6 +40,11 @@
     "order": 8
   },
   {
+    "file": "08-sample-sale.md",
+    "title": "Sample sale",
+    "order": 9
+  },
+  {
     "file": "99-changelog.md",
     "title": "Журнал изменений",
     "order": 99
