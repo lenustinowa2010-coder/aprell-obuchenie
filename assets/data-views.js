@@ -200,9 +200,6 @@
     return `<section class="live-media"><h3>Фото и видео по цветам</h3>${rendered}</section>`;
   }
 
-  /* «переписать», «не нравится» — это редакторские пометки, не для менеджера */
-  const isNote = s => s && s.trim().length > 25;
-
   const clean = s => String(s || '').replace(/\s*---\s*/g, ' — ').replace(/\s+/g, ' ').trim();
 
   function zipBtn(list, name) {
@@ -245,9 +242,7 @@
   function variants(list) {
     if (!Array.isArray(list) || !list.length) return '';
     const rows = list.map(v => {
-      const price = v.oos
-        ? '<span class="stock-out">Нет в наличии</span>'
-        : v.oldPrice
+      const price = v.oldPrice
         ? `<strong>${money(v.price)}</strong> <span class="was">${money(v.oldPrice)}</span>`
         : (v.price ? money(v.price) : '—');
       const link = v.u ? `<a href="${esc(v.u)}" target="_blank" rel="noopener">на сайте</a>` : '';
@@ -261,7 +256,7 @@
   /* ------------------------------------------------------------ модели ---- */
   function modelPrice(m) {
     const variants = m.site || [];
-    const prices = variants.filter(v => !v.oos).map(v => Number(v.price)).filter(n => n > 0);
+    const prices = variants.map(v => Number(v.price)).filter(n => n > 0);
     if (!prices.length) return variants.length ? '' : (m.price ? money(m.price) : '');
     const min = Math.min(...prices), max = Math.max(...prices);
     return min === max ? money(min) : `от ${money(min)}`;
@@ -284,26 +279,17 @@
       const allShots = siteShots.concat(extraShots);
       const pieces = [];
       const id = slugId(m);
-      const availableShots = []
-        .concat(...(m.site || []).filter(v => !v.oos).map(v => v.i || []));
-      const previewShot = m.cover ? asset(m.cover) : (liveImages[0] ? liveUrl(liveImages[0]) : asset(availableShots[0] || allShots[0] || ''));
+      const previewShot = m.cover ? asset(m.cover) : (liveImages[0] ? liveUrl(liveImages[0]) : asset(allShots[0] || ''));
       const preview = previewShot
         ? `<img src="${esc(previewShot)}" alt="Модель ${esc(m.art)}" loading="lazy">`
         : '<span class="model-no-photo">Фото пока нет</span>';
       const cardPrice = modelPrice(m);
-      const allOut = (m.site || []).length && !(m.site || []).some(v => !v.oos);
 
       pieces.push(`<h2>${esc(m.art)}${m.full && m.full !== m.art ? ' · ' + esc(m.full) : ''}</h2>`);
 
       const head = [m.material && clean(m.material), modelPrice(m)]
         .filter(Boolean).join(' · ');
       if (head) pieces.push(`<p class="meta">${esc(head)}</p>`);
-
-      if (isNote(m.status)) pieces.push(`<p class="flag">${esc(m.status)}</p>`);
-      if (!(m.site || []).length && !m.showInModels)
-        pieces.push('<p class="flag">На сайте вариантов нет — наличие и цену уточнить перед предложением</p>');
-      else if ((m.site || []).length && !(m.site || []).some(v => !v.oos))
-        pieces.push('<p class="flag">Все варианты сейчас отсутствуют на сайте — наличие и цену уточнить перед предложением</p>');
 
       pieces.push(mediaGroups(live, m.site, extraShots, m.art, m.extraColor));
       pieces.push(specs(m));
@@ -343,7 +329,7 @@
             ${m.full && m.full !== m.art ? `<span class="model-full">${esc(m.full)}</span>` : ''}
             ${m.material ? `<span class="model-material">${esc(clean(m.previewMaterial || m.material))}</span>` : ''}
             ${cardPrice ? `<span class="model-price">${cardPrice}</span>` : ''}
-            ${allOut ? '<span class="model-stock">Нет в наличии</span>' : '<span class="model-open-label">Открыть карточку</span>'}
+            <span class="model-open-label">Открыть карточку</span>
           </span>
         </summary>
         <div class="model-detail">${pieces.filter(Boolean).join('\n')}</div>
