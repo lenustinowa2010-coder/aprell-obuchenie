@@ -45,6 +45,11 @@
     "order": 9
   },
   {
+    "file": "09-merge-deals.md",
+    "title": "Объединение сделок",
+    "order": 10
+  },
+  {
     "file": "99-changelog.md",
     "title": "Журнал изменений",
     "order": 99
