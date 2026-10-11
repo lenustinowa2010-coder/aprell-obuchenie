@@ -22,72 +22,111 @@ const slugify = s => s.toLowerCase().trim()
   .replace(/[^\wа-яё\s-]/gi, '').replace(/\s+/g, '-').slice(0, 60);
 
 /* ---------- загрузка ---------- */
+// In-flight requests are shared by navigation and background search preparation.
+const pendingLoads = new Map();
+let backgroundReady, backgroundFinished = false, backgroundFailed = false;
+let routeVersion = 0;
+const catalogSections = [
+  { slug: 'models', title: 'Модели', order: 6, noSub: true },
+  { slug: 'accessories', title: 'Аксессуары', order: 7, noSub: true },
+  { slug: 'materials', title: 'Материалы и уход', order: 8 },
+  { slug: 'faq', title: 'Частые вопросы', order: 9 }
+];
+
+function once(key, load) {
+  if (!pendingLoads.has(key)) {
+    const promise = load().catch(error => {
+      pendingLoads.delete(key); // A later navigation can retry a failed request.
+      throw error;
+    });
+    pendingLoads.set(key, promise);
+  }
+  return pendingLoads.get(key);
+}
+
+async function fetchResource(url, type = 'json') {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
+  try {
+    // Conditional requests reuse cached bodies without showing outdated prices/rules.
+    const response = await fetch(url, { cache: 'no-cache', signal: controller.signal });
+    if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`);
+    return await response[type]();
+  } finally { clearTimeout(timeout); }
+}
+
 async function boot() {
-  if (typeof marked === "undefined") {
-    $("#loading").textContent = "Не удалось загрузить движок отображения. Проверьте интернет и обновите страницу.";
+  if (typeof marked === 'undefined') {
+    $('#loading').textContent = 'Не удалось загрузить движок отображения. Проверьте интернет и обновите страницу.';
     return;
   }
   marked.setOptions({ gfm: true, breaks: false });
-
-  let index;
-  try {
-    index = await (await fetch('content/index.json', { cache: 'no-cache' })).json();
-  } catch {
-    $('#loading').textContent = 'Не удалось загрузить содержание. Обновите страницу.';
-    return;
-  }
-
-  const loaded = await Promise.all(index.map(async it => {
-    const raw = await (await fetch('content/' + it.file + '?v=' + CONTENT_VERSION,
-      { cache: 'no-store' })).text();
-    const { meta, body } = splitFront(raw);
-    return {
-      slug: it.file.replace(/\.md$/, ''),
-      title: meta.title || it.file,
-      subtitle: meta.subtitle || '',
-      order: Number(meta.order || it.order || 99),
-      html: marked.parse(body)
-    };
-  }));
-
-  loaded.sort((a, b) => a.order - b.order);
-  state.parts = loaded;
-  loaded.forEach(p => state.byslug[p.slug] = p);
-
-  try {
-    const lj = await (await fetch('content/links.json', { cache: 'no-cache' })).json();
-    state.links = Array.isArray(lj) ? lj : (lj.items || []);
-  } catch { state.links = []; }
-
-  await loadDeliveryCities();
-  await loadCatalogParts();
-
-  buildNav();
-  buildSearchIndex();
-  route();
   tickNow();
   setInterval(tickNow, 30000);
+  try {
+    const index = await fetchResource('content/index.json');
+    state.parts = index.map(it => ({ ...it, slug: it.file.replace(/\.md$/, ''),
+      subtitle: it.subtitle || '', html: '' }));
+    state.parts.push(...catalogSections.map(p => ({ ...p, subtitle: '', html: '' })));
+    state.parts.sort((a, b) => a.order - b.order);
+    state.parts.forEach(p => { state.byslug[p.slug] = p; });
+    buildNav();
+    if ($('#q').value.trim().length < 2) await route();
+    // Let the selected page paint before preparing the rest of the site.
+    setTimeout(prepareBackground, 0);
+  } catch (error) {
+    console.error('Загрузка содержания:', error);
+    showLoadError();
+  }
 }
 
-async function loadDeliveryCities() {
-  try {
-    const data = await (await fetch('content/cdek-cities.json', { cache: 'no-cache' })).json();
-    state.cdekCities = data || {};
-  } catch { state.cdekCities = {}; }
+function showLoadError() {
+  const box = el('div', 'loading');
+  box.textContent = 'Не удалось загрузить раздел. Проверьте интернет. ';
+  const retry = el('button');
+  retry.type = 'button';
+  retry.textContent = 'Повторить';
+  retry.addEventListener('click', () => location.reload());
+  box.appendChild(retry);
+  $('#doc').replaceChildren(box);
+  $('#doc').hidden = false;
+  $('#results').hidden = true;
 }
 
-/* ---------- каталог: те же данные, свои разделы ---------- */
-async function loadCatalogParts() {
-  if (typeof window.buildDataParts !== 'function') return;
-  let d;
-  try { d = await (await fetch('katalog/data.json', { cache: 'no-cache' })).json(); }
-  catch { return; }
-  try {
-    d.liveMedia = await (await fetch('katalog/yadisk-media.json', { cache: 'no-cache' })).json();
-  } catch (e) { d.liveMedia = { models: [] }; }
-  // доп. фото из админки (extra_photos.json) — подмешиваем к моделям по артикулу
-  try {
-    const ex = await (await fetch('katalog/extra_photos.json', { cache: 'no-cache' })).json();
+async function loadPart(p) {
+  if (!p) return;
+  if (!p.loaded && p.file) {
+    await once(p.slug, async () => {
+      // New builds bundle the text into the index: no extra request per section.
+      const raw = typeof p.body === 'string' ? null : await fetchResource(
+        'content/' + p.file + '?v=' + CONTENT_VERSION, 'text');
+      const parsed = raw === null ? { meta: {}, body: p.body } : splitFront(raw);
+      p.title = parsed.meta.title || p.title;
+      p.subtitle = parsed.meta.subtitle || p.subtitle;
+      p.html = marked.parse(parsed.body);
+      p.loaded = true;
+    });
+  } else if (!p.loaded) {
+    await loadCatalogParts();
+  }
+  if (p.slug === '03-delivery') await loadDeliveryCities();
+}
+
+function loadDeliveryCities() {
+  return once('cities', async () => {
+    state.cdekCities = await fetchResource('content/cdek-cities.json');
+  });
+}
+
+function loadCatalogParts() {
+  return once('catalog', async () => {
+    if (typeof window.buildDataParts !== 'function') throw new Error('Каталог недоступен');
+    const [d, liveMedia, ex] = await Promise.all([
+      fetchResource('katalog/data.json'),
+      fetchResource('katalog/yadisk-media.json').catch(() => ({ models: [] })),
+      fetchResource('katalog/extra_photos.json').catch(() => ({ items: [] }))
+    ]);
+    d.liveMedia = liveMedia;
     const key = a => String(a || '').toLowerCase().replace(/[^0-9a-z]/g, '');
     const map = {};
     (ex.items || []).forEach(it => {
@@ -101,14 +140,39 @@ async function loadCatalogParts() {
         m.extraColor = extra.color;
       }
     });
-  } catch (e) { /* файла может не быть — не страшно */ }
-  try {
     window.buildDataParts(d).forEach(p => {
-      state.parts.push(p);
-      state.byslug[p.slug] = p;
+      Object.assign(state.byslug[p.slug], p, { loaded: true });
     });
-    state.parts.sort((a, b) => a.order - b.order);
-  } catch (e) { console.error('Каталог не собрался:', e); }
+  });
+}
+
+function prepareBackground() {
+  if (!state.parts.length) return Promise.resolve();
+  if (backgroundReady) return backgroundReady;
+  backgroundReady = (async () => {
+    const results = await Promise.allSettled([
+      ...state.parts.filter(p => p.file).map(p => loadPart(p)),
+      loadCatalogParts(),
+      once('links', async () => {
+        const links = await fetchResource('content/links.json');
+        state.links = Array.isArray(links) ? links : (links.items || []);
+      })
+    ]);
+    backgroundFailed = results.some(result => result.status === 'rejected');
+    buildNav();
+    buildSearchIndex();
+    backgroundFinished = true;
+    const current = document.querySelector(`.nav a.part[href="#/${state.current}"]`);
+    if (current) current.setAttribute('aria-current', 'true');
+    // Refresh search results, never re-render the document the user is reading.
+    const query = $('#q').value;
+    if (query.trim().length >= 2) { search(query); syncMobileSearch(query); }
+  })().catch(error => {
+    backgroundFailed = true;
+    backgroundFinished = true;
+    console.error('Подготовка поиска:', error);
+  });
+  return backgroundReady;
 }
 
 /* ---------- навигация ---------- */
@@ -636,7 +700,13 @@ function isSampleSaleQuery(query) {
 function search(q) {
   const box = $('#results');
   const query = q.trim();
-  if (query.length < 2) { box.hidden = true; $('#doc').hidden = false; return; }
+  if (query.length < 2) {
+    box.hidden = true; $('#doc').hidden = false;
+    if ($('#doc .loading')) route();
+    return;
+  }
+
+  if (!backgroundFinished) prepareBackground();
 
   const re = new RegExp(esc(query), 'i');
   // Название раздела точнее отвечает на общий запрос, чем упоминание в тексте.
@@ -686,12 +756,13 @@ function search(q) {
 
   box.innerHTML = '';
   const meta = el('p', 'results-meta');
-  meta.textContent = hits.length
-    ? `Найдено: ${hits.length}`
-    : 'Ничего не нашлось';
+  meta.textContent = !backgroundFinished
+    ? `Поиск по сайту загружается… Найдено: ${hits.length}`
+    : backgroundFailed ? `Часть данных недоступна. Найдено: ${hits.length}. Обновите страницу, чтобы повторить загрузку.`
+    : hits.length ? `Найдено: ${hits.length}` : 'Ничего не нашлось';
   box.appendChild(meta);
 
-  if (!hits.length) {
+  if (!hits.length && backgroundFinished && !backgroundFailed) {
     const e = el('p', 'empty');
     e.textContent = 'Попробуйте другое слово — например, название региона, модель или «догон».';
     box.appendChild(e);
@@ -753,11 +824,29 @@ function tickNow() {
 }
 
 /* ---------- маршрутизация ---------- */
-function route() {
+async function route() {
+  const version = ++routeVersion;
   const m = location.hash.match(/^#\/([\w-]+)(?:\/([^/]*))?/);
-  if (!m) { render(state.parts[0]?.slug); return; }
-  render(m[1], m[2] ? decodeURIComponent(m[2]) : null);
+  const p = (m && state.byslug[m[1]]) || state.parts[0];
+  if (!p) return;
   closeSide();
+  try {
+    if (!p.loaded) {
+      const loading = el('div', 'loading');
+      loading.textContent = 'Загружаю раздел…';
+      $('#doc').replaceChildren(loading);
+      $('#doc').hidden = false;
+      $('#results').hidden = true;
+    }
+    await loadPart(p);
+    if (version !== routeVersion) return;
+    let anchor = m && m[2];
+    try { anchor = anchor ? decodeURIComponent(anchor) : null; } catch { anchor = null; }
+    render(p.slug, anchor);
+  } catch (error) {
+    console.error('Загрузка раздела:', error);
+    if (version === routeVersion) showLoadError();
+  }
 }
 
 /* ---------- события ---------- */
@@ -797,6 +886,7 @@ function setSearchValue(value) {
 
 let timer;
 function onSearchInput(val) {
+  routeVersion++; // Pending navigation must not replace newer search results.
   setSearchValue(val);
   timer = setTimeout(() => {
     search(val);

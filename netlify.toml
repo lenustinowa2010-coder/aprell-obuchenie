@@ -17,3 +17,14 @@
   to = "https://aprellshop.ru/:splat"
   status = 200
   force = true
+
+# Cache bodies, but validate on every visit so edited rules and prices stay current.
+[[headers]]
+  for = "/content/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/katalog/*.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
