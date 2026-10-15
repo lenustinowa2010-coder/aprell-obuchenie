@@ -716,8 +716,16 @@ function search(q) {
   const arrivalWords = normalizeArrivalSearch(query).split(/\s+/).filter(Boolean);
   const arrivalHits = arrivalWords.length ? INDEX.filter(i => i.arrival &&
     arrivalWords.every(word => i.arrivalSearch.includes(word))) : [];
-  const hits = [...sectionHits, ...arrivalHits,
-    ...INDEX.filter(i => !i.arrival && re.test(i.text))].slice(0, 80);
+  // Карточка модели со скриптами всегда предшествует поставкам.
+  // Артикул сохраняет карточку в выдаче и при уточнении цвета или срока.
+  const articles = query.match(/\d{4,}/g) || [];
+  const catalogCard = i => ['models', 'accessories'].includes(i.part.slug) && i.id;
+  const modelHits = INDEX.filter(i => catalogCard(i) && (
+    re.test(i.text) || articles.some(art =>
+      (i.h2.match(/\d+/g) || []).some(number => Number(number) === Number(art)))
+  ));
+  const hits = [...modelHits, ...arrivalHits, ...sectionHits,
+    ...INDEX.filter(i => !i.arrival && !modelHits.includes(i) && re.test(i.text))];
 
   if (isSampleSaleQuery(query)) {
     const sampleSale = state.parts.find(p => p.slug === '08-sample-sale');
@@ -753,6 +761,9 @@ function search(q) {
       text: 'Что такое натуральный велюр и натуральная замша? Готовые ответы о материалах.'
     });
   }
+
+  hits.sort((a, b) => Number(modelHits.includes(b)) - Number(modelHits.includes(a)));
+  hits.splice(80);
 
   box.innerHTML = '';
   const meta = el('p', 'results-meta');
