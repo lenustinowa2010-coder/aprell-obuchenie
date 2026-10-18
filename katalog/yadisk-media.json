@@ -1691,6 +1691,36 @@
               "size": 24540099
             }
           ]
+        },
+        {
+          "name": "Зебра",
+          "files": [
+            {
+              "name": "4630-zebra-20261018.mp4",
+              "url": "/katalog/media/4630/4630-zebra-20261018.mp4",
+              "type": "video",
+              "size": 1954656,
+              "poster": "/katalog/media/4630/4630-zebra-20261018-poster.jpg"
+            },
+            {
+              "name": "4630-zebra-5.jpg",
+              "url": "/katalog/media/4630/4630-zebra-5.jpg",
+              "type": "image",
+              "size": 757399
+            },
+            {
+              "name": "4630-zebra-7.jpg",
+              "url": "/katalog/media/4630/4630-zebra-7.jpg",
+              "type": "image",
+              "size": 768766
+            },
+            {
+              "name": "4630-zebra-8.jpg",
+              "url": "/katalog/media/4630/4630-zebra-8.jpg",
+              "type": "image",
+              "size": 1239066
+            }
+          ]
         }
       ]
     },
