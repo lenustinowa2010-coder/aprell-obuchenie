@@ -1721,6 +1721,35 @@
               "size": 1239066
             }
           ]
+        },
+        {
+          "name": "Жираф",
+          "files": [
+            {
+              "name": "4630-giraffe-77.jpg",
+              "url": "/katalog/media/4630/4630-giraffe-77.jpg",
+              "type": "image",
+              "size": 656797
+            },
+            {
+              "name": "4630-giraffe-12.jpg",
+              "url": "/katalog/media/4630/4630-giraffe-12.jpg",
+              "type": "image",
+              "size": 655915
+            },
+            {
+              "name": "4630-giraffe-15.jpg",
+              "url": "/katalog/media/4630/4630-giraffe-15.jpg",
+              "type": "image",
+              "size": 991279
+            },
+            {
+              "name": "4630-giraffe-13.jpg",
+              "url": "/katalog/media/4630/4630-giraffe-13.jpg",
+              "type": "image",
+              "size": 614767
+            }
+          ]
         }
       ]
     },
