@@ -38,6 +38,7 @@ function mount(root){
  <label data-extra="paidAt">Дата выполненной операции<input name="paidAt" type="date"></label></div></details></form>
  <div class="rt-deadline" aria-live="polite" id="rt-deadline"></div>
  <p class="rt-help">Считаем календарные дни со следующего дня после события. Для контроля APRELL не переносим дату на более поздний день из-за выходных и праздников. Применимость переноса по ст. 193 ГК РФ проверяет ответственный; автоматически клиенту продление не обещаем.</p>
+ <aside class="rt-guide" aria-label="Информация менеджеру"><h3>Информация менеджеру — не копируется</h3><p id="rt-manager-note"></p></aside>
  <h3>Готовые сообщения</h3><p id="rt-video-note" class="rt-help" hidden>Видео перешлите или прикрепите в чат с Сергеем отдельным сообщением. Ссылка не нужна.</p>
  <p class="rt-help" id="rt-copy-hint">Перед отправкой замените оставшиеся поля в квадратных скобках. Кнопка только копирует текст.</p>
  <div class="rt-scripts"><section><div class="rt-script-head"><h4>Клиенту</h4><button type="button" data-copy="client">Копировать клиенту</button></div><pre id="rt-client"></pre></section><section><div class="rt-script-head"><h4>В чат «Обмены/возвраты»</h4><button type="button" data-copy="chat">Копировать в чат</button></div><pre id="rt-chat"></pre></section></div>
@@ -83,7 +84,7 @@ function mount(root){
   if(v.case==='quality'&&v.written==='unknown')line('p','Передачу письменных правил нужно проверить: при их отсутствии срок отказа может составить 3 месяца.');
   if(flaw&&v.request==='refund'&&!v.shopReceived)line('p','Сумка ещё не получена. Организуйте передачу для проверки. Если срок заканчивается — срочно Сергею; отсчёт не обнуляется.');
   if(c.warning)line('p',c.warning);
-  const texts=C.messages(v,c);host.querySelector('#rt-client').textContent=texts.client;host.querySelector('#rt-chat').textContent=texts.chat;
+  const texts=C.messages(v,c);host.querySelector('#rt-manager-note').textContent=texts.managerNote;host.querySelector('#rt-client').textContent=texts.client;host.querySelector('#rt-chat').textContent=texts.chat;
   const invalid=!!c.warning&&!c.due;
   host.querySelector('.rt-copy-status').textContent='';
   host.querySelector('[data-copy="client"]').disabled=invalid;
