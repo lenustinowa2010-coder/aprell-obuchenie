@@ -1453,6 +1453,25 @@
               "path": "/4630/К4630 корова/IMG_4867.HEIC",
               "type": "image",
               "size": 2804329
+            },
+            {
+              "name": "4630-cow-20261018-1.jpg",
+              "url": "/katalog/media/4630/4630-cow-20261018-1.jpg",
+              "type": "image",
+              "size": 74527
+            },
+            {
+              "name": "4630-cow-20261018-2.jpg",
+              "url": "/katalog/media/4630/4630-cow-20261018-2.jpg",
+              "type": "image",
+              "size": 91658
+            },
+            {
+              "name": "4630-cow-20261018.mp4",
+              "url": "/katalog/media/4630/4630-cow-20261018.mp4",
+              "type": "video",
+              "size": 5014897,
+              "poster": "/katalog/media/4630/4630-cow-20261018-poster.jpg"
             }
           ],
           "siteArt": "K4630"
