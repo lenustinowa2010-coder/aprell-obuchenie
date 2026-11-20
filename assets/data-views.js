@@ -6,7 +6,7 @@
 (function () {
 
   const esc = s => String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
   const firstContact = item => item.firstContact
     ? `<h3>Первое сообщение — 1 ${esc(item.art)}</h3><blockquote>${esc(item.firstContact).replace(/\n/g, '<br>')}</blockquote>`
@@ -40,6 +40,8 @@
   function videoEmbed(url) {
     if (!url) return '';
     const u = String(url);
+    const prepared = smallVideos[u];
+    if (prepared) return `<div class="review-video"><video src="${esc(prepared.url)}" controls playsinline preload="none" class="vid"></video>${videoDownloads(prepared.original, u, 'video-review.mp4')}</div>`;
     let src = '';
     const vk = u.match(/clip(-?\d+)_(\d+)/i);
     if (vk) {
@@ -55,6 +57,17 @@
 
   /* имя файла для скачивания */
   const fileName = u => String(u).split(/[\\/]/).pop().split('?')[0] || 'photo.jpg';
+
+  let smallVideos = {};
+  function videoDownloads(original, key, name) {
+    const small = smallVideos[key];
+    const safeName = esc(name || fileName(original));
+    const normal = `<a class="dl-vid" href="${esc(original)}" download="${safeName}">Скачать</a>`;
+    const compact = small
+      ? `<a class="dl-vid" href="${esc(small.url)}" download="${esc((name || 'video').replace(/\.[^.]+$/, ''))}-до-10мб.mp4" title="Размер не более 9,5 МБ">Скачать до 10 МБ</a>`
+      : `<span class="video-download-unavailable">Сжатая версия недоступна</span>`;
+    return `<div class="video-downloads">${normal}${compact}</div>`;
+  }
 
   const modelKey = value => {
     const m = String(value || '').match(/\d{3,5}/);
@@ -154,16 +167,16 @@
         </div>`;
       }).join('');
       const videoMedia = color.videos.map(file => {
-        const view = esc(liveUrl(file));
+        const compactUrl = smallVideos[file.url || file.path]?.url;
+        const view = esc(compactUrl?.startsWith('/katalog/') ? compactUrl : liveUrl(file));
         const poster = esc(livePosterUrl(file));
-        const download = esc(liveUrl(file, true));
         return `<div class="live-video">
           <button type="button" class="live-video-play" data-video-src="${view}"
             data-video-poster="${poster}" aria-label="Загрузить видео">
             <img data-src="${poster}" alt="Видео: ${esc(color.name)}" loading="lazy">
             <span aria-hidden="true">▶</span>
           </button>
-          <a class="dl-vid" href="${download}"${file.url ? ` download="${esc(file.name)}"` : ''} target="_blank" rel="noopener">↓ Скачать видео</a>
+          ${videoDownloads(liveUrl(file, true), file.url || file.path, file.name)}
         </div>`;
       }).join('');
       const extraMedia = color.extras.map(u => {
@@ -315,9 +328,9 @@
         pieces.push(`<h3>Видеообзор</h3>`);
         pieces.push(videoEmbed(m.video));
       }
-      if (m.vidLocal) {
+      if (m.vidLocal && !(m.video && smallVideos[m.video])) {
         const vurl = esc(asset(m.vidLocal));
-        pieces.push(`<p><video src="${vurl}" controls preload="none" class="vid"></video><br><a class="dl dl-vid" href="${vurl}" download="${esc(fileName(m.vidLocal))}">↓ Скачать видео</a></p>`);
+        pieces.push(`<div class="review-video"><video src="${vurl}" controls playsinline preload="none" class="vid"></video>${videoDownloads(asset(m.vidLocal), '/' + asset(m.vidLocal).replace(/^\//, ''), fileName(m.vidLocal))}</div>`);
       }
       pieces.push(variants(m.site));
       return `<details class="model-card" id="${id}"
@@ -391,7 +404,7 @@
       const accVid = a.vid || a.vidLocal;
       if (accVid) {
         const vurl = esc(asset(accVid));
-        pieces.push(`<p><video src="${vurl}" controls preload="none" class="vid"></video><br><a class="dl dl-vid" href="${vurl}" download="${esc(fileName(accVid))}">↓ Скачать видео</a></p>`);
+        pieces.push(`<div class="review-video"><video src="${vurl}" controls playsinline preload="none" class="vid"></video>${videoDownloads(asset(accVid), '/' + asset(accVid).replace(/^\//, ''), fileName(accVid))}</div>`);
       }
       if (a.offline) pieces.push('<p class="flag">Только в офлайн-магазинах — в директе не предлагаем</p>');
       if (a.colors) pieces.push(`<p><strong>Цвета:</strong> ${esc(clean(a.colors))}</p>`);
@@ -470,6 +483,7 @@
 
   /* ------------------------------------------------------------ сборка ---- */
   window.buildDataParts = function (d) {
+    smallVideos = d.smallVideos || {};
     const out = [];
     const featuredAccessories = (Array.isArray(d.acc) ? d.acc : [])
       .filter(item => item.showInModels)

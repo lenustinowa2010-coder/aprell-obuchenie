@@ -121,12 +121,15 @@ function loadDeliveryCities() {
 function loadCatalogParts() {
   return once('catalog', async () => {
     if (typeof window.buildDataParts !== 'function') throw new Error('Каталог недоступен');
-    const [d, liveMedia, ex] = await Promise.all([
+    const [d, liveMedia, ex, smallVideos, reviewVideos] = await Promise.all([
       fetchResource('katalog/data.json'),
       fetchResource('katalog/yadisk-media.json').catch(() => ({ models: [] })),
-      fetchResource('katalog/extra_photos.json').catch(() => ({ items: [] }))
+      fetchResource('katalog/extra_photos.json').catch(() => ({ items: [] })),
+      fetchResource('katalog/video-small/manifest.json'),
+      fetchResource('katalog/video-reviews/manifest.json')
     ]);
     d.liveMedia = liveMedia;
+    d.smallVideos = Object.assign({}, smallVideos, reviewVideos);
     const key = a => String(a || '').toLowerCase().replace(/[^0-9a-z]/g, '');
     const map = {};
     (ex.items || []).forEach(it => {

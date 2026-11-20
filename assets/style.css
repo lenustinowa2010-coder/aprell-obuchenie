@@ -777,3 +777,10 @@ a{color:inherit}
   .topbar .wordmark{display:none}
   .mobile-search{grid-column:2}
 }
+
+/* Original and size-limited video downloads. */
+.video-downloads{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.doc .video-downloads .dl-vid{display:inline-flex;align-items:center;justify-content:center;min-height:44px;box-sizing:border-box;padding:8px 10px;border:1px solid var(--wine);border-radius:7px;font-size:14px;line-height:1.25;text-decoration:none;color:var(--wine);background:#fff}
+.doc .video-downloads .dl-vid:hover{background:var(--wine);color:#fff}
+.video-downloads .dl-vid:focus-visible{outline:2px solid var(--wine);outline-offset:3px}
+.video-download-unavailable{font-size:14px}
