@@ -8462,6 +8462,34 @@
           ]
         }
       ]
+    },
+    {
+      "model": "0199",
+      "folder": "0199",
+      "colors": [
+        {
+          "name": "Чёрный",
+          "files": [
+            {
+              "name": "black-life.jpg",
+              "url": "/katalog/media/0199/black-life.jpg",
+              "type": "image",
+              "size": 762186
+            }
+          ]
+        },
+        {
+          "name": "Тёмно-коричневый",
+          "files": [
+            {
+              "name": "dark-brown-life.jpg",
+              "url": "/katalog/media/0199/dark-brown-life.jpg",
+              "type": "image",
+              "size": 695425
+            }
+          ]
+        }
+      ]
     }
   ]
 }

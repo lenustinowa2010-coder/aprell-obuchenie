@@ -4,6 +4,16 @@ subtitle: "Смены, задачи, воронка, Wazzup, поля карто
 order: 1
 ---
 
+
+<div class="announce">
+  <p><strong>SAMPLE SALE:</strong><br>
+    <a href="https://docs.google.com/spreadsheets/d/1Lro6rPfKqz2dUKNqbKjWxKpFfmQAbeajPEO_ClstY7o/edit?usp=drivesdk" target="_blank" rel="noopener">Таблица с указанием дефектов</a> ·
+    <a href="https://aprellshop.ru/catalog/uczenyonnyie-modeli/" target="_blank" rel="noopener">Каталог Sample Sale</a>
+  </p>
+  <p><a href="https://pub.fsa.gov.ru/rds/declaration/view/19619284/applicant" target="_blank" rel="noopener">Единый реестр сертификатов соответствия и деклараций о соответствии</a></p>
+  <p><a href="https://disk.yandex.ru/d/pmuxvBEYx9R6DQ" target="_blank" rel="noopener">Коровы — фото и материалы</a></p>
+</div>
+
 <div class="announce">
   <p><strong>Данные правила обязательны к исполнению.</strong> Вариантов «мне так неудобно» или «я привыкла иначе» — нет. Это единые правила для всех.</p>
   <p>При этом улучшения всегда приветствуются. Если видите, как сделать процесс <em>удобнее или быстрее</em> — пишите через кнопку «Замечание» на сайте. Важный нюанс: предложение должно улучшать работу, а не отменять требование. Всё, что реально можно упростить, — упростим.</p>
