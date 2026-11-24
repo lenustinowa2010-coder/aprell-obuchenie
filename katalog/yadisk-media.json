@@ -8475,6 +8475,13 @@
               "url": "/katalog/media/0199/black-life.jpg",
               "type": "image",
               "size": 762186
+            },
+            {
+              "name": "IMG_7908.mp4",
+              "url": "/katalog/media/0199/black-life.mp4",
+              "poster": "/katalog/media/0199/black-video-poster.jpg",
+              "type": "video",
+              "size": 9103654
             }
           ]
         },
@@ -8486,6 +8493,13 @@
               "url": "/katalog/media/0199/dark-brown-life.jpg",
               "type": "image",
               "size": 695425
+            },
+            {
+              "name": "IMG_7905.mp4",
+              "url": "/katalog/media/0199/dark-brown-life.mp4",
+              "poster": "/katalog/media/0199/dark-brown-video-poster.jpg",
+              "type": "video",
+              "size": 9125038
             }
           ]
         }
