@@ -3,8 +3,8 @@
   "syncedAt": "2026-08-13T08:30:13.437Z",
   "stats": {
     "images": 927,
-    "videos": 286,
-    "bytes": 5079710637
+    "videos": 287,
+    "bytes": 5088313944
   },
   "models": [
     {
@@ -5418,6 +5418,13 @@
               "url": "/katalog/media/5116/5116-black-leather-20260917-114004.jpg",
               "type": "image",
               "size": 254275
+            },
+            {
+              "name": "5116 — видеообзор VK.mp4",
+              "url": "/katalog/media/5116/5116-vk-456239295-original.mp4",
+              "poster": "/katalog/media/5116/5116-vk-456239295-poster.jpg",
+              "type": "video",
+              "size": 8603307
             }
           ],
           "siteArt": "W5116"
