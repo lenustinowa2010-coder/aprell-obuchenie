@@ -68,7 +68,7 @@ APRELL продаёт **подарочные сертификаты** — ими
 1. Уточняем у клиентки **номинал** (от 3000 ₽) и на чьё имя сертификат.
 2. Выставляем оплату на сумму номинала, как по обычному заказу.
 3. После оплаты формируем сам сертификат в генераторе:
-   **https://lenustinowa2010-coder.github.io/aprell-sertifikat/**
+   **https://aprell-certificates.lenka1393.chatgpt.site/**
 4. Каждому сертификату присваивается **номер** — он идёт по порядку.
 5. Заносим сертификат в **таблицу учёта**:
    **https://docs.google.com/spreadsheets/d/1ow3MZKWhGvEvoIfcXzvwAs8GYHWBUOpsnsKY7DPUeUw**
